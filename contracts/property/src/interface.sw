@@ -3,39 +3,6 @@ library interface;
 dep data_structures;
 
 use data_structures::TokenMetaData;
-use std::{identity::Identity, option::Option};
-
-pub struct AdminEvent {
-    /// The user which is now the admin of this contract.
-    /// If there is no longer an admin then the `Option` will be `None`.
-    admin: Option<Identity>,
-}
-
-pub struct ApprovalEvent {
-    /// The user that has gotten approval to transfer the specified token.
-    /// If an approval was revoked, the `Option` will be `None`.
-    approved: Option<Identity>,
-    /// The user that has given or revoked approval to transfer his/her tokens.
-    owner: Identity,
-    /// The unique identifier of the token which the approved may transfer.
-    token_id: u64,
-}
-
-pub struct BurnEvent {
-    /// The user that has burned their token.
-    owner: Identity,
-    /// The unique identifier of the token which has been burned.
-    token_id: u64,
-}
-
-pub struct MintEvent {
-    /// The owner of the newly minted tokens.
-    owner: Identity,
-    /// The starting range of token ids that have been minted in this transaction.
-    token_id_start: u64,
-    /// The total number of tokens minted in this transaction.
-    total_tokens: u64,
-}
 
 abi NFT {
     /// Returns the current admin for the contract.
@@ -175,9 +142,6 @@ abi NFT {
     #[storage(read)]
     fn owner_of(token_id: u64) -> Option<Identity>;
 
-    #[storage(read, write)]
-    fn share_owner(from: Identity, to: Identity, token_id: u64);
-
     /// Changes the contract's admin.
     ///
     /// This new admin will have access to minting if `access_control` is set to true and be able
@@ -205,6 +169,29 @@ abi NFT {
     #[storage(write)]
     fn set_approval_for_all(approve: bool, operator: Identity);
 
+    /// Share the ownership of the token
+    /// this is used to lend the token to other users
+    ///
+    /// Lending can occur under one of three conditions:
+    /// 1. The token's owner is transfering the token.
+    /// 2. The token's approved user is transfering the token.
+    /// 3. The token's owner has a user set as an operator and is transfering the token.
+    ///
+    /// # Arguments
+    ///
+    /// * `from` - The user which currently owns the token to be transfered.
+    /// * `to` - The user which the ownership of the token should be set to.
+    /// * `token_id` - The unique identifier of the token which should be transfered.
+    ///
+    /// # Reverts
+    ///
+    /// * When the `token_id` does not map to an existing token.
+    /// * When the sender is not the owner of the token.
+    /// * When the sender is not approved to transfer the token on the owner's behalf.
+    /// * When the sender is not approved to transfer all tokens on the owner's behalf.
+    #[storage(read, write)]
+    fn share_owner(from: Identity, to: Identity, token_id: u64);
+
     /// Returns the total supply of tokens which are currently in existence.
     #[storage(read)]
     fn total_supply() -> u64;
@@ -230,25 +217,4 @@ abi NFT {
     /// * When the sender is not approved to transfer all tokens on the owner's behalf.
     #[storage(read, write)]
     fn transfer_from(from: Identity, to: Identity, token_id: u64);
-}
-
-pub struct OperatorEvent {
-    /// Determines whether approval to transfer all of the owner's tokens has been given or revoked.
-    approve: bool,
-    /// The user which may or may not transfer all tokens on the owner's behalf.
-    operator: Identity,
-    /// The user which has given or revoked approval to the operator to transfer all of their
-    /// tokens on their behalf.
-    owner: Identity,
-}
-
-pub struct TransferEvent {
-    /// The user which previously owned the token that has been transfered.
-    from: Identity,
-    // The user that made the transfer. This can be the owner, the approved user, or the operator.
-    sender: Identity,
-    /// The user which now owns the token that has been transfered.
-    to: Identity,
-    /// The unique identifier of the token which has transfered ownership.
-    token_id: u64,
 }

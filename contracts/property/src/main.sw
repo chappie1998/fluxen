@@ -2,11 +2,14 @@ contract;
 
 dep data_structures;
 dep errors;
+dep events;
 dep interface;
 
 use data_structures::TokenMetaData;
 use errors::{AccessError, InitError, InputError};
-use interface::{AdminEvent, ApprovalEvent, BurnEvent, NFT, OperatorEvent, TransferEvent};
+use events::{AdminEvent, ApprovalEvent, BurnEvent, OperatorEvent, TransferEvent};
+use interface::NFT;
+
 use std::{
     auth::msg_sender,
     constants::BASE_ASSET_ID,
@@ -259,7 +262,7 @@ impl NFT for Contract {
     }
 
     #[storage(read, write)]
-    fn share_owner(from: Identity, to: Identity, token_id: u64, ) {
+    fn share_owner(from: Identity, to: Identity, token_id: u64) {
         // Make sure the `token_id` maps to an existing token
         let token_owner = storage.owners.get(token_id);
         require(token_owner.is_some(), InputError::TokenDoesNotExist);
