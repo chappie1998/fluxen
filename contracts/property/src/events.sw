@@ -26,10 +26,8 @@ pub struct BurnEvent {
 pub struct MintEvent {
     /// The owner of the newly minted tokens.
     owner: Identity,
-    /// The starting range of token ids that have been minted in this transaction.
-    token_id_start: u64,
     /// The total number of tokens minted in this transaction.
-    total_tokens: u64,
+    token_id: u64,
 }
 
 pub struct OperatorEvent {

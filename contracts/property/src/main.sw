@@ -7,19 +7,16 @@ dep interface;
 
 use data_structures::TokenMetaData;
 use errors::{AccessError, InitError, InputError};
-use events::{AdminEvent, ApprovalEvent, BurnEvent, OperatorEvent, TransferEvent};
+use events::{AdminEvent, ApprovalEvent, BurnEvent, MintEvent, OperatorEvent, TransferEvent};
 use interface::NFT;
 
 use std::{
     auth::msg_sender,
     constants::BASE_ASSET_ID,
     context::msg_amount,
-    identity::Identity,
     logging::log,
-    option::Option,
     result::Result,
     revert::require,
-    storage::StorageMap,
     token::transfer,
 };
 
@@ -62,11 +59,6 @@ storage {
     /// This is incremented on mint and decremented on burn. This should not be used to assign
     /// unqiue identifiers due to the decrementation of the value on burning of tokens.
     total_supply: u64 = 0,
-}
-
-struct MintEvent {
-    owner: Identity,
-    token_id: u64,
 }
 
 impl NFT for Contract {
