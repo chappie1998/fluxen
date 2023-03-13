@@ -12,13 +12,12 @@ pub struct ManagerChangeEvent {
     mew_manager: Identity,
 }
 
-pub struct WithdrawAuctionEvent {
+pub struct WithdrawLanedNftEvent {
     contract_id: ContractId,
     token_id: u64,
-    /// The current highest bidder of the auction.
-    highest_bidder: Option<Identity>,
-    /// the bidding amount of the auction.
-    bidder_amount: Option<u64>,
+    buyer: Identity,
+    start_block: u64,
+    end_block: u64,
 }
 
 pub struct BidEvent {
@@ -28,13 +27,13 @@ pub struct BidEvent {
     user: Identity,
 }
 
-pub struct CreateAuctionEvent {
+pub struct LendNftEvent {
     contract_id: ContractId,
     token_id: u64,
-    seller: Identity,
+    buyer: Identity,
+    start_block: u64,
     end_block: u64,
-    initial_price: u64,
-    reserve_price: Option<u64>,
+    price: u64,
 }
 
 pub struct CancelAuctionEvent {

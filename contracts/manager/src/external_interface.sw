@@ -59,4 +59,7 @@ abi externalAbi {
     /// * When the sender is not the token's owner.
     #[storage(read, write)]
     fn approve(approved: Identity, token_id: u64);
+
+    #[storage(read, write)]
+    fn share_owner(from: Identity, to: Identity, token_id: u64);
 }

@@ -15,8 +15,6 @@ use std::{
     constants::BASE_ASSET_ID,
     context::msg_amount,
     logging::log,
-    result::Result,
-    revert::require,
     token::transfer,
 };
 
@@ -268,11 +266,13 @@ impl NFT for Contract {
         let approved = storage.approved.get(token_id);
         require(sender == token_owner || (approved.is_some() && sender == approved.unwrap()) || (from == token_owner && storage.operator_approval.get((from, sender))), AccessError::SenderNotOwnerOrApproved);
 
-        // Set the new owner of the token and reset the approved Identity
-        storage.shared_owners.insert(token_id, Option::Some(to));
-        if approved.is_some() {
-            storage.approved.insert(token_id, Option::None::<Identity>());
+        let mut shared_owner = storage.shared_owners.get(token_id);
+        if shared_owner.is_some() {
+            shared_owner = Option::None::<Identity>();
+        } else {
+            shared_owner = Option::Some(to);
         }
+        storage.shared_owners.insert(token_id, shared_owner);
 
         log(TransferEvent {
             from,

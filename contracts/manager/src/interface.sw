@@ -2,7 +2,7 @@ library interface;
 
 dep data_structure;
 
-use data_structure::{Auction, ListNft, OfferNft, Royalty, WalletNft};
+use data_structure::{LendNft, ListNft};
 
 abi NftMarketplace {
     // Returns the current admin for the contract.
@@ -14,7 +14,7 @@ abi NftMarketplace {
     fn admin() -> Identity;
 
     #[storage(write)]
-    fn constructor(access_control: bool, admin: Identity);
+    fn constructor(admin: Identity);
 
     /// Starts an auction with a seller, selling asset, accepted bid asset, initial price, a
     /// possible reserve price, and duration of the auction.
@@ -43,19 +43,13 @@ abi NftMarketplace {
     /// * When the `initial_price` for NFTs is not one.
     /// * When transfering of the NFT asset to the contract failed.
     #[storage(read, write)]
-    fn create_auction(id: ContractId, token_id: u64, seller: Identity, duration: u64, initial_price: u64, reserve_price: Option<u64>);
-
-    #[payable, storage(read, write)]
-    fn bid(id: ContractId, token_id: u64);
-
-    #[storage(read, write)]
-    fn cancel_auction(id: ContractId, token_id: u64);
-
-    #[storage(read, write)]
-    fn auction_withdraw(id: ContractId, token_id: u64);
+    fn lend_nft(id: ContractId, token_id: u64, seller: Identity, start_block: u64, end_block: u64, initial_price: u64);
 
     #[storage(read)]
-    fn auction_info(id: ContractId, token_id: u64) -> Option<Auction>;
+    fn lended_nft_info(id: ContractId, token_id: u64) -> [Option<LendNft>; 5];
+
+    #[storage(read, write)]
+    fn lended_nft_withdraw(id: ContractId, token_id: u64);
 
     // Changes the contract's admin.
     // 
@@ -79,12 +73,7 @@ abi NftMarketplace {
     fn set_protocol_fee(id: ContractId, amount: u64);
 
     #[storage(read, write)]
-    fn set_royalty(id: ContractId, royalty: Royalty);
-    #[storage(read, write)]
     fn list_nft(id: ContractId, token_id: u64, price: u64);
-
-    #[storage(read, write)]
-    fn buy_nft(id: ContractId, token_id: u64);
 
     #[storage(read, write)]
     fn delist_nft(id: ContractId, token_id: u64);
@@ -101,28 +90,14 @@ abi NftMarketplace {
     #[storage(read)]
     fn get_default_protocol_feee() -> u64;
 
-    #[storage(read)]
-    fn get_royalty(id: ContractId) -> Option<Royalty>;
-
-    #[storage(read, write)]
-    fn withdraw_royalty(id: ContractId, amount: u64);
-
-    #[storage(read, write)]
-    fn make_offer(id: ContractId, token_id: u64);
-
-    // #[storage(read, write)]
-    // fn make_offer(id: ContractId, token_id: u64, price: u64);
-    #[storage(read)]
-    fn get_offer(id: ContractId, token_id: u64) -> Option<OfferNft>;
-
-    #[storage(read, write)]
-    fn accept_offer(id: ContractId, token_id: u64);
-
-    #[storage(read, write)]
-    fn change_offer(id: ContractId, token_id: u64, price: u64);
-
     fn get_balance() -> u64;
 
     #[storage(read)]
     fn withdraw_balance(amount: u64);
+
+    #[storage(read, write)]
+    fn whiltest_contract(id: ContractId);
+
+    #[storage(read)]
+    fn get_whiltested_contract(id: ContractId) -> bool;
 }
