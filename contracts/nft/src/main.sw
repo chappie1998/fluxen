@@ -119,7 +119,7 @@ impl NFT for Contract {
     fn change_max_supply(max_supply: u64) {
         require(storage.max_supply < max_supply, InputError::TokenSupplyCannotBeZero);
         let admin = storage.admin;
-        require((msg_sender().unwrap() == admin.unwrap()), AccessError::SenderNotAdmin);
+        require((admin.is_some() && msg_sender().unwrap() == admin.unwrap()), AccessError::SenderNotAdmin);
         storage.max_supply = max_supply;
     }
 
@@ -153,8 +153,8 @@ impl NFT for Contract {
         require(storage.max_supply >= index, InputError::NotEnoughTokensToMint);
 
         // Ensure that the sender is the admin if this is a controlled access mint
-        // let admin = storage.admin;
-        // require(!storage.access_control || (admin.is_some() && msg_sender().unwrap() == admin.unwrap()), AccessError::SenderNotAdmin);
+        let admin = storage.admin;
+        require((admin.is_some() && msg_sender().unwrap() == admin.unwrap()), AccessError::SenderNotAdmin);
         // Mint as many tokens as the sender has asked for
         // Create the TokenMetaData for this new token
         storage.meta_data.insert(index, Option::Some(meta_data));
