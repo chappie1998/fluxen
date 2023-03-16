@@ -113,6 +113,7 @@ impl NftMarketplace for Contract {
 
     #[storage(read, write)]
     fn list_nft(id: ContractId, token_id: u64, price: u64) {
+        require(storage.whiltest_contract.get(id), AccessError::ContractIsNotWhitelisted);
         require(price != 0, InputError::PriceCantBeZero);
         require(!storage.list_nft.get((id, token_id)).is_some(), AccessError::NFTAlreadyListed);
 

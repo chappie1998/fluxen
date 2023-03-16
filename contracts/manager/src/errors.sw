@@ -19,4 +19,5 @@ pub enum AccessError {
     SenderNotOwner: (),
     MaximumTimeNftLanded: (),
     CantLandNft: (),
+    ContractIsNotWhitelisted: (),
 }
