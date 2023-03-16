@@ -22,7 +22,7 @@ import type {
 
 import type { Option, Enum } from "./common";
 
-export type AccessErrorInput = Enum<{ NFTAlreadyListed: [], NFTNotListed: [], SenderCannotSetAccessControl: [], SenderNotAdmin: [], SenderNotOwner: [], MaximumTimeNftLanded: [], CantLandNft: [] }>;
+export type AccessErrorInput = Enum<{ NFTAlreadyListed: [], NFTNotListed: [], SenderCannotSetAccessControl: [], SenderNotAdmin: [], SenderNotOwner: [], MaximumTimeNftLanded: [], CantLandNft: [], ContractIsNotWhitelisted: [], ContractIsAlreadyWhitelisted: [] }>;
 export type AccessErrorOutput = AccessErrorInput;
 export type IdentityInput = Enum<{ Address: AddressInput, ContractId: ContractIdInput }>;
 export type IdentityOutput = Enum<{ Address: AddressOutput, ContractId: ContractIdOutput }>;
@@ -51,6 +51,10 @@ export type NFTListedEventInput = { owner: IdentityInput, nft_contract: Contract
 export type NFTListedEventOutput = { owner: IdentityOutput, nft_contract: ContractIdOutput, token_id: BN, price: BN };
 export type NFTPriceChangeEventInput = { owner: IdentityInput, nft_contract: ContractIdInput, token_id: BigNumberish, old_price: BigNumberish, new_price: BigNumberish };
 export type NFTPriceChangeEventOutput = { owner: IdentityOutput, nft_contract: ContractIdOutput, token_id: BN, old_price: BN, new_price: BN };
+export type UnwhiteListContractInput = { contract_id: ContractIdInput };
+export type UnwhiteListContractOutput = { contract_id: ContractIdOutput };
+export type WhiteListContractInput = { contract_id: ContractIdInput };
+export type WhiteListContractOutput = { contract_id: ContractIdOutput };
 export type WithdrawLanedNftEventInput = { contract_id: ContractIdInput, token_id: BigNumberish, buyer: IdentityInput, start_block: BigNumberish, end_block: BigNumberish };
 export type WithdrawLanedNftEventOutput = { contract_id: ContractIdOutput, token_id: BN, buyer: IdentityOutput, start_block: BN, end_block: BN };
 
@@ -72,6 +76,7 @@ interface ManagerAbiInterface extends Interface {
     set_admin: FunctionFragment;
     set_manager: FunctionFragment;
     set_protocol_fee: FunctionFragment;
+    unwhiltest_contract: FunctionFragment;
     whiltest_contract: FunctionFragment;
     withdraw_balance: FunctionFragment;
   };
@@ -92,6 +97,7 @@ interface ManagerAbiInterface extends Interface {
   encodeFunctionData(functionFragment: 'set_admin', values: [IdentityInput]): Uint8Array;
   encodeFunctionData(functionFragment: 'set_manager', values: [IdentityInput]): Uint8Array;
   encodeFunctionData(functionFragment: 'set_protocol_fee', values: [ContractIdInput, BigNumberish]): Uint8Array;
+  encodeFunctionData(functionFragment: 'unwhiltest_contract', values: [ContractIdInput]): Uint8Array;
   encodeFunctionData(functionFragment: 'whiltest_contract', values: [ContractIdInput]): Uint8Array;
   encodeFunctionData(functionFragment: 'withdraw_balance', values: [BigNumberish]): Uint8Array;
 
@@ -111,6 +117,7 @@ interface ManagerAbiInterface extends Interface {
   decodeFunctionData(functionFragment: 'set_admin', data: BytesLike): DecodedValue;
   decodeFunctionData(functionFragment: 'set_manager', data: BytesLike): DecodedValue;
   decodeFunctionData(functionFragment: 'set_protocol_fee', data: BytesLike): DecodedValue;
+  decodeFunctionData(functionFragment: 'unwhiltest_contract', data: BytesLike): DecodedValue;
   decodeFunctionData(functionFragment: 'whiltest_contract', data: BytesLike): DecodedValue;
   decodeFunctionData(functionFragment: 'withdraw_balance', data: BytesLike): DecodedValue;
 }
@@ -118,7 +125,7 @@ interface ManagerAbiInterface extends Interface {
 export class ManagerAbi extends Contract {
   interface: ManagerAbiInterface;
   functions: {
-    admin: InvokeFunction<[], IdentityOutput>;
+    admin: InvokeFunction<[], Option<IdentityOutput>>;
     change_nft_price: InvokeFunction<[id: ContractIdInput, token_id: BigNumberish, price: BigNumberish], void>;
     constructor: InvokeFunction<[admin: IdentityInput], void>;
     delist_nft: InvokeFunction<[id: ContractIdInput, token_id: BigNumberish], void>;
@@ -134,6 +141,7 @@ export class ManagerAbi extends Contract {
     set_admin: InvokeFunction<[admin: IdentityInput], void>;
     set_manager: InvokeFunction<[manager: IdentityInput], void>;
     set_protocol_fee: InvokeFunction<[id: ContractIdInput, amount: BigNumberish], void>;
+    unwhiltest_contract: InvokeFunction<[id: ContractIdInput], void>;
     whiltest_contract: InvokeFunction<[id: ContractIdInput], void>;
     withdraw_balance: InvokeFunction<[amount: BigNumberish], void>;
   };

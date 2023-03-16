@@ -94,9 +94,9 @@ pub struct NFTChangeOfferEvent {
 }
 
 pub struct WhiteListContract {
-    contract_id: ContractId
+    contract_id: ContractId,
 }
 
 pub struct UnwhiteListContract {
-    contract_id: ContractId
+    contract_id: ContractId,
 }

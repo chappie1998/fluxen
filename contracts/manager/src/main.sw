@@ -15,9 +15,9 @@ use events::{
     NFTDeListedEvent,
     NFTListedEvent,
     NFTPriceChangeEvent,
-    WithdrawLanedNftEvent,
-    WhiteListContract,
     UnwhiteListContract,
+    WhiteListContract,
+    WithdrawLanedNftEvent,
 };
 use interface::NftMarketplace;
 use external_interface::externalAbi;
@@ -67,17 +67,16 @@ storage {
 
 impl NftMarketplace for Contract {
     #[storage(read)]
-    fn admin() -> Identity {
-        storage.admin.unwrap()
+    fn admin() -> Option<Identity> {
+        storage.admin
     }
 
-    #[storage(write)]
+    #[storage(read, write)]
     fn constructor(admin: Identity) {
         // This function can only be called once so if the token supply is already set it has
         // already been called
-        let admin = Option::Some(admin);
-        require(admin.is_none(), InitError::AdminIsNone);
-        storage.admin = admin;
+        require(storage.admin.is_none(), InitError::AdminIsNone);
+        storage.admin = Option::Some(admin);
     }
 
     #[storage(read, write)]
@@ -144,7 +143,7 @@ impl NftMarketplace for Contract {
         let nft = nft_data.unwrap();
         require(nft.owner == sender, AccessError::SenderNotOwner);
 
-        storage.list_nft.insert((id, token_id), Option::None());
+        storage.list_nft.insert((id, token_id), Option::None);
 
         let x = abi(externalAbi, id.value);
         x.transfer_from(Identity::ContractId(contract_id()), sender, token_id);
@@ -237,7 +236,7 @@ impl NftMarketplace for Contract {
         storage.whiltest_contract.get(id)
     }
 
-    #[storage(read, write)]
+    #[payable, storage(read, write)]
     fn lend_nft(
         id: ContractId,
         token_id: u64,
@@ -254,7 +253,7 @@ impl NftMarketplace for Contract {
         require(start_block > height(), InputError::WrongStartBlockProvided);
 
         let lended_nfts = storage.lend_nft.get((id, token_id));
-        require(!lended_nfts[4].is_some(), AccessError::MaximumTimeNftLanded);
+        require(lended_nfts[4].is_none(), AccessError::MaximumTimeNftLanded);
 
         let result = get_lended_nfts(id, token_id, buyer, start_block, end_block, price, lended_nfts);
         storage.lend_nft.insert((id, token_id), result);
@@ -295,18 +294,18 @@ fn get_lended_nfts(
     price: u64,
     nfts: [Option<LendNft>; 5],
 ) -> [Option<LendNft>; 5] {
-    let blank = Option::None();
+    let blank = Option::None;
     let mut result = [blank, blank, blank, blank, blank];
     let lending_nft = Option::Some(LendNft::new(sb, eb, price, buyer));
-    if !nfts[0].is_some() {
+    if nfts[0].is_none() {
         result = [lending_nft, blank, blank, blank, blank];
-    } else if !nfts[1].is_some() {
+    } else if nfts[1].is_none() {
         let s1 = nfts[0].unwrap().start_block;
         let e1 = nfts[0].unwrap().end_block;
         if eb < s1 || sb > e1 {
             result = [nfts[0], lending_nft, blank, blank, blank];
         }
-    } else if !nfts[2].is_some() {
+    } else if nfts[2].is_none() {
         let s1 = nfts[0].unwrap().start_block;
         let e1 = nfts[0].unwrap().end_block;
         let s2 = nfts[1].unwrap().start_block;
@@ -314,7 +313,7 @@ fn get_lended_nfts(
         if (eb < s1 || sb > e1) && (eb < s2 || sb > e2) {
             result = [nfts[0], nfts[1], lending_nft, blank, blank];
         }
-    } else if !nfts[3].is_some() {
+    } else if nfts[3].is_none() {
         let s1 = nfts[0].unwrap().start_block;
         let e1 = nfts[0].unwrap().end_block;
         let s2 = nfts[1].unwrap().start_block;
@@ -330,7 +329,7 @@ fn get_lended_nfts(
         {
             result = [nfts[0], nfts[1], nfts[2], lending_nft, blank];
         }
-    } else if !nfts[4].is_some() {
+    } else if nfts[4].is_none() {
         let s1 = nfts[0].unwrap().start_block;
         let e1 = nfts[0].unwrap().end_block;
         let s2 = nfts[1].unwrap().start_block;
@@ -360,7 +359,7 @@ fn withdraw_lended_nft(
     token_id: u64,
     nfts: [Option<LendNft>; 5],
 ) -> [Option<LendNft>; 5] {
-    let blank = Option::None();
+    let blank = Option::None;
     let mut result = nfts;
     let x = abi(externalAbi, id.value);
     let this_contract = Identity::ContractId(contract_id());

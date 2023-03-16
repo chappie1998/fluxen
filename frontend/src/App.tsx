@@ -1,30 +1,40 @@
-import React from "react";
+import { useState } from "react";
 import logo from "./logo.svg";
 import "./App.css";
 import { PropertyAbi__factory } from "./contracts/nft";
 import { ManagerAbi__factory } from "./contracts/manager";
-import { Wallet } from "fuels";
+import { Address, Contract, ContractFactory, Wallet } from "fuels";
+import { _abi } from "./contracts/nft/factories/PropertyAbi__factory";
+
+const buffer = require("buffer");
+
+const SIGN_MESSAGE = "This is a test";
 
 function App() {
+  const [address, setAddress] = useState();
+
   type TokenMetaData = {
     name: string;
     // symbol: string;
     token_uri: string;
   };
-  const wallet = Wallet.fromPrivateKey(
-    "0xde97d8624a438121b86a1956544bd72ed68cd69f2c99555b08b1e8c51ffd511c"
-    // "https://node-beta-2.fuel.network/graphql"
-  );
   const admin =
-    "0x6b63804cfbf9856e68e5b6e7aef238dc8311ec55bec04df774003a2c96e0418e";
+    "0xfec21894a55b54b3dd89ab836856403d20f20d2af3694e13e64a32b3e1d41f0a";
+  const wallet = Wallet.fromPrivateKey(
+    "0xc852a8675f20538e3c578f56d59ea928035fda840b428e873e8abc04bb2a57ab",
+    "https://beta-3.fuel.network/graphql"
+  );
 
   const contractId =
-    "0xf33494881c67797d70ed78277cf1fa0fff59ffecb4af62bc1989128e88f0ab95";
+    "0x54061a6eed2c40f61b0a41a9f19eff50dcf56a5ace54da1f7e1bc78e18e66a18";
   const managerContract = ManagerAbi__factory.connect(contractId, wallet);
 
   const NFTContractId =
-    "0x8383488e3f2a1e1600ce2052e14341b505355917ac9726320698b83c7443ff69";
-  const NFTContract = PropertyAbi__factory.connect(NFTContractId, wallet);
+    "0xa16ad54dc1c1cb082e56c1a82cc3a7b108d5316d34e70d83cdf578cac36c9ac4";
+  // const NFTContract = PropertyAbi__factory.connect(NFTContractId, wallet);
+  // console.log(PropertyAbi__factory.createInterface);
+
+  const NFTContract = new Contract(NFTContractId, _abi, wallet);
 
   const callConstructorResp = async () => {
     console.log("some1 start");
@@ -33,6 +43,20 @@ function App() {
       .txParams({ gasPrice: 1 })
       .call();
     console.log("some1", consttructor);
+  };
+
+  const constructorManager = async () => {
+    console.log("some1 start");
+    const consttructor = await managerContract.functions
+      .constructor({ Address: { value: admin } })
+      .txParams({ gasPrice: 1 })
+      .call();
+    console.log("some1", consttructor);
+  };
+
+  const getadmin = async () => {
+    const admin = await managerContract.functions.admin().get();
+    console.log("admin", admin);
   };
 
   const mint = async (token: any) => {
@@ -63,29 +87,185 @@ function App() {
 
   const listNFT = async (token: any) => {
     const list_nft = await managerContract.functions
-      .list_nft({ value: NFTContractId }, token, 0.1 * 1e9)
+      .list_nft({ value: NFTContractId }, token, 0.01 * 1e9)
       .txParams({ gasPrice: 1 })
-      // .addContracts([NFTContract])
+      .addContracts([NFTContract])
       .call();
     console.log("list_nft", list_nft);
     // console.log("list_nft", "list_nft");
   };
 
   const mintAndList = async () => {
-    const token = 0;
+    const token = 2;
     await mint(token);
-    // await approveNFT(token);
-    // await listNFT(token);
+    await approveNFT(token);
+    await listNFT(token);
     console.log(token);
+  };
+
+  const token_metadata = async () => {
+    const token_metadata = await NFTContract.functions.token_metadata(0).get();
+    console.log("token_metadata", token_metadata);
+  };
+
+  const connectWalletButton = async () => {
+    const w = window;
+    try {
+      const accounts = await window.fuel.accounts();
+      localStorage.setItem("publicKey", accounts[0]);
+      // setAddress(Address.fromAddressOrString(accounts[0]).toB256());
+    } catch (error) {
+      const isConnected = await w.fuel.connect();
+      console.log("Connection response", isConnected);
+      const accounts = await w.fuel.accounts();
+      localStorage.setItem("publicKey", accounts[0]);
+      // setAddress(Address.fromAddressOrString(accounts[0]).toB256());
+    }
+  };
+
+  const signMessage = async () => {
+    let w = window;
+    if (w.fuel) {
+      const accounts = await w.fuel.accounts();
+      const signature = await w.fuel.signMessage(accounts[0], SIGN_MESSAGE);
+      if (signature && address) {
+        const body = {
+          varifiedBy: "fuel",
+          address,
+          signature,
+          message: SIGN_MESSAGE,
+        };
+        try {
+          const response = await fetch(
+            `${process.env.REACT_APP_AMRKETPLACE_API_URL}/user/auth`,
+            {
+              method: "POST",
+              headers: {
+                "Content-type": "application/json",
+              },
+              body: JSON.stringify(body),
+            }
+          );
+          if (response.ok) {
+            const data = await response.json();
+            localStorage.setItem("token", data.token);
+          }
+        } catch (error) {
+          console.error(error);
+        }
+      }
+    }
+  };
+
+  const getaccount = async () => {
+    let w = window;
+    if (w.fuel) {
+      const isConnected = await w.fuel.connect();
+      console.log("Connection response", isConnected);
+      const accounts = await w.fuel.accounts();
+      return w.fuel.getWallet(accounts[0]);
+    }
+  };
+
+  const whiltest_contract = async () => {
+    const whiltest_contract = await managerContract.functions
+      .whiltest_contract({ value: NFTContractId })
+      .txParams({ gasPrice: 1 })
+      .call();
+    console.log("whiltest_contract", whiltest_contract);
+  };
+
+  const get_whiltested_contract = async () => {
+    const get_whiltested_contract = await managerContract.functions
+      .get_whiltested_contract({ value: NFTContractId })
+      .get();
+    console.log("get_whiltested_contract", get_whiltested_contract);
+  };
+
+  const lend_nft = async () => {
+    const lend_nft = await managerContract.functions
+      .lend_nft(
+        { value: NFTContractId },
+        2,
+        { Address: { value: admin } },
+        8765,
+        8766,
+        0.01 * 1e9
+      )
+      .txParams({ gasPrice: 1 })
+      .callParams({
+        forward: [0.01 * 1e9],
+      })
+      .call();
+    console.log("lend_nft", lend_nft);
+  };
+
+  const lended_nft_info = async () => {
+    const lended_nft_info = await managerContract.functions
+      .lended_nft_info({ value: NFTContractId }, 2)
+      .get();
+    console.log("lended_nft_info", lended_nft_info);
+    console.log(
+      "start_block",
+      lended_nft_info.value?.[0]?.start_block.toNumber()
+    );
+  };
+
+  const deployContract = async () => {
+    // load the byteCode of the contract, generated from Sway source
+    const data = await fetch("./deploy_contract/property.bin");
+
+    var byteCode = new Uint8Array(await data.arrayBuffer());
+    const buff = buffer.Buffer.from(byteCode);
+
+    // load the JSON abi of the contract, generated from Sway source
+    const abi = require("./deploy_contract/property-abi.json");
+    // console.log(abi.toString());
+
+    const wallet = await getaccount();
+    // send byteCode and ABI to ContractFactory to load
+    const factory = new ContractFactory(buff, abi, wallet);
+    const contract = await factory.deployContract();
+    console.log("contract successful deployed", contract);
   };
 
   return (
     <div className="App">
+      <button
+        className="sc-button fl-button style-1"
+        onClick={connectWalletButton}
+      >
+        <span>connectWalletButton</span>
+      </button>
+      <button className="sc-button fl-button style-1" onClick={signMessage}>
+        <span>Verify Wallet</span>
+      </button>
+      <div>
+        <button onClick={deployContract}>deployContract</button>
+      </div>
       <div>
         <button onClick={callConstructorResp}>callConstructorResp</button>
       </div>
       <div>
+        <button onClick={constructorManager}>constructorManager</button>
+        <button onClick={getadmin}>getadmin</button>
+      </div>
+      <div>
+        <button onClick={whiltest_contract}>whiltest_contract</button>
+        <button onClick={get_whiltested_contract}>
+          get_whiltested_contract
+        </button>
+      </div>
+
+      <div>
         <button onClick={mintAndList}>mintAndList</button>
+      </div>
+      <div>
+        <button onClick={token_metadata}>token_metadata</button>
+      </div>
+      <div>
+        <button onClick={lend_nft}>lend_nft</button>
+        <button onClick={lended_nft_info}>lended_nft_info</button>
       </div>
     </div>
   );

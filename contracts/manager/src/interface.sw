@@ -5,15 +5,15 @@ dep data_structure;
 use data_structure::{LendNft, ListNft};
 
 abi NftMarketplace {
-    // Returns the current admin for the contract.
-    // 
-    // # Reverts
-    // 
-    // * When the contract does not have an admin.
+    /// Returns the current admin for the contract.
+    ///
+    /// # Reverts
+    ///
+    /// * When the contract does not have an admin.
     #[storage(read)]
-    fn admin() -> Identity;
+    fn admin() -> Option<Identity>;
 
-    #[storage(write)]
+    #[storage(read, write)]
     fn constructor(admin: Identity);
 
     /// Starts an auction with a seller, selling asset, accepted bid asset, initial price, a
@@ -42,7 +42,7 @@ abi NftMarketplace {
     /// * When the native asset type sent and the `sell_asset` enum do not match.
     /// * When the `initial_price` for NFTs is not one.
     /// * When transfering of the NFT asset to the contract failed.
-    #[storage(read, write)]
+    #[payable, storage(read, write)]
     fn lend_nft(id: ContractId, token_id: u64, seller: Identity, start_block: u64, end_block: u64, initial_price: u64);
 
     #[storage(read)]

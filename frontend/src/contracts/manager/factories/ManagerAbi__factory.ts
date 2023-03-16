@@ -89,6 +89,16 @@ const _abi = {
           "name": "CantLandNft",
           "type": 0,
           "typeArguments": null
+        },
+        {
+          "name": "ContractIsNotWhitelisted",
+          "type": 0,
+          "typeArguments": null
+        },
+        {
+          "name": "ContractIsAlreadyWhitelisted",
+          "type": 0,
+          "typeArguments": null
         }
       ],
       "typeParameters": null
@@ -216,17 +226,17 @@ const _abi = {
       "components": [
         {
           "name": "start_block",
-          "type": 21,
+          "type": 23,
           "typeArguments": null
         },
         {
           "name": "end_block",
-          "type": 21,
+          "type": 23,
           "typeArguments": null
         },
         {
           "name": "price",
-          "type": 21,
+          "type": 23,
           "typeArguments": null
         },
         {
@@ -248,7 +258,7 @@ const _abi = {
         },
         {
           "name": "token_id",
-          "type": 21,
+          "type": 23,
           "typeArguments": null
         },
         {
@@ -258,17 +268,17 @@ const _abi = {
         },
         {
           "name": "start_block",
-          "type": 21,
+          "type": 23,
           "typeArguments": null
         },
         {
           "name": "end_block",
-          "type": 21,
+          "type": 23,
           "typeArguments": null
         },
         {
           "name": "price",
-          "type": 21,
+          "type": 23,
           "typeArguments": null
         }
       ],
@@ -285,7 +295,7 @@ const _abi = {
         },
         {
           "name": "price",
-          "type": 21,
+          "type": 23,
           "typeArguments": null
         }
       ],
@@ -319,7 +329,7 @@ const _abi = {
         },
         {
           "name": "token_id",
-          "type": 21,
+          "type": 23,
           "typeArguments": null
         }
       ],
@@ -341,12 +351,12 @@ const _abi = {
         },
         {
           "name": "token_id",
-          "type": 21,
+          "type": 23,
           "typeArguments": null
         },
         {
           "name": "price",
-          "type": 21,
+          "type": 23,
           "typeArguments": null
         }
       ],
@@ -368,17 +378,17 @@ const _abi = {
         },
         {
           "name": "token_id",
-          "type": 21,
+          "type": 23,
           "typeArguments": null
         },
         {
           "name": "old_price",
-          "type": 21,
+          "type": 23,
           "typeArguments": null
         },
         {
           "name": "new_price",
-          "type": 21,
+          "type": 23,
           "typeArguments": null
         }
       ],
@@ -386,6 +396,30 @@ const _abi = {
     },
     {
       "typeId": 20,
+      "type": "struct UnwhiteListContract",
+      "components": [
+        {
+          "name": "contract_id",
+          "type": 12,
+          "typeArguments": null
+        }
+      ],
+      "typeParameters": null
+    },
+    {
+      "typeId": 21,
+      "type": "struct WhiteListContract",
+      "components": [
+        {
+          "name": "contract_id",
+          "type": 12,
+          "typeArguments": null
+        }
+      ],
+      "typeParameters": null
+    },
+    {
+      "typeId": 22,
       "type": "struct WithdrawLanedNftEvent",
       "components": [
         {
@@ -395,7 +429,7 @@ const _abi = {
         },
         {
           "name": "token_id",
-          "type": 21,
+          "type": 23,
           "typeArguments": null
         },
         {
@@ -405,19 +439,19 @@ const _abi = {
         },
         {
           "name": "start_block",
-          "type": 21,
+          "type": 23,
           "typeArguments": null
         },
         {
           "name": "end_block",
-          "type": 21,
+          "type": 23,
           "typeArguments": null
         }
       ],
       "typeParameters": null
     },
     {
-      "typeId": 21,
+      "typeId": 23,
       "type": "u64",
       "components": null,
       "typeParameters": null
@@ -429,8 +463,14 @@ const _abi = {
       "name": "admin",
       "output": {
         "name": "",
-        "type": 5,
-        "typeArguments": null
+        "type": 8,
+        "typeArguments": [
+          {
+            "name": "",
+            "type": 5,
+            "typeArguments": null
+          }
+        ]
       },
       "attributes": [
         {
@@ -450,12 +490,12 @@ const _abi = {
         },
         {
           "name": "token_id",
-          "type": 21,
+          "type": 23,
           "typeArguments": null
         },
         {
           "name": "price",
-          "type": 21,
+          "type": 23,
           "typeArguments": null
         }
       ],
@@ -493,6 +533,7 @@ const _abi = {
         {
           "name": "storage",
           "arguments": [
+            "read",
             "write"
           ]
         }
@@ -507,7 +548,7 @@ const _abi = {
         },
         {
           "name": "token_id",
-          "type": 21,
+          "type": 23,
           "typeArguments": null
         }
       ],
@@ -532,7 +573,7 @@ const _abi = {
       "name": "get_balance",
       "output": {
         "name": "",
-        "type": 21,
+        "type": 23,
         "typeArguments": null
       },
       "attributes": null
@@ -542,7 +583,7 @@ const _abi = {
       "name": "get_default_protocol_feee",
       "output": {
         "name": "",
-        "type": 21,
+        "type": 23,
         "typeArguments": null
       },
       "attributes": [
@@ -563,7 +604,7 @@ const _abi = {
         },
         {
           "name": "token_id",
-          "type": 21,
+          "type": 23,
           "typeArguments": null
         }
       ],
@@ -599,7 +640,7 @@ const _abi = {
       "name": "get_protocol_fee",
       "output": {
         "name": "",
-        "type": 21,
+        "type": 23,
         "typeArguments": null
       },
       "attributes": [
@@ -643,7 +684,7 @@ const _abi = {
         },
         {
           "name": "token_id",
-          "type": 21,
+          "type": 23,
           "typeArguments": null
         },
         {
@@ -653,17 +694,17 @@ const _abi = {
         },
         {
           "name": "start_block",
-          "type": 21,
+          "type": 23,
           "typeArguments": null
         },
         {
           "name": "end_block",
-          "type": 21,
+          "type": 23,
           "typeArguments": null
         },
         {
           "name": "price",
-          "type": 21,
+          "type": 23,
           "typeArguments": null
         }
       ],
@@ -674,6 +715,10 @@ const _abi = {
         "typeArguments": null
       },
       "attributes": [
+        {
+          "name": "payable",
+          "arguments": []
+        },
         {
           "name": "storage",
           "arguments": [
@@ -692,7 +737,7 @@ const _abi = {
         },
         {
           "name": "token_id",
-          "type": 21,
+          "type": 23,
           "typeArguments": null
         }
       ],
@@ -720,7 +765,7 @@ const _abi = {
         },
         {
           "name": "token_id",
-          "type": 21,
+          "type": 23,
           "typeArguments": null
         }
       ],
@@ -749,12 +794,12 @@ const _abi = {
         },
         {
           "name": "token_id",
-          "type": 21,
+          "type": 23,
           "typeArguments": null
         },
         {
           "name": "price",
-          "type": 21,
+          "type": 23,
           "typeArguments": null
         }
       ],
@@ -831,11 +876,35 @@ const _abi = {
         },
         {
           "name": "amount",
-          "type": 21,
+          "type": 23,
           "typeArguments": null
         }
       ],
       "name": "set_protocol_fee",
+      "output": {
+        "name": "",
+        "type": 0,
+        "typeArguments": null
+      },
+      "attributes": [
+        {
+          "name": "storage",
+          "arguments": [
+            "read",
+            "write"
+          ]
+        }
+      ]
+    },
+    {
+      "inputs": [
+        {
+          "name": "id",
+          "type": 12,
+          "typeArguments": null
+        }
+      ],
+      "name": "unwhiltest_contract",
       "output": {
         "name": "",
         "type": 0,
@@ -879,7 +948,7 @@ const _abi = {
       "inputs": [
         {
           "name": "amount",
-          "type": 21,
+          "type": 23,
           "typeArguments": null
         }
       ],
@@ -1032,7 +1101,7 @@ const _abi = {
       "logId": 16,
       "loggedType": {
         "name": "",
-        "type": 20,
+        "type": 22,
         "typeArguments": []
       }
     },
@@ -1040,7 +1109,7 @@ const _abi = {
       "logId": 17,
       "loggedType": {
         "name": "",
-        "type": 20,
+        "type": 22,
         "typeArguments": []
       }
     },
@@ -1048,7 +1117,7 @@ const _abi = {
       "logId": 18,
       "loggedType": {
         "name": "",
-        "type": 20,
+        "type": 22,
         "typeArguments": []
       }
     },
@@ -1056,7 +1125,7 @@ const _abi = {
       "logId": 19,
       "loggedType": {
         "name": "",
-        "type": 20,
+        "type": 22,
         "typeArguments": []
       }
     },
@@ -1064,7 +1133,7 @@ const _abi = {
       "logId": 20,
       "loggedType": {
         "name": "",
-        "type": 20,
+        "type": 22,
         "typeArguments": []
       }
     },
@@ -1072,7 +1141,7 @@ const _abi = {
       "logId": 21,
       "loggedType": {
         "name": "",
-        "type": 7,
+        "type": 4,
         "typeArguments": []
       }
     },
@@ -1080,7 +1149,7 @@ const _abi = {
       "logId": 22,
       "loggedType": {
         "name": "",
-        "type": 4,
+        "type": 7,
         "typeArguments": []
       }
     },
@@ -1088,7 +1157,7 @@ const _abi = {
       "logId": 23,
       "loggedType": {
         "name": "",
-        "type": 18,
+        "type": 4,
         "typeArguments": []
       }
     },
@@ -1096,7 +1165,7 @@ const _abi = {
       "logId": 24,
       "loggedType": {
         "name": "",
-        "type": 4,
+        "type": 18,
         "typeArguments": []
       }
     },
@@ -1104,7 +1173,7 @@ const _abi = {
       "logId": 25,
       "loggedType": {
         "name": "",
-        "type": 11,
+        "type": 4,
         "typeArguments": []
       }
     },
@@ -1112,7 +1181,7 @@ const _abi = {
       "logId": 26,
       "loggedType": {
         "name": "",
-        "type": 4,
+        "type": 11,
         "typeArguments": []
       }
     },
@@ -1120,7 +1189,7 @@ const _abi = {
       "logId": 27,
       "loggedType": {
         "name": "",
-        "type": 16,
+        "type": 4,
         "typeArguments": []
       }
     },
@@ -1128,7 +1197,7 @@ const _abi = {
       "logId": 28,
       "loggedType": {
         "name": "",
-        "type": 4,
+        "type": 16,
         "typeArguments": []
       }
     },
@@ -1144,12 +1213,60 @@ const _abi = {
       "logId": 30,
       "loggedType": {
         "name": "",
-        "type": 7,
+        "type": 4,
         "typeArguments": []
       }
     },
     {
       "logId": 31,
+      "loggedType": {
+        "name": "",
+        "type": 4,
+        "typeArguments": []
+      }
+    },
+    {
+      "logId": 32,
+      "loggedType": {
+        "name": "",
+        "type": 20,
+        "typeArguments": []
+      }
+    },
+    {
+      "logId": 33,
+      "loggedType": {
+        "name": "",
+        "type": 4,
+        "typeArguments": []
+      }
+    },
+    {
+      "logId": 34,
+      "loggedType": {
+        "name": "",
+        "type": 4,
+        "typeArguments": []
+      }
+    },
+    {
+      "logId": 35,
+      "loggedType": {
+        "name": "",
+        "type": 21,
+        "typeArguments": []
+      }
+    },
+    {
+      "logId": 36,
+      "loggedType": {
+        "name": "",
+        "type": 7,
+        "typeArguments": []
+      }
+    },
+    {
+      "logId": 37,
       "loggedType": {
         "name": "",
         "type": 4,

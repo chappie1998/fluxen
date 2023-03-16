@@ -129,7 +129,7 @@ impl NFT for Contract {
         let admin = Option::Some(admin);
         require(storage.max_supply == 0, InitError::CannotReinitialize);
         require(max_supply != 0, InputError::TokenSupplyCannotBeZero);
-        require(admin.is_none(), InitError::AdminIsNone);
+        // require(admin.is_none(), InitError::AdminIsNone);
 
         storage.admin = admin;
         storage.max_supply = max_supply;
