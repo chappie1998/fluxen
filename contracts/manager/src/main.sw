@@ -209,6 +209,7 @@ impl NftMarketplace for Contract {
 
     #[storage(read, write)]
     fn whiltest_contract(id: ContractId) {
+        require(!storage.whiltest_contract.get(id), AccessError::ContractIsAlreadyWhitelisted);
         let current_admin = storage.admin;
         let current_manager = storage.manager;
         require((current_admin.is_some() && msg_sender().unwrap() == current_admin.unwrap()) || (current_manager.is_some() && msg_sender().unwrap() == current_manager.unwrap()), AccessError::SenderCannotSetAccessControl);

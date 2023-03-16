@@ -20,4 +20,5 @@ pub enum AccessError {
     MaximumTimeNftLanded: (),
     CantLandNft: (),
     ContractIsNotWhitelisted: (),
+    ContractIsAlreadyWhitelisted: (),
 }
