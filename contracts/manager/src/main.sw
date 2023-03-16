@@ -16,6 +16,7 @@ use events::{
     NFTListedEvent,
     NFTPriceChangeEvent,
     WithdrawLanedNftEvent,
+    WhiteListContract,
 };
 use interface::NftMarketplace;
 use external_interface::externalAbi;
@@ -211,9 +212,9 @@ impl NftMarketplace for Contract {
         let current_manager = storage.manager;
         require((current_admin.is_some() && msg_sender().unwrap() == current_admin.unwrap()) || (current_manager.is_some() && msg_sender().unwrap() == current_manager.unwrap()), AccessError::SenderCannotSetAccessControl);
         storage.whiltest_contract.insert(id, true);
-        // log(ManagerChangeEvent {
-        //     mew_manager: manager,
-        // });
+        log(WhiteListContract {
+            contract_id: id,
+        });
     }
 
     #[storage(read)]

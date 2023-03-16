@@ -92,3 +92,7 @@ pub struct NFTChangeOfferEvent {
     new_price: u64,
     old_price: u64,
 }
+
+pub struct WhiteListContract {
+    contract_id: ContractId
+}
