@@ -50,7 +50,7 @@ const main = async () => {
   };
 
   await deployManagerContract();
-  // await deployNFTContract();
+  await deployNFTContract();
 };
 
 main()

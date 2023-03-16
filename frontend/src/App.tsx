@@ -26,11 +26,11 @@ function App() {
   );
 
   const contractId =
-    "0x54061a6eed2c40f61b0a41a9f19eff50dcf56a5ace54da1f7e1bc78e18e66a18";
+    "0x2f4df4e7dfe8ef765e159bf6f68a7c184d6010e1566d520add513086826b8f7d";
   const managerContract = ManagerAbi__factory.connect(contractId, wallet);
 
   const NFTContractId =
-    "0xa16ad54dc1c1cb082e56c1a82cc3a7b108d5316d34e70d83cdf578cac36c9ac4";
+    "0xc6d83b7bd82d2cb0bbedb683d5203de491eccd1bf0da873bd24ec5e72446b825";
   // const NFTContract = PropertyAbi__factory.connect(NFTContractId, wallet);
   // console.log(PropertyAbi__factory.createInterface);
 
@@ -96,7 +96,7 @@ function App() {
   };
 
   const mintAndList = async () => {
-    const token = 2;
+    const token = 0;
     await mint(token);
     await approveNFT(token);
     await listNFT(token);
@@ -186,10 +186,10 @@ function App() {
     const lend_nft = await managerContract.functions
       .lend_nft(
         { value: NFTContractId },
-        2,
+        0,
         { Address: { value: admin } },
-        8765,
-        8766,
+        8315,
+        8316,
         0.01 * 1e9
       )
       .txParams({ gasPrice: 1 })
@@ -202,13 +202,22 @@ function App() {
 
   const lended_nft_info = async () => {
     const lended_nft_info = await managerContract.functions
-      .lended_nft_info({ value: NFTContractId }, 2)
+      .lended_nft_info({ value: NFTContractId }, 0)
       .get();
     console.log("lended_nft_info", lended_nft_info);
     console.log(
       "start_block",
       lended_nft_info.value?.[0]?.start_block.toNumber()
     );
+  };
+
+  const lended_nft_withdraw = async () => {
+    const lended_nft_withdraw = await managerContract.functions
+      .lended_nft_withdraw({ value: NFTContractId }, 0)
+      .txParams({ gasPrice: 1 })
+      .addContracts([NFTContract])
+      .call();
+    console.log("lended_nft_withdraw", lended_nft_withdraw);
   };
 
   const deployContract = async () => {
@@ -266,6 +275,9 @@ function App() {
       <div>
         <button onClick={lend_nft}>lend_nft</button>
         <button onClick={lended_nft_info}>lended_nft_info</button>
+      </div>
+      <div>
+        <button onClick={lended_nft_withdraw}>lended_nft_withdraw</button>
       </div>
     </div>
   );
