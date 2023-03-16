@@ -98,6 +98,9 @@ abi NftMarketplace {
     #[storage(read, write)]
     fn whiltest_contract(id: ContractId);
 
+    #[storage(read, write)]
+    fn unwhiltest_contract(id: ContractId);
+
     #[storage(read)]
     fn get_whiltested_contract(id: ContractId) -> bool;
 }
