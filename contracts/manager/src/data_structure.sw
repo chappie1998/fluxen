@@ -20,10 +20,10 @@ pub struct ChangeListPrice {
 }
 
 pub struct LendNft {
-    /// The block at which the auction's bidding period should end.
-    start_block: u64,
-    /// The block at which the auction's bidding period should end.
-    end_block: u64,
+    /// The time at which the auction's bidding period should end.
+    start_time: u64,
+    /// The time at which the auction's bidding period should end.
+    end_time: u64,
     /// The current highest bidder of the auction.
     /// The starting price for the auction.
     price: u64,
@@ -33,14 +33,14 @@ pub struct LendNft {
 
 impl LendNft {
     pub fn new(
-        start_block: u64,
-        end_block: u64,
+        start_time: u64,
+        end_time: u64,
         price: u64,
         buyer: Identity,
     ) -> Self {
         LendNft {
-            start_block,
-            end_block,
+            start_time,
+            end_time,
             price,
             buyer,
         }

@@ -43,7 +43,7 @@ abi NftMarketplace {
     /// * When the `initial_price` for NFTs is not one.
     /// * When transfering of the NFT asset to the contract failed.
     #[payable, storage(read, write)]
-    fn lend_nft(id: ContractId, token_id: u64, seller: Identity, start_block: u64, end_block: u64, initial_price: u64);
+    fn lend_nft(id: ContractId, token_id: u64, seller: Identity, start_time: u64, end_time: u64, initial_price: u64);
 
     #[storage(read)]
     fn lended_nft_info(id: ContractId, token_id: u64) -> [Option<LendNft>; 5];

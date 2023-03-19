@@ -3,8 +3,8 @@ library errors;
 pub enum InputError {
     PriceCantBeZero: (),
     IncorrectAmountProvided: (),
-    EndBlockIsLessThanStartBlock: (),
-    WrongStartBlockProvided: (),
+    EndtimeIsLessThanStarttime: (),
+    WrongStarttimeProvided: (),
 }
 
 pub enum InitError {
