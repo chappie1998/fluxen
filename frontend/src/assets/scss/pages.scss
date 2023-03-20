@@ -1,0 +1,465 @@
+// --------------------------sell---------------------
+
+.sell {
+  .fixedPrice {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid rgba(138, 138, 160, 0.3);
+    border-radius: 10px;
+    padding: 10px;
+    cursor: pointer;
+  }
+
+  .selected {
+    border-color: rgba(138, 138, 160, 1);
+  }
+
+  .priceInput {
+    color: white;
+
+    span {
+      position: absolute;
+      right: 10px;
+      top: 1px;
+      font-size: 20px;
+      font-weight: 500;
+      border-left: 1px solid rgba(138, 138, 160, 0.3);
+      padding-left: 10px;
+      line-height: 54px;
+    }
+  }
+
+  .summery {
+    font-size: 18px;
+
+    ul {
+      list-style: none;
+      border-bottom: 1px solid rgba(138, 138, 160, 0.3);
+
+      li {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10px;
+      }
+    }
+
+    h3 {
+      margin-top: 10px;
+      display: flex;
+      justify-content: space-between;
+    }
+  }
+}
+
+// -----------------launchpad project-----------------
+
+.incDec {
+  border: 1px solid grey;
+  /* padding: 1.1rem; */
+  border-radius: 1rem;
+  width: 10rem;
+  display: flex;
+  justify-content: space-between;
+  font-size: 1.5rem;
+  align-items: center;
+  font-weight: bold;
+}
+
+.decrement {
+  border-right: 1px solid grey;
+  padding: 1.1rem;
+  cursor: pointer;
+}
+
+.increment {
+  border-left: 1px solid grey;
+  padding: 1.1rem;
+  cursor: pointer;
+}
+
+// --------------------itemDetails-----------------
+
+.item-details {
+  .attributes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px 10px;
+  }
+
+  .tf-item-details .content-right .themesflat-tabs .react-tabs__tab-panel {
+    padding-right: 0;
+  }
+
+  .sc-item-details .meta-item-details {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    column-gap: 30px;
+
+    .box {
+      width: 50%;
+
+      button {
+        margin-bottom: 20px;
+      }
+
+      .item {
+        width: 100%;
+        margin-bottom: 20px;
+      }
+    }
+  }
+
+  .activities {
+    width: 100%;
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+
+    table {
+      width: 100%;
+      border: none;
+      margin: 0;
+      font-size: 12px;
+
+      thead tr {
+        background: var(--primary-color);
+      }
+
+      th,
+      td {
+        border: none;
+      }
+
+      tbody tr:nth-child(even) {
+        background-color: var(--primary-color5);
+      }
+    }
+  }
+}
+
+// ---------------------collection--------------------
+
+.collection {
+  .collection-image-holder {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    max-width: 330px;
+
+    img {
+      max-width: 170px;
+      width: 100%;
+      border-radius: 50%;
+    }
+  }
+
+  .collection-details {
+    display: grid;
+    grid-template-columns: 250px 250px;
+    gap: 20px;
+    padding-right: 20px;
+    margin-bottom: 10px;
+
+    div {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--primary-color);
+      padding: 10px;
+      border-radius: 10px;
+    }
+  }
+
+  .collectio-nft-list {
+    display: flex;
+    gap: 20px;
+
+    .hide-button {
+      border: none;
+      width: 100%;
+      height: 100%;
+      padding: 15px 0;
+      background: var(--primary-color);
+      margin-bottom: 10px;
+
+      &::after {
+        background: none;
+        border: 1px solid var(--primary-color2);
+        border-width: 0 0 2px 2px;
+        content: "";
+        display: block;
+        line-height: 0;
+        position: absolute;
+        transform: rotate(-315deg);
+        height: 12px;
+        width: 12px;
+        top: 9px;
+      }
+    }
+
+    .left {
+      min-height: 20px;
+      max-height: 70vh;
+      position: sticky;
+      top: 90px;
+      align-self: flex-start;
+      overflow: auto;
+      flex: 0 0 300px;
+
+      .hide-button::after {
+        left: 15px;
+      }
+
+      &.hide {
+        flex-basis: 50px;
+
+        .hide-button::after {
+          transform: rotate(225deg);
+          left: 15px;
+        }
+
+        .side-bar {
+          display: none;
+        }
+      }
+
+      .side-bar {
+        padding-right: 0;
+
+        .buy-now-check {
+          margin-bottom: 17px;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+
+          h2 {
+            font-size: 20px;
+          }
+        }
+
+        .accordion-item-card {
+          display: grid;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          gap: 0.75rem;
+          border: 1px solid var(--border-color);
+          border-radius: 0.25rem;
+          padding: 1rem;
+          margin-top: 1rem;
+          cursor: pointer;
+
+          &.selected {
+            border-color: #5142fc;
+          }
+        }
+
+        .accordion-body {
+          &:last-child {
+            padding-bottom: 1rem;
+          }
+        }
+      }
+    }
+
+    .middle {
+      border-top: 1px solid var(--border-color);
+      flex-grow: 1;
+
+      .react-tabs__tab-list {
+        letter-spacing: 1px;
+      }
+      .activities {
+        font-size: 15px;
+      }
+
+      .filters {
+        display: flex;
+        justify-content: flex-end;
+        column-gap: 10px;
+
+        .dropdown {
+          width: 200px;
+          ul {
+            opacity: 1;
+            display: none;
+          }
+          &:hover ul {
+            display: block;
+          }
+
+          input {
+            color: var(--primary-color2);
+            padding-block: 5px;
+            position: relative;
+          }
+
+          &::after {
+            background: none;
+            border: 1px solid var(--primary-color2);
+            border-width: 0 0 2px 2px;
+            content: "";
+            display: block;
+            line-height: 0;
+            position: absolute;
+            transform: rotate(315deg);
+            height: 10px;
+            width: 10px;
+            top: 12px;
+            right: 15px;
+          }
+        }
+
+        .grid {
+          border: 1px solid var(--border-color);
+          border-radius: 4px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+
+          .gridIcon {
+            padding: 6px 10px 5px;
+            cursor: pointer;
+
+            &.selected {
+              background-color: var(--primary-color);
+            }
+          }
+        }
+      }
+
+      .explore {
+        margin-top: 20px;
+
+        .box-explore {
+          display: flex;
+          flex-wrap: wrap;
+          column-gap: 10px;
+          justify-content: space-between;
+
+          .nft-card {
+            border: 2px solid transparent;
+            cursor: pointer;
+            width: 280px;
+          }
+
+          .selected {
+            border-color: #5142fc;
+          }
+
+          &.small-card {
+            .nft-card {
+              width: 200px;
+            }
+          }
+        }
+      }
+    }
+
+    .right {
+      position: sticky;
+      top: 90px;
+      align-self: flex-start;
+      width: 300px;
+      flex: 0 0 300px;
+
+      .hide-button {
+        margin-right: 0;
+
+        &::after {
+          transform: rotate(225deg);
+          right: 15px;
+        }
+      }
+
+      &.hide {
+        flex-basis: 50px;
+
+        .hide-button::after {
+          transform: rotate(-315deg);
+        }
+
+        .side-bar-right {
+          display: none;
+        }
+      }
+
+      .side-bar-right {
+        .nft-image-small {
+          width: 50px;
+          margin-right: 15px;
+          position: relative;
+          border-radius: 5px;
+
+          img {
+            width: 100%;
+            border-radius: 5px;
+          }
+
+          span {
+            position: absolute;
+            top: -6px;
+            right: -6px;
+            font-size: 15px;
+            background: rgba(121, 120, 120, 0.548);
+            border-radius: 50%;
+            padding: 2px;
+            height: 15px;
+            width: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+          }
+        }
+
+        .themesflat-container {
+          padding-inline: 0;
+
+          .tabList {
+            margin-bottom: 15px;
+            justify-content: space-around;
+
+            .react-tabs__tab {
+              line-height: 30px;
+              width: 20%;
+            }
+          }
+
+          .react-tabs__tab-panel {
+            padding-top: 10px;
+            max-height: 500px;
+            overflow: auto;
+
+            .slider {
+              padding-bottom: 10px;
+
+              input {
+                width: 100%;
+              }
+            }
+
+            .slider-values {
+              display: flex;
+              justify-content: space-between;
+              font-size: 16px;
+              margin-bottom: 10px;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .bottom {
+    display: flex;
+    // justify-content: space-between;
+  }
+}
+
+// ----------------------Edit profile------------------
+
+.form-upload-profile {
+  input:focus:invalid:required {
+    border: 1px solid red;
+  }
+}

@@ -27,7 +27,7 @@ pub struct BidEvent {
     user: Identity,
 }
 
-pub struct LendNftEvent {
+pub struct borrowNftEvent {
     contract_id: ContractId,
     token_id: u64,
     buyer: Identity,

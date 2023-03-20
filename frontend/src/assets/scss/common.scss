@@ -1,0 +1,95 @@
+//  -------- font sizes-------
+
+.fs-11 {
+  font-size: 11px;
+}
+
+// -------colors--------- {
+
+.warning {
+  color: yellow;
+}
+
+.error {
+  color: red;
+}
+
+//----------------- width ---------------
+.max-w-500 {
+  max-width: 500px;
+}
+
+.max-w-230 {
+  max-width: 230px;
+}
+
+.max-w-200 {
+  max-width: 200px;
+}
+
+.max-w-50 {
+  max-width: 50px;
+}
+
+.width-50 {
+  width: 50px;
+}
+
+// flex and grid
+
+.justify-self-end {
+  justify-self: flex-end;
+}
+
+.line-h-1 {
+  line-height: 1.5;
+}
+
+.tabList {
+  display: flex;
+  justify-content: flex-start;
+  column-gap: 2rem;
+}
+
+.tabList li {
+  max-width: 10rem;
+}
+
+.tabList li::after {
+  display: none;
+}
+
+.textMuted {
+  color: rgb(255, 255, 255, 0.75);
+}
+
+.column-gap-10 {
+  column-gap: 10px;
+}
+
+.pt-80 {
+  padding-top: 80px;
+}
+
+.letter-spacing-1 {
+  letter-spacing: 1px;
+}
+
+.devider {
+  width: 100%;
+  border-bottom: 1px solid #343444;
+}
+
+.mb-24 {
+  margin-bottom: 24px;
+}
+
+.hidden {
+  display: none;
+}
+
+.truncate {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

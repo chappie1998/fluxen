@@ -9,6 +9,6 @@
   Fuel-Core version: 0.17.3
 */
 
-export type { PropertyAbi } from './PropertyAbi';
+export type { NFTAbi } from './NFTAbi';
 
-export { PropertyAbi__factory } from './factories/PropertyAbi__factory';
+export { NFTAbi__factory } from './factories/NFTAbi__factory';

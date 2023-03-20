@@ -2,7 +2,7 @@ library interface;
 
 dep data_structure;
 
-use data_structure::{LendNft, ListNft};
+use data_structure::{borrowNft, ListNft};
 
 abi NftMarketplace {
     /// Returns the current admin for the contract.
@@ -43,13 +43,13 @@ abi NftMarketplace {
     /// * When the `initial_price` for NFTs is not one.
     /// * When transfering of the NFT asset to the contract failed.
     #[payable, storage(read, write)]
-    fn lend_nft(id: ContractId, token_id: u64, seller: Identity, start_time: u64, end_time: u64, initial_price: u64);
+    fn borrow_nft(id: ContractId, token_id: u64, seller: Identity, start_time: u64, end_time: u64, initial_price: u64);
 
     #[storage(read)]
-    fn lended_nft_info(id: ContractId, token_id: u64) -> [Option<LendNft>; 5];
+    fn borrowed_nft_info(id: ContractId, token_id: u64) -> [Option<borrowNft>; 5];
 
     #[storage(read, write)]
-    fn lended_nft_withdraw(id: ContractId, token_id: u64);
+    fn borrowed_nft_withdraw(id: ContractId, token_id: u64);
 
     // Changes the contract's admin.
     // 

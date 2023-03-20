@@ -19,7 +19,7 @@ pub struct ChangeListPrice {
     new_price: u64,
 }
 
-pub struct LendNft {
+pub struct borrowNft {
     /// The time at which the auction's bidding period should end.
     start_time: u64,
     /// The time at which the auction's bidding period should end.
@@ -31,14 +31,14 @@ pub struct LendNft {
     buyer: Identity,
 }
 
-impl LendNft {
+impl borrowNft {
     pub fn new(
         start_time: u64,
         end_time: u64,
         price: u64,
         buyer: Identity,
     ) -> Self {
-        LendNft {
+        borrowNft {
             start_time,
             end_time,
             price,

@@ -1,0 +1,268 @@
+.accounement {
+  overflow: hidden;
+  height: 28px;
+
+  p {
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 500;
+    animation: slideUp 5s linear infinite alternate;
+
+    &:hover {
+      animation-play-state: paused;
+    }
+
+    a {
+      text-decoration: underline;
+    }
+  }
+}
+
+@keyframes slideUp {
+  0%,
+  50% {
+    transform: translateY(0);
+  }
+
+  55%,
+  100% {
+    transform: translateY(-28px);
+  }
+}
+
+// -----------------------------header------------------------------
+
+.header_1 {
+  .walletDropdownMenu {
+    position: absolute;
+    background-color: rgb(16 20 54);
+    padding: 10px;
+    border-radius: 0.75rem;
+    min-width: 14rem;
+    margin-top: 1rem;
+    font-size: 18px;
+    line-height: 26px;
+    font-weight: 700;
+    width: 230px;
+    right: 0;
+  }
+
+  .address {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-inline: 10px;
+    width: 150px;
+  }
+
+  .balance {
+    margin-top: 15px;
+    margin-inline: 10px;
+    border: 1px solid rgb(54 58 93);
+    border-radius: 0.75rem;
+    padding: 10px;
+  }
+
+  .greenText {
+    color: rgb(16 185 129);
+    font-size: 22px;
+  }
+
+  .menuItem {
+    padding: 5px 15px;
+    cursor: pointer;
+    margin: 10px auto;
+  }
+
+  .menuItem:hover {
+    border-radius: 15px;
+    background-color: rgba(255, 255, 255, 0.2);
+  }
+}
+
+// --------------------change listing popup----------------
+
+.changeListing {
+  .input {
+    color: white;
+    margin-top: 10px;
+    position: relative;
+
+    input {
+      padding-right: 70px;
+      border-radius: 10px;
+      border: 1px solid rgba(138, 138, 160, 0.3);
+      width: 100%;
+      color: white;
+    }
+
+    span {
+      position: absolute;
+      right: 10px;
+      top: 1px;
+      font-size: 20px;
+      font-weight: 500;
+      border-left: 1px solid rgba(138, 138, 160, 0.3);
+      padding-left: 10px;
+      line-height: 54px;
+    }
+  }
+}
+
+// ----------------------------AttrCard-------------------
+.attr-card {
+  border: 1px solid rgba(138, 138, 160, 0.3);
+  border-radius: 10px;
+  padding: 10px;
+}
+
+// --------------------------loader--------------------
+
+.loader {
+  background-color: var(--bg-section);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &.overlay {
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    opacity: 0.7;
+    background: var(--bg-section);
+    top: 0;
+    left: 0;
+    z-index: 999;
+    cursor: not-allowed;
+  }
+
+  .lds-ellipsis {
+    display: inline-block;
+    position: relative;
+    width: 80px;
+    height: 80px;
+    z-index: 9999;
+  }
+
+  .lds-ellipsis div {
+    position: absolute;
+    top: 33px;
+    width: 13px;
+    height: 13px;
+    border-radius: 50%;
+    background: #fff;
+    animation-timing-function: cubic-bezier(0, 1, 1, 0);
+  }
+
+  .lds-ellipsis div:nth-child(1) {
+    left: 8px;
+    animation: lds-ellipsis1 0.6s infinite;
+  }
+
+  .lds-ellipsis div:nth-child(2) {
+    left: 8px;
+    animation: lds-ellipsis2 0.6s infinite;
+  }
+
+  .lds-ellipsis div:nth-child(3) {
+    left: 32px;
+    animation: lds-ellipsis2 0.6s infinite;
+  }
+
+  .lds-ellipsis div:nth-child(4) {
+    left: 56px;
+    animation: lds-ellipsis3 0.6s infinite;
+  }
+}
+
+@keyframes lds-ellipsis1 {
+  0% {
+    transform: scale(0);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes lds-ellipsis3 {
+  0% {
+    transform: scale(1);
+  }
+
+  100% {
+    transform: scale(0);
+  }
+}
+
+@keyframes lds-ellipsis2 {
+  0% {
+    transform: translate(0, 0);
+  }
+
+  100% {
+    transform: translate(24px, 0);
+  }
+}
+
+// ------ swiper------
+
+.slider3 {
+  padding: 120px 0 50px 0;
+  background: var(--bg-section);
+  position: relative;
+  height: 90vh;
+  display: flex;
+  align-items: center;
+
+  .swiper-slide {
+    background-position: center;
+    background-size: cover;
+    height: 400px;
+    border-radius: 10px;
+
+    .nft-card {
+      height: 100%;
+      background-color: var(--primary-color);
+      border-radius: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow: hidden;
+
+      .image-holder {
+        height: 75%;
+
+        img {
+          display: block;
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+      }
+
+      .details {
+        padding: 20px;
+        display: flex;
+        column-gap: 20px;
+
+        .avatar {
+          img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+          }
+        }
+      }
+    }
+
+    @media (max-width: 768px) {
+      width: 250px;
+    }
+
+    @media (min-width: 1200px) {
+      width: 500px;
+    }
+  }
+}

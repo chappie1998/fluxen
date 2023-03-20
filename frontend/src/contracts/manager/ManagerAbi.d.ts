@@ -28,7 +28,7 @@ export type IdentityInput = Enum<{ Address: AddressInput, ContractId: ContractId
 export type IdentityOutput = Enum<{ Address: AddressOutput, ContractId: ContractIdOutput }>;
 export type InitErrorInput = Enum<{ AdminIsNone: [] }>;
 export type InitErrorOutput = InitErrorInput;
-export type InputErrorInput = Enum<{ PriceCantBeZero: [], IncorrectAmountProvided: [], EndBlockIsLessThanStartBlock: [], WrongStartBlockProvided: [] }>;
+export type InputErrorInput = Enum<{ PriceCantBeZero: [], IncorrectAmountProvided: [], EndtimeIsLessThanStarttime: [], WrongStarttimeProvided: [] }>;
 export type InputErrorOutput = InputErrorInput;
 
 export type AddressInput = { value: string };
@@ -37,10 +37,6 @@ export type AdminChangedEventInput = { mew_admin: IdentityInput };
 export type AdminChangedEventOutput = { mew_admin: IdentityOutput };
 export type ContractIdInput = { value: string };
 export type ContractIdOutput = ContractIdInput;
-export type LendNftInput = { start_block: BigNumberish, end_block: BigNumberish, price: BigNumberish, buyer: IdentityInput };
-export type LendNftOutput = { start_block: BN, end_block: BN, price: BN, buyer: IdentityOutput };
-export type LendNftEventInput = { contract_id: ContractIdInput, token_id: BigNumberish, buyer: IdentityInput, start_block: BigNumberish, end_block: BigNumberish, price: BigNumberish };
-export type LendNftEventOutput = { contract_id: ContractIdOutput, token_id: BN, buyer: IdentityOutput, start_block: BN, end_block: BN, price: BN };
 export type ListNftInput = { owner: IdentityInput, price: BigNumberish };
 export type ListNftOutput = { owner: IdentityOutput, price: BN };
 export type ManagerChangeEventInput = { mew_manager: IdentityInput };
@@ -55,12 +51,19 @@ export type UnwhiteListContractInput = { contract_id: ContractIdInput };
 export type UnwhiteListContractOutput = { contract_id: ContractIdOutput };
 export type WhiteListContractInput = { contract_id: ContractIdInput };
 export type WhiteListContractOutput = { contract_id: ContractIdOutput };
-export type WithdrawLanedNftEventInput = { contract_id: ContractIdInput, token_id: BigNumberish, buyer: IdentityInput, start_block: BigNumberish, end_block: BigNumberish };
-export type WithdrawLanedNftEventOutput = { contract_id: ContractIdOutput, token_id: BN, buyer: IdentityOutput, start_block: BN, end_block: BN };
+export type WithdrawLanedNftEventInput = { contract_id: ContractIdInput, token_id: BigNumberish, buyer: IdentityInput, start_time: BigNumberish, end_time: BigNumberish };
+export type WithdrawLanedNftEventOutput = { contract_id: ContractIdOutput, token_id: BN, buyer: IdentityOutput, start_time: BN, end_time: BN };
+export type borrowNftInput = { start_time: BigNumberish, end_time: BigNumberish, price: BigNumberish, buyer: IdentityInput };
+export type borrowNftOutput = { start_time: BN, end_time: BN, price: BN, buyer: IdentityOutput };
+export type borrowNftEventInput = { contract_id: ContractIdInput, token_id: BigNumberish, buyer: IdentityInput, start_time: BigNumberish, end_time: BigNumberish, price: BigNumberish };
+export type borrowNftEventOutput = { contract_id: ContractIdOutput, token_id: BN, buyer: IdentityOutput, start_time: BN, end_time: BN, price: BN };
 
 interface ManagerAbiInterface extends Interface {
   functions: {
     admin: FunctionFragment;
+    borrow_nft: FunctionFragment;
+    borrowed_nft_info: FunctionFragment;
+    borrowed_nft_withdraw: FunctionFragment;
     change_nft_price: FunctionFragment;
     constructor: FunctionFragment;
     delist_nft: FunctionFragment;
@@ -68,11 +71,7 @@ interface ManagerAbiInterface extends Interface {
     get_default_protocol_feee: FunctionFragment;
     get_nft_data: FunctionFragment;
     get_protocol_fee: FunctionFragment;
-    get_time: FunctionFragment;
     get_whiltested_contract: FunctionFragment;
-    lend_nft: FunctionFragment;
-    lended_nft_info: FunctionFragment;
-    lended_nft_withdraw: FunctionFragment;
     list_nft: FunctionFragment;
     set_admin: FunctionFragment;
     set_manager: FunctionFragment;
@@ -83,6 +82,9 @@ interface ManagerAbiInterface extends Interface {
   };
 
   encodeFunctionData(functionFragment: 'admin', values: []): Uint8Array;
+  encodeFunctionData(functionFragment: 'borrow_nft', values: [ContractIdInput, BigNumberish, IdentityInput, BigNumberish, BigNumberish, BigNumberish]): Uint8Array;
+  encodeFunctionData(functionFragment: 'borrowed_nft_info', values: [ContractIdInput, BigNumberish]): Uint8Array;
+  encodeFunctionData(functionFragment: 'borrowed_nft_withdraw', values: [ContractIdInput, BigNumberish]): Uint8Array;
   encodeFunctionData(functionFragment: 'change_nft_price', values: [ContractIdInput, BigNumberish, BigNumberish]): Uint8Array;
   encodeFunctionData(functionFragment: 'constructor', values: [IdentityInput]): Uint8Array;
   encodeFunctionData(functionFragment: 'delist_nft', values: [ContractIdInput, BigNumberish]): Uint8Array;
@@ -90,11 +92,7 @@ interface ManagerAbiInterface extends Interface {
   encodeFunctionData(functionFragment: 'get_default_protocol_feee', values: []): Uint8Array;
   encodeFunctionData(functionFragment: 'get_nft_data', values: [ContractIdInput, BigNumberish]): Uint8Array;
   encodeFunctionData(functionFragment: 'get_protocol_fee', values: [ContractIdInput]): Uint8Array;
-  encodeFunctionData(functionFragment: 'get_time', values: []): Uint8Array;
   encodeFunctionData(functionFragment: 'get_whiltested_contract', values: [ContractIdInput]): Uint8Array;
-  encodeFunctionData(functionFragment: 'lend_nft', values: [ContractIdInput, BigNumberish, IdentityInput, BigNumberish, BigNumberish, BigNumberish]): Uint8Array;
-  encodeFunctionData(functionFragment: 'lended_nft_info', values: [ContractIdInput, BigNumberish]): Uint8Array;
-  encodeFunctionData(functionFragment: 'lended_nft_withdraw', values: [ContractIdInput, BigNumberish]): Uint8Array;
   encodeFunctionData(functionFragment: 'list_nft', values: [ContractIdInput, BigNumberish, BigNumberish]): Uint8Array;
   encodeFunctionData(functionFragment: 'set_admin', values: [IdentityInput]): Uint8Array;
   encodeFunctionData(functionFragment: 'set_manager', values: [IdentityInput]): Uint8Array;
@@ -104,6 +102,9 @@ interface ManagerAbiInterface extends Interface {
   encodeFunctionData(functionFragment: 'withdraw_balance', values: [BigNumberish]): Uint8Array;
 
   decodeFunctionData(functionFragment: 'admin', data: BytesLike): DecodedValue;
+  decodeFunctionData(functionFragment: 'borrow_nft', data: BytesLike): DecodedValue;
+  decodeFunctionData(functionFragment: 'borrowed_nft_info', data: BytesLike): DecodedValue;
+  decodeFunctionData(functionFragment: 'borrowed_nft_withdraw', data: BytesLike): DecodedValue;
   decodeFunctionData(functionFragment: 'change_nft_price', data: BytesLike): DecodedValue;
   decodeFunctionData(functionFragment: 'constructor', data: BytesLike): DecodedValue;
   decodeFunctionData(functionFragment: 'delist_nft', data: BytesLike): DecodedValue;
@@ -111,11 +112,7 @@ interface ManagerAbiInterface extends Interface {
   decodeFunctionData(functionFragment: 'get_default_protocol_feee', data: BytesLike): DecodedValue;
   decodeFunctionData(functionFragment: 'get_nft_data', data: BytesLike): DecodedValue;
   decodeFunctionData(functionFragment: 'get_protocol_fee', data: BytesLike): DecodedValue;
-  decodeFunctionData(functionFragment: 'get_time', data: BytesLike): DecodedValue;
   decodeFunctionData(functionFragment: 'get_whiltested_contract', data: BytesLike): DecodedValue;
-  decodeFunctionData(functionFragment: 'lend_nft', data: BytesLike): DecodedValue;
-  decodeFunctionData(functionFragment: 'lended_nft_info', data: BytesLike): DecodedValue;
-  decodeFunctionData(functionFragment: 'lended_nft_withdraw', data: BytesLike): DecodedValue;
   decodeFunctionData(functionFragment: 'list_nft', data: BytesLike): DecodedValue;
   decodeFunctionData(functionFragment: 'set_admin', data: BytesLike): DecodedValue;
   decodeFunctionData(functionFragment: 'set_manager', data: BytesLike): DecodedValue;
@@ -129,6 +126,9 @@ export class ManagerAbi extends Contract {
   interface: ManagerAbiInterface;
   functions: {
     admin: InvokeFunction<[], Option<IdentityOutput>>;
+    borrow_nft: InvokeFunction<[id: ContractIdInput, token_id: BigNumberish, buyer: IdentityInput, start_time: BigNumberish, end_time: BigNumberish, price: BigNumberish], void>;
+    borrowed_nft_info: InvokeFunction<[id: ContractIdInput, token_id: BigNumberish], [Option<borrowNftOutput>, Option<borrowNftOutput>, Option<borrowNftOutput>, Option<borrowNftOutput>, Option<borrowNftOutput>]>;
+    borrowed_nft_withdraw: InvokeFunction<[id: ContractIdInput, token_id: BigNumberish], void>;
     change_nft_price: InvokeFunction<[id: ContractIdInput, token_id: BigNumberish, price: BigNumberish], void>;
     constructor: InvokeFunction<[admin: IdentityInput], void>;
     delist_nft: InvokeFunction<[id: ContractIdInput, token_id: BigNumberish], void>;
@@ -136,11 +136,7 @@ export class ManagerAbi extends Contract {
     get_default_protocol_feee: InvokeFunction<[], BN>;
     get_nft_data: InvokeFunction<[id: ContractIdInput, token_id: BigNumberish], Option<ListNftOutput>>;
     get_protocol_fee: InvokeFunction<[id: ContractIdInput], BN>;
-    get_time: InvokeFunction<[], BN>;
     get_whiltested_contract: InvokeFunction<[id: ContractIdInput], boolean>;
-    lend_nft: InvokeFunction<[id: ContractIdInput, token_id: BigNumberish, buyer: IdentityInput, start_block: BigNumberish, end_block: BigNumberish, price: BigNumberish], void>;
-    lended_nft_info: InvokeFunction<[id: ContractIdInput, token_id: BigNumberish], [Option<LendNftOutput>, Option<LendNftOutput>, Option<LendNftOutput>, Option<LendNftOutput>, Option<LendNftOutput>]>;
-    lended_nft_withdraw: InvokeFunction<[id: ContractIdInput, token_id: BigNumberish], void>;
     list_nft: InvokeFunction<[id: ContractIdInput, token_id: BigNumberish, price: BigNumberish], void>;
     set_admin: InvokeFunction<[admin: IdentityInput], void>;
     set_manager: InvokeFunction<[manager: IdentityInput], void>;

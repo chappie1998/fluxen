@@ -6,11 +6,11 @@ dep events;
 dep interface;
 dep external_interface;
 
-use data_structure::{LendNft, ListNft};
+use data_structure::{borrowNft, ListNft};
 use errors::{AccessError, InitError, InputError};
 use events::{
     AdminChangedEvent,
-    LendNftEvent,
+    borrowNftEvent,
     ManagerChangeEvent,
     NFTDeListedEvent,
     NFTListedEvent,
@@ -62,7 +62,7 @@ storage {
     list_nft: StorageMap<(ContractId, u64), Option<ListNft>> = StorageMap {},
     /// Info of the royalty
     /// StorageVec is not allowed to inside storageMap so need to use this method
-    lend_nft: StorageMap<(ContractId, u64), [Option<LendNft>; 5]> = StorageMap {},
+    borrow_nft: StorageMap<(ContractId, u64), [Option<borrowNft>; 5]> = StorageMap {},
 }
 
 impl NftMarketplace for Contract {
@@ -237,7 +237,7 @@ impl NftMarketplace for Contract {
     }
 
     #[payable, storage(read, write)]
-    fn lend_nft(
+    fn borrow_nft(
         id: ContractId,
         token_id: u64,
         buyer: Identity,
@@ -252,13 +252,13 @@ impl NftMarketplace for Contract {
         require(price == nft_data.unwrap().price, InputError::IncorrectAmountProvided);
         require(start_time > timestamp(), InputError::WrongStarttimeProvided);
 
-        let lended_nfts = storage.lend_nft.get((id, token_id));
-        require(lended_nfts[4].is_none(), AccessError::MaximumTimeNftLanded);
+        let borrowed_nfts = storage.borrow_nft.get((id, token_id));
+        require(borrowed_nfts[4].is_none(), AccessError::MaximumTimeNftLanded);
 
-        let result = get_lended_nfts(id, token_id, buyer, start_time, end_time, price, lended_nfts);
-        storage.lend_nft.insert((id, token_id), result);
+        let result = get_borrowed_nfts(id, token_id, buyer, start_time, end_time, price, borrowed_nfts);
+        storage.borrow_nft.insert((id, token_id), result);
 
-        log(LendNftEvent {
+        log(borrowNftEvent {
             contract_id: id,
             token_id,
             buyer,
@@ -269,41 +269,41 @@ impl NftMarketplace for Contract {
     }
 
     #[storage(read)]
-    fn lended_nft_info(id: ContractId, token_id: u64) -> [Option<LendNft>; 5] {
-        storage.lend_nft.get((id, token_id))
+    fn borrowed_nft_info(id: ContractId, token_id: u64) -> [Option<borrowNft>; 5] {
+        storage.borrow_nft.get((id, token_id))
     }
 
     #[storage(read, write)]
-    fn lended_nft_withdraw(id: ContractId, token_id: u64) {
-        // Make sure this lend_nft exists
+    fn borrowed_nft_withdraw(id: ContractId, token_id: u64) {
+        // Make sure this borrow_nft exists
         let nft_data = storage.list_nft.get((id, token_id));
         require(nft_data.is_some(), AccessError::NFTNotListed);
-        let lended_nfts = storage.lend_nft.get((id, token_id));
+        let borrowed_nfts = storage.borrow_nft.get((id, token_id));
 
-        let result = withdraw_lended_nft(id, token_id, lended_nfts);
-        storage.lend_nft.insert((id, token_id), result);
+        let result = withdraw_borrowed_nft(id, token_id, borrowed_nfts);
+        storage.borrow_nft.insert((id, token_id), result);
     }
 }
 
-fn get_lended_nfts(
+fn get_borrowed_nfts(
     id: ContractId,
     token_id: u64,
     buyer: Identity,
     sb: u64,
     eb: u64,
     price: u64,
-    nfts: [Option<LendNft>; 5],
-) -> [Option<LendNft>; 5] {
+    nfts: [Option<borrowNft>; 5],
+) -> [Option<borrowNft>; 5] {
     let blank = Option::None;
     let mut result = [blank, blank, blank, blank, blank];
-    let lending_nft = Option::Some(LendNft::new(sb, eb, price, buyer));
+    let borrowing_nft = Option::Some(borrowNft::new(sb, eb, price, buyer));
     if nfts[0].is_none() {
-        result = [lending_nft, blank, blank, blank, blank];
+        result = [borrowing_nft, blank, blank, blank, blank];
     } else if nfts[1].is_none() {
         let s1 = nfts[0].unwrap().start_time;
         let e1 = nfts[0].unwrap().end_time;
         if eb < s1 || sb > e1 {
-            result = [nfts[0], lending_nft, blank, blank, blank];
+            result = [nfts[0], borrowing_nft, blank, blank, blank];
         }
     } else if nfts[2].is_none() {
         let s1 = nfts[0].unwrap().start_time;
@@ -311,7 +311,7 @@ fn get_lended_nfts(
         let s2 = nfts[1].unwrap().start_time;
         let e2 = nfts[1].unwrap().end_time;
         if (eb < s1 || sb > e1) && (eb < s2 || sb > e2) {
-            result = [nfts[0], nfts[1], lending_nft, blank, blank];
+            result = [nfts[0], nfts[1], borrowing_nft, blank, blank];
         }
     } else if nfts[3].is_none() {
         let s1 = nfts[0].unwrap().start_time;
@@ -327,7 +327,7 @@ fn get_lended_nfts(
             && (eb < s3
             || sb > e3)
         {
-            result = [nfts[0], nfts[1], nfts[2], lending_nft, blank];
+            result = [nfts[0], nfts[1], nfts[2], borrowing_nft, blank];
         }
     } else if nfts[4].is_none() {
         let s1 = nfts[0].unwrap().start_time;
@@ -347,18 +347,18 @@ fn get_lended_nfts(
             && (eb < s4
             || sb > e4)
         {
-            result = [nfts[0], nfts[1], nfts[2], nfts[4], lending_nft];
+            result = [nfts[0], nfts[1], nfts[2], nfts[4], borrowing_nft];
         }
     }
     require(result[0].is_some(), AccessError::CantLandNft);
     result
 }
 
-fn withdraw_lended_nft(
+fn withdraw_borrowed_nft(
     id: ContractId,
     token_id: u64,
-    nfts: [Option<LendNft>; 5],
-) -> [Option<LendNft>; 5] {
+    nfts: [Option<borrowNft>; 5],
+) -> [Option<borrowNft>; 5] {
     let blank = Option::None;
     let mut result = nfts;
     let x = abi(externalAbi, id.value);
