@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Footer from "../components/footer/Footer";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import Countdown from "react-countdown";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import "react-tabs/style/react-tabs.css";
@@ -12,31 +12,40 @@ import img5 from "../assets/images/avatar/avt-7.jpg";
 import img6 from "../assets/images/avatar/avt-8.jpg";
 import img7 from "../assets/images/avatar/avt-2.jpg";
 import imgdetail1 from "../assets/images/box-item/images-item-details2.jpg";
-import { ManagerAbi__factory } from "../contracts/manager";
-import { getManagerContract, getPublicKey } from "../utils/GetContract";
+import { getWallet, getPublicKey } from "../utils/GetContract";
+import { token } from "../utils/auth";
 
-const ItemDetails02 = () => {
-  const contract_id = useParams();
+const UpdateCollection = () => {
+  const { contract_id } = useParams();
+  const navigate = useNavigate();
 
-  const borrow_nft = async (token, amount, start_time, end_time) => {
-    const contract = await getManagerContract();
-    const lend_nft = await contract()
-      .functions.lend_nft(
-        { value: contract_id },
-        token,
-        { Address: { value: getPublicKey } },
-        start_time,
-        end_time,
-        amount
-      )
-      .txParams({ gasPrice: 1 })
-      .callParams({
-        forward: [amount],
-      })
-      .call();
-    console.log("lend_nft", lend_nft);
+  const create_collection = async () => {
+    const publicKey = await getPublicKey();
+    let body = {
+      contract_id: contract_id,
+      owner: publicKey,
+    };
+    try {
+      const response = await fetch(
+        `${process.env.REACT_APP_API_URL}/collection`,
+        {
+          method: "POST",
+          headers: {
+            "Content-type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(body),
+        }
+      );
+      if (response.ok) {
+        navigate("/add-rooms/" + contract_id);
+      } else if (!response.ok) {
+        console.log("Unauthorized or token expired");
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
-
   return (
     <div className="item-details">
       <div className="tf-section tf-item-details style-2">
@@ -81,8 +90,11 @@ const ItemDetails02 = () => {
                     Facilisi lobortisal morbi fringilla urna amet sed ipsum
                   </p>
                 </div>
-                <button className="sc-button loadmore style bag fl-button pri-3">
-                  <span>Reserve</span>
+                <button
+                  onClick={create_collection}
+                  className="sc-button loadmore style bag fl-button pri-3"
+                >
+                  <span>Update details</span>
                 </button>
               </div>
             </div>
@@ -93,4 +105,4 @@ const ItemDetails02 = () => {
   );
 };
 
-export default ItemDetails02;
+export default UpdateCollection;

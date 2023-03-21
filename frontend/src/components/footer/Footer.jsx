@@ -68,7 +68,7 @@ const Footer = () => {
     // },
     {
       icon: "fab fa-telegram-plane",
-      link: "https://t.me/fuelart",
+      link: "https://t.me/fluxen",
     },
     // {
     //   icon: "fab fa-youtube",

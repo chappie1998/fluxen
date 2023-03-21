@@ -739,7 +739,7 @@ const ItemContent = () => {
                       </div>
                       <div className="card-media">
                         <Link to={`/property/${item.contract_id}`}>
-                          <img src={item.img} alt="Fuelart" />
+                          <img src={item.img} alt="Fluxen" />
                         </Link>
                       </div>
                       <div className="card-title">
@@ -779,7 +779,7 @@ const ItemContent = () => {
                       <div className="wrap-media">
                         <div className="card-media">
                           <Link to="/item-details-01">
-                            <img src={item.img} alt="Fuelart" />
+                            <img src={item.img} alt="Fluxen" />
                           </Link>
                         </div>
                       </div>
@@ -793,7 +793,7 @@ const ItemContent = () => {
                         <p>Creator</p>
                         <div className="author">
                           <div className="avatar">
-                            <img src={item.imgAuthor} alt="Fuelart" />
+                            <img src={item.imgAuthor} alt="Fluxen" />
                           </div>
                           <div className="info">
                             <h4>

@@ -63,7 +63,7 @@ interface ManagerAbiInterface extends Interface {
     admin: FunctionFragment;
     borrow_nft: FunctionFragment;
     borrowed_nft_info: FunctionFragment;
-    borrowed_nft_withdraw: FunctionFragment;
+    borrowed_nft_return: FunctionFragment;
     change_nft_price: FunctionFragment;
     constructor: FunctionFragment;
     delist_nft: FunctionFragment;
@@ -84,7 +84,7 @@ interface ManagerAbiInterface extends Interface {
   encodeFunctionData(functionFragment: 'admin', values: []): Uint8Array;
   encodeFunctionData(functionFragment: 'borrow_nft', values: [ContractIdInput, BigNumberish, IdentityInput, BigNumberish, BigNumberish, BigNumberish]): Uint8Array;
   encodeFunctionData(functionFragment: 'borrowed_nft_info', values: [ContractIdInput, BigNumberish]): Uint8Array;
-  encodeFunctionData(functionFragment: 'borrowed_nft_withdraw', values: [ContractIdInput, BigNumberish]): Uint8Array;
+  encodeFunctionData(functionFragment: 'borrowed_nft_return', values: [ContractIdInput, BigNumberish]): Uint8Array;
   encodeFunctionData(functionFragment: 'change_nft_price', values: [ContractIdInput, BigNumberish, BigNumberish]): Uint8Array;
   encodeFunctionData(functionFragment: 'constructor', values: [IdentityInput]): Uint8Array;
   encodeFunctionData(functionFragment: 'delist_nft', values: [ContractIdInput, BigNumberish]): Uint8Array;
@@ -104,7 +104,7 @@ interface ManagerAbiInterface extends Interface {
   decodeFunctionData(functionFragment: 'admin', data: BytesLike): DecodedValue;
   decodeFunctionData(functionFragment: 'borrow_nft', data: BytesLike): DecodedValue;
   decodeFunctionData(functionFragment: 'borrowed_nft_info', data: BytesLike): DecodedValue;
-  decodeFunctionData(functionFragment: 'borrowed_nft_withdraw', data: BytesLike): DecodedValue;
+  decodeFunctionData(functionFragment: 'borrowed_nft_return', data: BytesLike): DecodedValue;
   decodeFunctionData(functionFragment: 'change_nft_price', data: BytesLike): DecodedValue;
   decodeFunctionData(functionFragment: 'constructor', data: BytesLike): DecodedValue;
   decodeFunctionData(functionFragment: 'delist_nft', data: BytesLike): DecodedValue;
@@ -128,7 +128,7 @@ export class ManagerAbi extends Contract {
     admin: InvokeFunction<[], Option<IdentityOutput>>;
     borrow_nft: InvokeFunction<[id: ContractIdInput, token_id: BigNumberish, buyer: IdentityInput, start_time: BigNumberish, end_time: BigNumberish, price: BigNumberish], void>;
     borrowed_nft_info: InvokeFunction<[id: ContractIdInput, token_id: BigNumberish], [Option<borrowNftOutput>, Option<borrowNftOutput>, Option<borrowNftOutput>, Option<borrowNftOutput>, Option<borrowNftOutput>]>;
-    borrowed_nft_withdraw: InvokeFunction<[id: ContractIdInput, token_id: BigNumberish], void>;
+    borrowed_nft_return: InvokeFunction<[id: ContractIdInput, token_id: BigNumberish], void>;
     change_nft_price: InvokeFunction<[id: ContractIdInput, token_id: BigNumberish, price: BigNumberish], void>;
     constructor: InvokeFunction<[admin: IdentityInput], void>;
     delist_nft: InvokeFunction<[id: ContractIdInput, token_id: BigNumberish], void>;

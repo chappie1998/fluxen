@@ -89,7 +89,7 @@ const AllNFTs = () => {
                       to={`/asset/${item.contract_id}/${item.token}`}
                       relative="path"
                     >
-                      <img src={item.img} alt="fuelart" />
+                      <img src={item.img} alt="fluxen" />
                     </Link>
                     <div className="button-place-bid">
                       <button
@@ -117,7 +117,7 @@ const AllNFTs = () => {
                   {/* <div className="meta-info"> */}
                   {/* <div className="author">
                       <div className="avatar">
-                      <img src={item.imgAuthor} alt="fuelart" />
+                      <img src={item.imgAuthor} alt="fluxen" />
                       </div>
                       <div className="info">
                       <span>Owned By</span>

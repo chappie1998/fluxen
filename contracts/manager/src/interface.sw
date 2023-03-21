@@ -49,7 +49,7 @@ abi NftMarketplace {
     fn borrowed_nft_info(id: ContractId, token_id: u64) -> [Option<borrowNft>; 5];
 
     #[storage(read, write)]
-    fn borrowed_nft_withdraw(id: ContractId, token_id: u64);
+    fn borrowed_nft_return(id: ContractId, token_id: u64);
 
     // Changes the contract's admin.
     // 

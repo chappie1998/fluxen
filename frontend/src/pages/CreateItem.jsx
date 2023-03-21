@@ -141,7 +141,7 @@ const CreateItem = () => {
                 <h4 className="title-create-item">Preview item</h4>
                 <div className="sc-card-product">
                   <div className="card-media">
-                    <img src={imageURL} alt="Fuelart" />
+                    <img src={imageURL} alt="Fluxen" />
                   </div>
                   <div className="card-title">
                     <h5>"{nftName}”</h5>
@@ -154,7 +154,7 @@ const CreateItem = () => {
                   {/* <div className="meta-info">
                   <div className="author">
                     <div className="avatar">
-                      <img src={avt} alt="Fuelart" />
+                      <img src={avt} alt="Fluxen" />
                     </div>
                     <div className="info">
                       <span>Owned By</span>

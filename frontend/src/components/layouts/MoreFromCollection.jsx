@@ -60,10 +60,7 @@ const MoreFromCollection = (props) => {
                                 <Link
                                   to={`/asset/${item.nft_contract}/${item.token_id}`}
                                 >
-                                  <img
-                                    src={item.nft_data.image}
-                                    alt="fuelart"
-                                  />
+                                  <img src={item.nft_data.image} alt="fluxen" />
                                 </Link>
                               </div>
                               <div className="card-title">

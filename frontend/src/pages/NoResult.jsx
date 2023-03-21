@@ -162,7 +162,7 @@ const NoResult = () => {
                             <div className="sc-card-product">
                               <div className="card-media">
                                 <Link to="/item-details-01">
-                                  <img src={item.img} alt="fuelart" />
+                                  <img src={item.img} alt="fluxen" />
                                 </Link>
                                 <Link
                                   to="/login"
@@ -198,7 +198,7 @@ const NoResult = () => {
                               <div className="meta-info">
                                 <div className="author">
                                   <div className="avatar">
-                                    <img src={item.imgAuthor} alt="fuelart" />
+                                    <img src={item.imgAuthor} alt="fluxen" />
                                   </div>
                                   <div className="info">
                                     <span>Creator</span>

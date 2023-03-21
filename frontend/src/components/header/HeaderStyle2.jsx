@@ -14,7 +14,6 @@ const HeaderStyle2 = () => {
   const [walletDropdownMenu, setWalletDropdownMenu] = useState(false);
   const [showModal, setShowModal] = useState();
   const [address, setAddress] = useState();
-  const { pathname } = useLocation();
 
   const headerRef = useRef(null);
   useEffect(() => {
@@ -98,7 +97,7 @@ const HeaderStyle2 = () => {
         };
         try {
           const response = await fetch(
-            `${process.env.REACT_APP_AMRKETPLACE_API_URL}/account`,
+            `${process.env.REACT_APP_API_URL}/account`,
             {
               method: "POST",
               headers: {
@@ -308,6 +307,15 @@ const HeaderStyle2 = () => {
                             >
                               <div className="menuItem">
                                 <span>Profile</span>
+                              </div>
+                            </Link>
+                            <Link
+                              to="/list-property"
+                              rel="home"
+                              className="main-logo"
+                            >
+                              <div className="menuItem">
+                                <span>List Property</span>
                               </div>
                             </Link>
                             <Link

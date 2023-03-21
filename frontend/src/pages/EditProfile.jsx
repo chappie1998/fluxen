@@ -87,7 +87,7 @@ const EditProfile = () => {
             <div className="col-xl-3 col-lg-4 col-md-6 col-12">
               <div className="sc-card-profile text-center">
                 <div className="card-media">
-                  <img id="profileimg" src={imageURL} alt="Fuelart" />
+                  <img id="profileimg" src={imageURL} alt="Fluxen" />
                 </div>
                 <div id="upload-profile">
                   <Link to="#" className="btn-upload">
@@ -125,7 +125,7 @@ const EditProfile = () => {
                         <h4 className="title-infor-account">Custom URL</h4>
                         <input
                           type="text"
-                          placeholder="Fuelart.Trista Francis.com/"
+                          placeholder="Fluxen.Trista Francis.com/"
                           name="customUrl"
                         />
                       </fieldset>

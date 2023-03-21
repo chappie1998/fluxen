@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Footer from "../components/footer/Footer";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import Countdown from "react-countdown";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import "react-tabs/style/react-tabs.css";
@@ -12,29 +12,31 @@ import img5 from "../assets/images/avatar/avt-7.jpg";
 import img6 from "../assets/images/avatar/avt-8.jpg";
 import img7 from "../assets/images/avatar/avt-2.jpg";
 import imgdetail1 from "../assets/images/box-item/images-item-details2.jpg";
-import { ManagerAbi__factory } from "../contracts/manager";
-import { getManagerContract, getPublicKey } from "../utils/GetContract";
+import { getWallet, getPublicKey } from "../utils/GetContract";
+import { ContractFactory } from "fuels";
+import { token } from "../utils/auth";
 
-const ItemDetails02 = () => {
-  const contract_id = useParams();
+const buffer = require("buffer");
 
-  const borrow_nft = async (token, amount, start_time, end_time) => {
-    const contract = await getManagerContract();
-    const lend_nft = await contract()
-      .functions.lend_nft(
-        { value: contract_id },
-        token,
-        { Address: { value: getPublicKey } },
-        start_time,
-        end_time,
-        amount
-      )
-      .txParams({ gasPrice: 1 })
-      .callParams({
-        forward: [amount],
-      })
-      .call();
-    console.log("lend_nft", lend_nft);
+const CreateCollection = () => {
+  const navigate = useNavigate();
+  const deployContract = async () => {
+    // load the byteCode of the contract, generated from Sway source
+    const data = await fetch("../deploy_contract/property.bin");
+
+    var byteCode = new Uint8Array(await data.arrayBuffer());
+    const buff = buffer.Buffer.from(byteCode);
+
+    // load the JSON abi of the contract, generated from Sway source
+    const abi = require("../deploy_contract/property-abi.json");
+    // console.log(abi.toString());
+
+    const wallet = await getWallet();
+    // send byteCode and ABI to ContractFactory to load
+    const factory = new ContractFactory(buff, abi, wallet);
+    const contract = await factory.deployContract();
+    console.log("contract successful deployed", contract.id.toB256());
+    navigate("/update-property/" + contract.id.toB256());
   };
 
   return (
@@ -81,8 +83,11 @@ const ItemDetails02 = () => {
                     Facilisi lobortisal morbi fringilla urna amet sed ipsum
                   </p>
                 </div>
-                <button className="sc-button loadmore style bag fl-button pri-3">
-                  <span>Reserve</span>
+                <button
+                  onClick={deployContract}
+                  className="sc-button loadmore style bag fl-button pri-3"
+                >
+                  <span>List Property</span>
                 </button>
               </div>
             </div>
@@ -93,4 +98,4 @@ const ItemDetails02 = () => {
   );
 };
 
-export default ItemDetails02;
+export default CreateCollection;

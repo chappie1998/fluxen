@@ -90,15 +90,15 @@ const PopularCollectionItem = (props) => (
             <Link to="/authors-02">
               <div className="media-images-collection">
                 <div className="box-left">
-                  <img src={props.item.imgleft} alt="fuelart" />
+                  <img src={props.item.imgleft} alt="fluxen" />
                 </div>
                 <div className="box-right">
                   <div className="top-img">
-                    <img src={props.item.imgright1} alt="fuelart" />
-                    <img src={props.item.imgright2} alt="fuelart" />
+                    <img src={props.item.imgright1} alt="fluxen" />
+                    <img src={props.item.imgright2} alt="fluxen" />
                   </div>
                   <div className="bottom-img">
-                    <img src={props.item.imgright3} alt="fuelart" />
+                    <img src={props.item.imgright3} alt="fluxen" />
                   </div>
                 </div>
               </div>

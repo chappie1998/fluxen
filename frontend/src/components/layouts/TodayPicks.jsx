@@ -33,7 +33,7 @@ const TodayPicks = (props) => {
                 >
                   <div className="card-media">
                     <Link to="/item-details-01">
-                      <img src={item.img} alt="fuelart" />
+                      <img src={item.img} alt="fluxen" />
                     </Link>
                     <Link to="/login" className="wishlist-button heart">
                       <span className="number-like">{item.wishlist}</span>
@@ -49,7 +49,7 @@ const TodayPicks = (props) => {
                   <div className="meta-info">
                     <div className="author">
                       <div className="avatar">
-                        <img src={item.imgAuthor} alt="fuelart" />
+                        <img src={item.imgAuthor} alt="fluxen" />
                       </div>
                       <div className="info">
                         <span>Owned By</span>

@@ -1,6 +1,6 @@
 {
-  "name": "fuelart-reactjs",
-  "homepage": "https://fuelart.io",
+  "name": "fluxen-reactjs",
+  "homepage": "https://fluxen.io",
   "version": "1.0.1",
   "private": true,
   "dependencies": {

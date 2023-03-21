@@ -66,7 +66,7 @@ const Authors02 = () => {
 
   const { publicKey } = useParams();
 
-  const ud = localStorage.getItem("fuelart-ud");
+  const ud = localStorage.getItem("fluxen-ud");
 
   const loadUserData = async () => {
     const data = await fetch(
@@ -208,7 +208,7 @@ const Authors02 = () => {
                                       >
                                         <img
                                           src={data.nft_data.image}
-                                          alt="Fuelart"
+                                          alt="Fluxen"
                                         />
                                       </Link>
                                       {/* <Link
