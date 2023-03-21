@@ -227,7 +227,7 @@ button,
 input,
 select,
 textarea {
-  font-family: "Urbanist", sans-serif;
+  font-family: roboto, sans-serif;
   color: var(--primary-color2);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;

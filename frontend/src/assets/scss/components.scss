@@ -20,6 +20,7 @@
 }
 
 @keyframes slideUp {
+
   0%,
   50% {
     transform: translateY(0);
@@ -264,5 +265,24 @@
     @media (min-width: 1200px) {
       width: 500px;
     }
+  }
+}
+
+// calender
+.calender {
+  margin-top: 20px;
+  color: black;
+
+  .rdrDefinedRangesWrapper {
+    display: none;
+  }
+
+  button {
+
+    &:hover,
+    &:focus {
+      border: none;
+    }
+
   }
 }

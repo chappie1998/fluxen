@@ -5,7 +5,6 @@ import "./assets/scss/components.scss";
 import "./assets/scss/elements.scss";
 import { Routes, Route } from "react-router-dom";
 import routes from "./pages/index";
-import { useSelector } from "react-redux";
 // import Header from "./components/header/Header";
 import { Fragment } from "react";
 import Footer from "./components/footer/Footer";
