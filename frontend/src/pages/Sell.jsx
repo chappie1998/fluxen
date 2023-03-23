@@ -7,10 +7,10 @@ import {
   getWallet,
   NFTContract,
 } from "../utils/GetContract";
-import { Contract, Address, bn } from "fuels";
+import {  bn } from "fuels";
 import { _abi } from "../contracts/nft/factories/NFTAbi__factory.ts";
 import { LoadingDots } from "../components/LoadingDots";
-import { NFTAbi__factory } from "../contracts/nft";
+import { PropertyAbi__factory } from "../contracts/nft";
 
 export const Sell = () => {
   const [selected, setSelected] = useState(true);
@@ -70,7 +70,7 @@ export const Sell = () => {
     try {
       const wallet = await getWallet();
       const contractInstance = await getManagerContract();
-      const nftcontractInstance = NFTAbi__factory.connect(contract_id, wallet, {
+      const nftcontractInstance = PropertyAbi__factory.connect(contract_id, wallet, {
         cache: false,
       });
       // const nftcontractInstance = await getNftContract(contract_id);

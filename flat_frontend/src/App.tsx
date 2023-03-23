@@ -26,7 +26,7 @@ function App() {
   );
 
   const contractId =
-    "0x2ba04754ca881881cd1e0debaafeebc2401fbdd3865b12d825c12777d8b6cee5";
+    "0x515c77d2a4a7221d749d93140f9a6470724c5c54e306945ed3868c84c362a9e9";
   const managerContract = ManagerAbi__factory.connect(contractId, wallet);
 
   const NFTContractId =
@@ -182,9 +182,9 @@ function App() {
     console.log("get_whiltested_contract", get_whiltested_contract);
   };
 
-  const lend_nft = async () => {
+  const borrow_nft = async () => {
     const lend_nft = await managerContract.functions
-      .lend_nft(
+      .borrow_nft(
         { value: NFTContractId },
         0,
         { Address: { value: admin } },
@@ -197,27 +197,27 @@ function App() {
         forward: [0.01 * 1e9],
       })
       .call();
-    console.log("lend_nft", lend_nft);
+    console.log("borrow_nft", borrow_nft);
   };
 
-  const lended_nft_info = async () => {
+  const borrowed_nft_info = async () => {
     const lended_nft_info = await managerContract.functions
-      .lended_nft_info({ value: NFTContractId }, 0)
+      .borrowed_nft_info({ value: NFTContractId }, 0)
       .get();
-    console.log("lended_nft_info", lended_nft_info);
+    console.log("borrowed_nft_info", borrowed_nft_info);
     console.log(
       "start_block",
-      lended_nft_info.value?.[0]?.start_block.toNumber()
+      // borrowed_nft_info.value[0]?.start_block.toNumber()
     );
   };
 
-  const lended_nft_withdraw = async () => {
+  const borrowed_nft_return = async () => {
     const lended_nft_withdraw = await managerContract.functions
-      .lended_nft_withdraw({ value: NFTContractId }, 0)
+      .borrowed_nft_return({ value: NFTContractId }, 0)
       .txParams({ gasPrice: 1 })
       .addContracts([NFTContract])
       .call();
-    console.log("lended_nft_withdraw", lended_nft_withdraw);
+    console.log("borrowed_nft_return", borrowed_nft_return);
   };
 
   const deployContract = async () => {
@@ -292,11 +292,11 @@ function App() {
         <button onClick={token_metadata}>token_metadata</button>
       </div>
       <div>
-        <button onClick={lend_nft}>lend_nft</button>
-        <button onClick={lended_nft_info}>lended_nft_info</button>
+        <button onClick={borrow_nft}>borrow_nft</button>
+        <button onClick={borrowed_nft_info}>borrowed_nft_info</button>
       </div>
       <div>
-        <button onClick={lended_nft_withdraw}>lended_nft_withdraw</button>
+        <button onClick={borrowed_nft_return}>borrowed_nft_return</button>
       </div>
       <div>
         <button onClick={b_time}>get_time</button>

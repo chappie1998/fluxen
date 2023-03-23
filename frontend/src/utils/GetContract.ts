@@ -1,7 +1,7 @@
 import { Address, Contract, WalletUnlocked } from "fuels";
-import { NFTAbi__factory } from "../contracts/nft";
-import { _abi as nftabi } from "../contracts/nft/factories/NFTAbi__factory";
+// import { NFTAbi__factory } from "../contracts/nft";
 import { ManagerAbi__factory } from "../contracts/manager";
+import { NFTAbi__factory } from "../contracts/nft/factories/NFTAbi__factory";
 
 // let pk = "0xde97d8624a438121b86a1956544bd72ed68cd69f2c99555b08b1e8c51ffd511c";
 

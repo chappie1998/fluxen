@@ -32,11 +32,11 @@ const main = async () => {
 
   const deployManagerContract = async () => {
     const bytecode = readFileSync(
-      "/home/chappie/fluxen/contracts/manager/out/debug/manager.bin"
+      "/home/ankit/fluxen/contracts/manager/out/debug/manager.bin"
     ); // Read the binary file
     const abiJSON = JSON.parse(
       readFileSync(
-        "/home/chappie/fluxen/contracts/manager/out/debug/manager-abi.json"
+        "/home/ankit/fluxen/contracts/manager/out/debug/manager-abi.json"
       ).toString()
     ) as JsonAbi;
     const factory = new ContractFactory(bytecode, abiJSON, wallet);

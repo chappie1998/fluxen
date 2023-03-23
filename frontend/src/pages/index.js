@@ -30,7 +30,7 @@ const routes = [
   { path: "/sell/:contract_id/:token", component: <Sell /> },
   { path: "property/:contract_id", component: <ItemDetails02 /> },
   { path: "my-properties", component: <MyCollections /> },
-  { path: "create-property", component: <CreateCollection /> },
+  { path: "create-property", component: <CreateItem /> },
   { path: "update-property/:contract_id", component: <UpdateCollection /> },
 ];
 

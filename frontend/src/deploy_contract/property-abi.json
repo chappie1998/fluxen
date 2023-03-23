@@ -189,14 +189,8 @@
       "components": [
         {
           "name": "approved",
-          "type": 7,
-          "typeArguments": [
-            {
-              "name": "",
-              "type": 4,
-              "typeArguments": null
-            }
-          ]
+          "type": 4,
+          "typeArguments": null
         },
         {
           "name": "owner",
@@ -423,8 +417,14 @@
       "name": "balance_of",
       "output": {
         "name": "",
-        "type": 20,
-        "typeArguments": null
+        "type": 7,
+        "typeArguments": [
+          {
+            "name": "",
+            "type": 20,
+            "typeArguments": null
+          }
+        ]
       },
       "attributes": [
         {
@@ -528,8 +528,14 @@
       "name": "is_approved_for_all",
       "output": {
         "name": "",
-        "type": 2,
-        "typeArguments": null
+        "type": 7,
+        "typeArguments": [
+          {
+            "name": "",
+            "type": 2,
+            "typeArguments": null
+          }
+        ]
       },
       "attributes": [
         {
@@ -867,7 +873,7 @@
       "logId": 10,
       "loggedType": {
         "name": "",
-        "type": 5,
+        "type": 6,
         "typeArguments": []
       }
     },
@@ -875,7 +881,7 @@
       "logId": 11,
       "loggedType": {
         "name": "",
-        "type": 6,
+        "type": 3,
         "typeArguments": []
       }
     },
@@ -883,7 +889,7 @@
       "logId": 12,
       "loggedType": {
         "name": "",
-        "type": 3,
+        "type": 16,
         "typeArguments": []
       }
     },
@@ -891,7 +897,7 @@
       "logId": 13,
       "loggedType": {
         "name": "",
-        "type": 16,
+        "type": 3,
         "typeArguments": []
       }
     },
@@ -899,7 +905,7 @@
       "logId": 14,
       "loggedType": {
         "name": "",
-        "type": 3,
+        "type": 12,
         "typeArguments": []
       }
     },
@@ -907,7 +913,7 @@
       "logId": 15,
       "loggedType": {
         "name": "",
-        "type": 12,
+        "type": 17,
         "typeArguments": []
       }
     },
@@ -915,7 +921,7 @@
       "logId": 16,
       "loggedType": {
         "name": "",
-        "type": 17,
+        "type": 6,
         "typeArguments": []
       }
     },
@@ -923,7 +929,7 @@
       "logId": 17,
       "loggedType": {
         "name": "",
-        "type": 6,
+        "type": 3,
         "typeArguments": []
       }
     },
@@ -931,7 +937,7 @@
       "logId": 18,
       "loggedType": {
         "name": "",
-        "type": 3,
+        "type": 19,
         "typeArguments": []
       }
     },
@@ -939,7 +945,7 @@
       "logId": 19,
       "loggedType": {
         "name": "",
-        "type": 19,
+        "type": 6,
         "typeArguments": []
       }
     },
@@ -947,20 +953,12 @@
       "logId": 20,
       "loggedType": {
         "name": "",
-        "type": 6,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 21,
-      "loggedType": {
-        "name": "",
         "type": 3,
         "typeArguments": []
       }
     },
     {
-      "logId": 22,
+      "logId": 21,
       "loggedType": {
         "name": "",
         "type": 19,

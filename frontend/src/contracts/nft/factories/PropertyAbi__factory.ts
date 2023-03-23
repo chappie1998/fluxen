@@ -13,7 +13,7 @@ import { Interface, Contract } from "fuels";
 import type { Provider, Account, AbstractAddress } from "fuels";
 import type { PropertyAbi, PropertyAbiInterface } from "../PropertyAbi";
 
-export const _abi = {
+const _abi = {
   "types": [
     {
       "typeId": 0,

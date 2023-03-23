@@ -9,13 +9,21 @@ import avt from "../assets/images/avatar/avt-9.jpg";
 import { Fragment, useState } from "react";
 import { Web3Storage } from "web3.storage";
 
-import { getNftContract, getPublicKey } from "./../utils/GetContract";
+import {
+  getNftContract,
+  getPublicKey,
+  getWallet,
+} from "./../utils/GetContract";
+import { token } from "../utils/auth";
+import { ContractFactory } from "fuels";
+
+const buffer = require("buffer");
 
 const CreateItem = () => {
   const [spinner, setSpinner] = useState(false);
   const [imageURL, setImageURL] = useState(img1);
   const [image, setImage] = useState();
-  const [nftName, setNftName] = useState("Nft Name");
+  const [nftName, setNftName] = useState("Property Name");
   const [description, setDescription] = useState("Description");
 
   const navigate = useNavigate();
@@ -66,6 +74,26 @@ const CreateItem = () => {
     return md1;
   };
 
+  const deployContract = async () => {
+    // load the byteCode of the contract, generated from Sway source
+    const data = await fetch("../deploy_contract/property.bin");
+
+    var byteCode = new Uint8Array(await data.arrayBuffer());
+    const buff = buffer.Buffer.from(byteCode);
+
+    // load the JSON abi of the contract, generated from Sway source
+    const abi = require("../deploy_contract/property-abi.json");
+    // console.log(abi.toString());
+
+    const wallet = await getWallet();
+    // send byteCode and ABI to ContractFactory to load
+    const factory = new ContractFactory(buff, abi, wallet);
+    const contract = await factory.deployContract();
+    console.log("contract successful deployed", contract.id.toB256());
+    // navigate("/update-property/" + contract.id.toB256());
+    return contract.id.toB256();
+  };
+
   const mint = async () => {
     if (!image || nftName == "Nft Name" || description == "Description") {
       alert("please provide data!");
@@ -73,39 +101,30 @@ const CreateItem = () => {
     }
 
     setSpinner(true);
+    const contract_id = await deployContract();
+    const publicKey = await getPublicKey();
+    let body = {
+      contract_id: contract_id,
+      owner: publicKey,
+      mainImage:
+        "https://a0.muscache.com/im/pictures/e89458f1-5c5e-4aa1-bbb3-bee452765064.jpg?im_w=720",
+    };
     try {
-      const mintData = await upload();
-      // const mintData = {
-      //   token_uri:
-      //     "bafkreie57f7sxx566cfjsjvuke7a5tqd3xcx6s6s2ikjd2zf63xy4z3onq",
-      //   name: "lolName 5",
-      // };
-      if (process.env.REACT_APP_NFT_CONTRACT_ID) {
-        const NFTContractId = process.env.REACT_APP_NFT_CONTRACT_ID;
-        const publicKey = await getPublicKey();
-        const contract = await getNftContract(NFTContractId);
-        const mintedNFT = await contract.functions
-          .mint({ Address: { value: publicKey } }, mintData)
-          .txParams({ gasPrice: 1 })
-          // .simulate();
-          .call();
-        console.log("mint", mintedNFT);
-        alert("congratulations for minting NFT on fuel!");
-        navigate("/author/" + publicKey);
-        // navigate(
-        //   "/asset/" +
-        //     NFTContractId +
-        //     "/" +
-        //     mintedNFT.logs[0].token_id.toNumber()
-        // );
-        // setTimeout(() => {
-        //   navigate(
-        //     "/asset/" +
-        //       NFTContractId +
-        //       "/" +
-        //       mintedNFT.logs[0].token_id.toNumber()
-        //   );
-        // }, "3000");
+      const response = await fetch(
+        `${process.env.REACT_APP_API_URL}/collection`,
+        {
+          method: "POST",
+          headers: {
+            "Content-type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(body),
+        }
+      );
+      if (response.ok) {
+        navigate("/update-property/" + contract_id);
+      } else if (!response.ok) {
+        console.log("Unauthorized or token expired");
       }
     } catch (error) {
       throw new Error(error);
@@ -151,35 +170,6 @@ const CreateItem = () => {
                   <div className="mt-4">
                     <h5>"{description}”</h5>
                   </div>
-                  {/* <div className="meta-info">
-                  <div className="author">
-                    <div className="avatar">
-                      <img src={avt} alt="Fluxen" />
-                    </div>
-                    <div className="info">
-                      <span>Owned By</span>
-                      <h6>
-                        {" "}
-                        <Link to="/author-02">Freddie Carpenter</Link>
-                      </h6>
-                    </div>
-                  </div>
-                  <div className="price">
-                    <span>Price</span>
-                    <h5> {price} ETH</h5>
-                  </div>
-                </div> */}
-                  {/* <div className="card-bottom">
-                  <Link
-                    to="/wallet-connect"
-                    className="sc-button style bag fl-button pri-3"
-                  >
-                    <span>Place Bid</span>
-                  </Link>
-                  <Link to="/activity-01" className="view-history reload">
-                    View History
-                  </Link>
-                </div> */}
                 </div>
               </div>
               <div className="col-xl-9 col-lg-6 col-md-12 col-12">
@@ -200,30 +190,8 @@ const CreateItem = () => {
                     </label>
                   </form>
                   <div className="flat-tabs tab-create-item">
-                    {/* <h4 className="title-create-item">Select method</h4> */}
                     <Tabs>
-                      {/* <TabList>
-                      <Tab>
-                        <span className="icon-fl-tag"></span>Fixed Price
-                      </Tab>
-                      <Tab>
-                        <span className="icon-fl-clock"></span>Time Auctions
-                      </Tab>
-                      <Tab>
-                        <span className="icon-fl-icon-22"></span>Open For Bids
-                      </Tab>
-                    </TabList> */}
-
-                      {/* <TabPanel> */}
                       <div>
-                        {/* <h4 className="title-create-item">Price</h4>
-                        <input
-                          type="text"
-                          required
-                          placeholder="Enter price for one item (ETH)"
-                          onChange={(e) => setPrice(e.target.value)}
-                        /> */}
-
                         <h4 className="title-create-item">Title</h4>
                         <input
                           type="text"
@@ -247,128 +215,7 @@ const CreateItem = () => {
                             <span>Create</span>
                           </button>
                         </div>
-
-                        {/* <div className="row-form style-3">
-                          <div className="inner-row-form">
-                            <h4 className="title-create-item">Royalties</h4>
-                            <input type="text" placeholder="5%" />
-                          </div>
-                          <div className="inner-row-form">
-                            <h4 className="title-create-item">Size</h4>
-                            <input type="text" placeholder="e.g. “size”" />
-                          </div>
-                          <div className="inner-row-form style-2">
-                            <div className="seclect-box">
-                              <div id="item-create" className="dropdown">
-                                <Link to="#" className="btn-selector nolink">
-                                  Abstraction
-                                </Link>
-                                <ul>
-                                  <li>
-                                    <span>Art</span>
-                                  </li>
-                                  <li>
-                                    <span>Music</span>
-                                  </li>
-                                  <li>
-                                    <span>Domain Names</span>
-                                  </li>
-                                  <li>
-                                    <span>Virtual World</span>
-                                  </li>
-                                  <li>
-                                    <span>Trading Cards</span>
-                                  </li>
-                                  <li>
-                                    <span>Sports</span>
-                                  </li>
-                                  <li>
-                                    <span>Utility</span>
-                                  </li>
-                                </ul>
-                              </div>
-                            </div>
-                          </div>
-                        </div> */}
                       </div>
-                      {/* </TabPanel> */}
-                      {/* <TabPanel>
-                      <form action="#">
-                        <h4 className="title-create-item">Minimum bid</h4>
-                        <input type="text" placeholder="enter minimum bid" />
-                        <div className="row">
-                          <div className="col-md-6">
-                            <h5 className="title-create-item">Starting date</h5>
-                            <input
-                              type="date"
-                              name="bid_starting_date"
-                              id="bid_starting_date"
-                              className="form-control"
-                              min="1997-01-01"
-                            />
-                          </div>
-                          <div className="col-md-6">
-                            <h4 className="title-create-item">
-                              Expiration date
-                            </h4>
-                            <input
-                              type="date"
-                              name="bid_expiration_date"
-                              id="bid_expiration_date"
-                              className="form-control"
-                            />
-                          </div>
-                        </div>
-
-                        <h4 className="title-create-item">Title</h4>
-                        <input type="text" placeholder="Item Name" />
-
-                        <h4 className="title-create-item">Description</h4>
-                        <textarea placeholder="e.g. “This is very limited item”"></textarea>
-                      </form>
-                    </TabPanel>
-                    <TabPanel>
-                      <form action="#">
-                        <h4 className="title-create-item">Price</h4>
-                        <input
-                          type="text"
-                          placeholder="Enter price for one item (ETH)"
-                        />
-
-                        <h4 className="title-create-item">Minimum bid</h4>
-                        <input type="text" placeholder="enter minimum bid" />
-
-                        <div className="row">
-                          <div className="col-md-6">
-                            <h5 className="title-create-item">Starting date</h5>
-                            <input
-                              type="date"
-                              name="bid_starting_date"
-                              id="bid_starting_date2"
-                              className="form-control"
-                              min="1997-01-01"
-                            />
-                          </div>
-                          <div className="col-md-6">
-                            <h4 className="title-create-item">
-                              Expiration date
-                            </h4>
-                            <input
-                              type="date"
-                              name="bid_expiration_date"
-                              id="bid_expiration_date2"
-                              className="form-control"
-                            />
-                          </div>
-                        </div>
-
-                        <h4 className="title-create-item">Title</h4>
-                        <input type="text" placeholder="Item Name" />
-
-                        <h4 className="title-create-item">Description</h4>
-                        <textarea placeholder="e.g. “This is very limited item”"></textarea>
-                      </form>
-                    </TabPanel> */}
                     </Tabs>
                   </div>
                 </div>

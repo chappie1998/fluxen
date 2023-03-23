@@ -276,11 +276,10 @@ impl NftMarketplace for Contract {
     #[storage(read, write)]
     fn borrowed_nft_return(id: ContractId, token_id: u64) {
         // Make sure this borrow_nft exists
-        let nft_data = storage.list_nft.get((id, token_id));
-        require(nft_data.is_some(), AccessError::NFTNotListed);
-        let borrowed_nfts = storage.borrow_nft.get((id, token_id)).unwrap();
+        let borrowed_nfts = storage.borrow_nft.get((id, token_id));
+        require(borrowed_nfts.is_some(), AccessError::NFTNotListed);
 
-        let result = withdraw_borrowed_nft(id, token_id, borrowed_nfts);
+        let result = withdraw_borrowed_nft(id, token_id, borrowed_nfts.unwrap());
         storage.borrow_nft.insert((id, token_id), result);
     }
 }

@@ -31,7 +31,7 @@ const _abi = {
           "typeArguments": [
             {
               "name": "",
-              "type": 13,
+              "type": 21,
               "typeArguments": null
             }
           ]
@@ -147,12 +147,12 @@ const _abi = {
           "typeArguments": null
         },
         {
-          "name": "EndBlockIsLessThanStartBlock",
+          "name": "EndtimeIsLessThanStarttime",
           "type": 0,
           "typeArguments": null
         },
         {
-          "name": "WrongStartBlockProvided",
+          "name": "WrongStarttimeProvided",
           "type": 0,
           "typeArguments": null
         }
@@ -222,70 +222,6 @@ const _abi = {
     },
     {
       "typeId": 13,
-      "type": "struct LendNft",
-      "components": [
-        {
-          "name": "start_block",
-          "type": 23,
-          "typeArguments": null
-        },
-        {
-          "name": "end_block",
-          "type": 23,
-          "typeArguments": null
-        },
-        {
-          "name": "price",
-          "type": 23,
-          "typeArguments": null
-        },
-        {
-          "name": "buyer",
-          "type": 5,
-          "typeArguments": null
-        }
-      ],
-      "typeParameters": null
-    },
-    {
-      "typeId": 14,
-      "type": "struct LendNftEvent",
-      "components": [
-        {
-          "name": "contract_id",
-          "type": 12,
-          "typeArguments": null
-        },
-        {
-          "name": "token_id",
-          "type": 23,
-          "typeArguments": null
-        },
-        {
-          "name": "buyer",
-          "type": 5,
-          "typeArguments": null
-        },
-        {
-          "name": "start_block",
-          "type": 23,
-          "typeArguments": null
-        },
-        {
-          "name": "end_block",
-          "type": 23,
-          "typeArguments": null
-        },
-        {
-          "name": "price",
-          "type": 23,
-          "typeArguments": null
-        }
-      ],
-      "typeParameters": null
-    },
-    {
-      "typeId": 15,
       "type": "struct ListNft",
       "components": [
         {
@@ -302,7 +238,7 @@ const _abi = {
       "typeParameters": null
     },
     {
-      "typeId": 16,
+      "typeId": 14,
       "type": "struct ManagerChangeEvent",
       "components": [
         {
@@ -314,7 +250,7 @@ const _abi = {
       "typeParameters": null
     },
     {
-      "typeId": 17,
+      "typeId": 15,
       "type": "struct NFTDeListedEvent",
       "components": [
         {
@@ -336,7 +272,7 @@ const _abi = {
       "typeParameters": null
     },
     {
-      "typeId": 18,
+      "typeId": 16,
       "type": "struct NFTListedEvent",
       "components": [
         {
@@ -363,7 +299,7 @@ const _abi = {
       "typeParameters": null
     },
     {
-      "typeId": 19,
+      "typeId": 17,
       "type": "struct NFTPriceChangeEvent",
       "components": [
         {
@@ -395,7 +331,7 @@ const _abi = {
       "typeParameters": null
     },
     {
-      "typeId": 20,
+      "typeId": 18,
       "type": "struct UnwhiteListContract",
       "components": [
         {
@@ -407,7 +343,7 @@ const _abi = {
       "typeParameters": null
     },
     {
-      "typeId": 21,
+      "typeId": 19,
       "type": "struct WhiteListContract",
       "components": [
         {
@@ -419,7 +355,7 @@ const _abi = {
       "typeParameters": null
     },
     {
-      "typeId": 22,
+      "typeId": 20,
       "type": "struct WithdrawLanedNftEvent",
       "components": [
         {
@@ -438,12 +374,76 @@ const _abi = {
           "typeArguments": null
         },
         {
-          "name": "start_block",
+          "name": "start_time",
           "type": 23,
           "typeArguments": null
         },
         {
-          "name": "end_block",
+          "name": "end_time",
+          "type": 23,
+          "typeArguments": null
+        }
+      ],
+      "typeParameters": null
+    },
+    {
+      "typeId": 21,
+      "type": "struct borrowNft",
+      "components": [
+        {
+          "name": "start_time",
+          "type": 23,
+          "typeArguments": null
+        },
+        {
+          "name": "end_time",
+          "type": 23,
+          "typeArguments": null
+        },
+        {
+          "name": "price",
+          "type": 23,
+          "typeArguments": null
+        },
+        {
+          "name": "buyer",
+          "type": 5,
+          "typeArguments": null
+        }
+      ],
+      "typeParameters": null
+    },
+    {
+      "typeId": 22,
+      "type": "struct borrowNftEvent",
+      "components": [
+        {
+          "name": "contract_id",
+          "type": 12,
+          "typeArguments": null
+        },
+        {
+          "name": "token_id",
+          "type": 23,
+          "typeArguments": null
+        },
+        {
+          "name": "buyer",
+          "type": 5,
+          "typeArguments": null
+        },
+        {
+          "name": "start_time",
+          "type": 23,
+          "typeArguments": null
+        },
+        {
+          "name": "end_time",
+          "type": 23,
+          "typeArguments": null
+        },
+        {
+          "name": "price",
           "type": 23,
           "typeArguments": null
         }
@@ -477,6 +477,116 @@ const _abi = {
           "name": "storage",
           "arguments": [
             "read"
+          ]
+        }
+      ]
+    },
+    {
+      "inputs": [
+        {
+          "name": "id",
+          "type": 12,
+          "typeArguments": null
+        },
+        {
+          "name": "token_id",
+          "type": 23,
+          "typeArguments": null
+        },
+        {
+          "name": "buyer",
+          "type": 5,
+          "typeArguments": null
+        },
+        {
+          "name": "start_time",
+          "type": 23,
+          "typeArguments": null
+        },
+        {
+          "name": "end_time",
+          "type": 23,
+          "typeArguments": null
+        },
+        {
+          "name": "price",
+          "type": 23,
+          "typeArguments": null
+        }
+      ],
+      "name": "borrow_nft",
+      "output": {
+        "name": "",
+        "type": 0,
+        "typeArguments": null
+      },
+      "attributes": [
+        {
+          "name": "payable",
+          "arguments": []
+        },
+        {
+          "name": "storage",
+          "arguments": [
+            "read",
+            "write"
+          ]
+        }
+      ]
+    },
+    {
+      "inputs": [
+        {
+          "name": "id",
+          "type": 12,
+          "typeArguments": null
+        },
+        {
+          "name": "token_id",
+          "type": 23,
+          "typeArguments": null
+        }
+      ],
+      "name": "borrowed_nft_info",
+      "output": {
+        "name": "",
+        "type": 1,
+        "typeArguments": null
+      },
+      "attributes": [
+        {
+          "name": "storage",
+          "arguments": [
+            "read"
+          ]
+        }
+      ]
+    },
+    {
+      "inputs": [
+        {
+          "name": "id",
+          "type": 12,
+          "typeArguments": null
+        },
+        {
+          "name": "token_id",
+          "type": 23,
+          "typeArguments": null
+        }
+      ],
+      "name": "borrowed_nft_return",
+      "output": {
+        "name": "",
+        "type": 0,
+        "typeArguments": null
+      },
+      "attributes": [
+        {
+          "name": "storage",
+          "arguments": [
+            "read",
+            "write"
           ]
         }
       ]
@@ -615,7 +725,7 @@ const _abi = {
         "typeArguments": [
           {
             "name": "",
-            "type": 15,
+            "type": 13,
             "typeArguments": null
           }
         ]
@@ -653,16 +763,6 @@ const _abi = {
       ]
     },
     {
-      "inputs": [],
-      "name": "get_time",
-      "output": {
-        "name": "",
-        "type": 23,
-        "typeArguments": null
-      },
-      "attributes": null
-    },
-    {
       "inputs": [
         {
           "name": "id",
@@ -681,116 +781,6 @@ const _abi = {
           "name": "storage",
           "arguments": [
             "read"
-          ]
-        }
-      ]
-    },
-    {
-      "inputs": [
-        {
-          "name": "id",
-          "type": 12,
-          "typeArguments": null
-        },
-        {
-          "name": "token_id",
-          "type": 23,
-          "typeArguments": null
-        },
-        {
-          "name": "buyer",
-          "type": 5,
-          "typeArguments": null
-        },
-        {
-          "name": "start_block",
-          "type": 23,
-          "typeArguments": null
-        },
-        {
-          "name": "end_block",
-          "type": 23,
-          "typeArguments": null
-        },
-        {
-          "name": "price",
-          "type": 23,
-          "typeArguments": null
-        }
-      ],
-      "name": "lend_nft",
-      "output": {
-        "name": "",
-        "type": 0,
-        "typeArguments": null
-      },
-      "attributes": [
-        {
-          "name": "payable",
-          "arguments": []
-        },
-        {
-          "name": "storage",
-          "arguments": [
-            "read",
-            "write"
-          ]
-        }
-      ]
-    },
-    {
-      "inputs": [
-        {
-          "name": "id",
-          "type": 12,
-          "typeArguments": null
-        },
-        {
-          "name": "token_id",
-          "type": 23,
-          "typeArguments": null
-        }
-      ],
-      "name": "lended_nft_info",
-      "output": {
-        "name": "",
-        "type": 1,
-        "typeArguments": null
-      },
-      "attributes": [
-        {
-          "name": "storage",
-          "arguments": [
-            "read"
-          ]
-        }
-      ]
-    },
-    {
-      "inputs": [
-        {
-          "name": "id",
-          "type": 12,
-          "typeArguments": null
-        },
-        {
-          "name": "token_id",
-          "type": 23,
-          "typeArguments": null
-        }
-      ],
-      "name": "lended_nft_withdraw",
-      "output": {
-        "name": "",
-        "type": 0,
-        "typeArguments": null
-      },
-      "attributes": [
-        {
-          "name": "storage",
-          "arguments": [
-            "read",
-            "write"
           ]
         }
       ]
@@ -983,7 +973,7 @@ const _abi = {
       "logId": 0,
       "loggedType": {
         "name": "",
-        "type": 4,
+        "type": 7,
         "typeArguments": []
       }
     },
@@ -999,7 +989,7 @@ const _abi = {
       "logId": 2,
       "loggedType": {
         "name": "",
-        "type": 19,
+        "type": 7,
         "typeArguments": []
       }
     },
@@ -1007,7 +997,7 @@ const _abi = {
       "logId": 3,
       "loggedType": {
         "name": "",
-        "type": 6,
+        "type": 7,
         "typeArguments": []
       }
     },
@@ -1015,7 +1005,7 @@ const _abi = {
       "logId": 4,
       "loggedType": {
         "name": "",
-        "type": 4,
+        "type": 7,
         "typeArguments": []
       }
     },
@@ -1031,7 +1021,7 @@ const _abi = {
       "logId": 6,
       "loggedType": {
         "name": "",
-        "type": 17,
+        "type": 4,
         "typeArguments": []
       }
     },
@@ -1039,7 +1029,7 @@ const _abi = {
       "logId": 7,
       "loggedType": {
         "name": "",
-        "type": 7,
+        "type": 22,
         "typeArguments": []
       }
     },
@@ -1055,7 +1045,7 @@ const _abi = {
       "logId": 9,
       "loggedType": {
         "name": "",
-        "type": 7,
+        "type": 20,
         "typeArguments": []
       }
     },
@@ -1063,7 +1053,7 @@ const _abi = {
       "logId": 10,
       "loggedType": {
         "name": "",
-        "type": 7,
+        "type": 20,
         "typeArguments": []
       }
     },
@@ -1071,7 +1061,7 @@ const _abi = {
       "logId": 11,
       "loggedType": {
         "name": "",
-        "type": 7,
+        "type": 20,
         "typeArguments": []
       }
     },
@@ -1079,7 +1069,7 @@ const _abi = {
       "logId": 12,
       "loggedType": {
         "name": "",
-        "type": 4,
+        "type": 20,
         "typeArguments": []
       }
     },
@@ -1087,7 +1077,7 @@ const _abi = {
       "logId": 13,
       "loggedType": {
         "name": "",
-        "type": 4,
+        "type": 20,
         "typeArguments": []
       }
     },
@@ -1095,7 +1085,7 @@ const _abi = {
       "logId": 14,
       "loggedType": {
         "name": "",
-        "type": 14,
+        "type": 4,
         "typeArguments": []
       }
     },
@@ -1111,7 +1101,7 @@ const _abi = {
       "logId": 16,
       "loggedType": {
         "name": "",
-        "type": 22,
+        "type": 17,
         "typeArguments": []
       }
     },
@@ -1119,7 +1109,7 @@ const _abi = {
       "logId": 17,
       "loggedType": {
         "name": "",
-        "type": 22,
+        "type": 6,
         "typeArguments": []
       }
     },
@@ -1127,7 +1117,7 @@ const _abi = {
       "logId": 18,
       "loggedType": {
         "name": "",
-        "type": 22,
+        "type": 4,
         "typeArguments": []
       }
     },
@@ -1135,7 +1125,7 @@ const _abi = {
       "logId": 19,
       "loggedType": {
         "name": "",
-        "type": 22,
+        "type": 4,
         "typeArguments": []
       }
     },
@@ -1143,7 +1133,7 @@ const _abi = {
       "logId": 20,
       "loggedType": {
         "name": "",
-        "type": 22,
+        "type": 15,
         "typeArguments": []
       }
     },
@@ -1175,7 +1165,7 @@ const _abi = {
       "logId": 24,
       "loggedType": {
         "name": "",
-        "type": 18,
+        "type": 16,
         "typeArguments": []
       }
     },
@@ -1207,7 +1197,7 @@ const _abi = {
       "logId": 28,
       "loggedType": {
         "name": "",
-        "type": 16,
+        "type": 14,
         "typeArguments": []
       }
     },
@@ -1239,7 +1229,7 @@ const _abi = {
       "logId": 32,
       "loggedType": {
         "name": "",
-        "type": 20,
+        "type": 18,
         "typeArguments": []
       }
     },
@@ -1263,7 +1253,7 @@ const _abi = {
       "logId": 35,
       "loggedType": {
         "name": "",
-        "type": 21,
+        "type": 19,
         "typeArguments": []
       }
     },
