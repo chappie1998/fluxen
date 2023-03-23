@@ -50,7 +50,7 @@ abi NFT {
     ///
     /// * `owner` - The user of which the balance should be returned.
     #[storage(read)]
-    fn balance_of(owner: Identity) -> u64;
+    fn balance_of(owner: Identity) -> Option<u64>;
 
     /// Burns the specified token.
     ///
@@ -96,7 +96,7 @@ abi NFT {
     /// * `operator` - The user which has recieved approval to transfer all tokens on the `owner`s behalf.
     /// * `owner` - The user which has given approval to transfer all tokens to the `operator`.
     #[storage(read)]
-    fn is_approved_for_all(operator: Identity, owner: Identity) -> bool;
+    fn is_approved_for_all(operator: Identity, owner: Identity) -> Option<bool>;
 
     /// Mints `amount` number of tokens to the `to` `Identity`.
     ///

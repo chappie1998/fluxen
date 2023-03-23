@@ -54,12 +54,12 @@ storage {
     default_protocol_fee: u64 = 10000,
     /// custom protocol fee for each contract
     /// 10000 == 100%
-    protocol_fee: StorageMap<ContractId, Option<u64>> = StorageMap {},
+    protocol_fee: StorageMap<ContractId, u64> = StorageMap {},
     /// Info of the royalty
     /// StorageVec is not allowed to inside storageMap so need to use this method
     whiltest_contract: StorageMap<ContractId, bool> = StorageMap {},
     /// List NFT info
-    list_nft: StorageMap<(ContractId, u64), Option<ListNft>> = StorageMap {},
+    list_nft: StorageMap<(ContractId, u64), ListNft> = StorageMap {},
     /// Info of the royalty
     /// StorageVec is not allowed to inside storageMap so need to use this method
     borrow_nft: StorageMap<(ContractId, u64), [Option<borrowNft>; 5]> = StorageMap {},
@@ -108,12 +108,12 @@ impl NftMarketplace for Contract {
     fn set_protocol_fee(id: ContractId, amount: u64) {
         let current_admin = storage.admin;
         require(current_admin.is_some() && msg_sender().unwrap() == current_admin.unwrap(), AccessError::SenderCannotSetAccessControl);
-        storage.protocol_fee.insert(id, Option::Some(amount));
+        storage.protocol_fee.insert(id, amount);
     }
 
     #[storage(read, write)]
     fn list_nft(id: ContractId, token_id: u64, price: u64) {
-        require(storage.whiltest_contract.get(id), AccessError::ContractIsNotWhitelisted);
+        require(storage.whiltest_contract.get(id).unwrap(), AccessError::ContractIsNotWhitelisted);
         require(price != 0, InputError::PriceCantBeZero);
         require(!storage.list_nft.get((id, token_id)).is_some(), AccessError::NFTAlreadyListed);
 
@@ -122,7 +122,7 @@ impl NftMarketplace for Contract {
             owner: sender,
             price: price,
         };
-        storage.list_nft.insert((id, token_id), Option::Some(nft));
+        storage.list_nft.insert((id, token_id), nft);
 
         let x = abi(externalAbi, id.value);
         x.transfer_from(sender, Identity::ContractId(contract_id()), token_id);
@@ -143,7 +143,7 @@ impl NftMarketplace for Contract {
         let nft = nft_data.unwrap();
         require(nft.owner == sender, AccessError::SenderNotOwner);
 
-        storage.list_nft.insert((id, token_id), Option::None);
+        storage.list_nft.remove((id, token_id));
 
         let x = abi(externalAbi, id.value);
         x.transfer_from(Identity::ContractId(contract_id()), sender, token_id);
@@ -165,7 +165,7 @@ impl NftMarketplace for Contract {
 
         let old_price = nft.price;
         nft.price = price;
-        storage.list_nft.insert((id, token_id), Option::Some(nft));
+        storage.list_nft.insert((id, token_id), nft);
 
         log(NFTPriceChangeEvent {
             owner: nft.owner,
@@ -209,7 +209,7 @@ impl NftMarketplace for Contract {
 
     #[storage(read, write)]
     fn whiltest_contract(id: ContractId) {
-        require(!storage.whiltest_contract.get(id), AccessError::ContractIsAlreadyWhitelisted);
+        require(!storage.whiltest_contract.get(id).unwrap(), AccessError::ContractIsAlreadyWhitelisted);
         let current_admin = storage.admin;
         let current_manager = storage.manager;
         require((current_admin.is_some() && msg_sender().unwrap() == current_admin.unwrap()) || (current_manager.is_some() && msg_sender().unwrap() == current_manager.unwrap()), AccessError::SenderCannotSetAccessControl);
@@ -221,7 +221,7 @@ impl NftMarketplace for Contract {
 
     #[storage(read, write)]
     fn unwhiltest_contract(id: ContractId) {
-        require(storage.whiltest_contract.get(id), AccessError::ContractIsNotWhitelisted);
+        require(storage.whiltest_contract.get(id).unwrap(), AccessError::ContractIsNotWhitelisted);
         let current_admin = storage.admin;
         let current_manager = storage.manager;
         require((current_admin.is_some() && msg_sender().unwrap() == current_admin.unwrap()) || (current_manager.is_some() && msg_sender().unwrap() == current_manager.unwrap()), AccessError::SenderCannotSetAccessControl);
@@ -233,7 +233,7 @@ impl NftMarketplace for Contract {
 
     #[storage(read)]
     fn get_whiltested_contract(id: ContractId) -> bool {
-        storage.whiltest_contract.get(id)
+        storage.whiltest_contract.get(id).unwrap()
     }
 
     #[payable, storage(read, write)]
@@ -252,7 +252,7 @@ impl NftMarketplace for Contract {
         require(price == nft_data.unwrap().price, InputError::IncorrectAmountProvided);
         require(start_time > timestamp(), InputError::WrongStarttimeProvided);
 
-        let borrowed_nfts = storage.borrow_nft.get((id, token_id));
+        let borrowed_nfts = storage.borrow_nft.get((id, token_id)).unwrap();
         require(borrowed_nfts[4].is_none(), AccessError::MaximumTimeNftLanded);
 
         let result = get_borrowed_nfts(id, token_id, buyer, start_time, end_time, price, borrowed_nfts);
@@ -270,7 +270,7 @@ impl NftMarketplace for Contract {
 
     #[storage(read)]
     fn borrowed_nft_info(id: ContractId, token_id: u64) -> [Option<borrowNft>; 5] {
-        storage.borrow_nft.get((id, token_id))
+        storage.borrow_nft.get((id, token_id)).unwrap()
     }
 
     #[storage(read, write)]
@@ -278,7 +278,7 @@ impl NftMarketplace for Contract {
         // Make sure this borrow_nft exists
         let nft_data = storage.list_nft.get((id, token_id));
         require(nft_data.is_some(), AccessError::NFTNotListed);
-        let borrowed_nfts = storage.borrow_nft.get((id, token_id));
+        let borrowed_nfts = storage.borrow_nft.get((id, token_id)).unwrap();
 
         let result = withdraw_borrowed_nft(id, token_id, borrowed_nfts);
         storage.borrow_nft.insert((id, token_id), result);

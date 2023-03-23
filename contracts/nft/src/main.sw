@@ -27,7 +27,7 @@ storage {
     /// In the case that no user is approved to transfer a token based on the token owner's behalf,
     /// `None` will be stored.
     /// Map(token_id => approved)
-    approved: StorageMap<u64, Option<Identity>> = StorageMap {},
+    approved: StorageMap<u64, Identity> = StorageMap {},
     /// Used for O(1) lookup of the number of tokens owned by each user.
     /// This increments or decrements when minting, transfering ownership, and burning tokens.
     /// Map(Identity => balance)
@@ -37,7 +37,7 @@ storage {
     max_supply: u64 = 0,
     /// Stores the `TokenMetadata` for each token based on the token's unique identifier.
     /// Map(token_id => TokenMetadata)
-    meta_data: StorageMap<u64, Option<TokenMetaData>> = StorageMap {},
+    meta_data: StorageMap<u64, TokenMetaData> = StorageMap {},
     /// Maps a tuple of (owner, operator) identities and stores whether the operator is allowed to
     /// transfer ALL tokens on the owner's behalf.
     /// Map((owner, operator) => approved)
@@ -45,11 +45,11 @@ storage {
     /// Stores the user which owns a token based on it's unique identifier.
     /// If the token has been burned then `None` will be stored.
     /// Map(token_id => owner)
-    owners: StorageMap<u64, Option<Identity>> = StorageMap {},
+    owners: StorageMap<u64, Identity> = StorageMap {},
     /// Stores the user which owns a token based on it's unique identifier.
     /// If the token has been burned then `None` will be stored.
     /// Map(token_id => owner)
-    shared_owners: StorageMap<u64, Option<Identity>> = StorageMap {},
+    shared_owners: StorageMap<u64, Identity> = StorageMap {},
     /// The total number of tokens that ever have been minted.
     /// This is used to assign token identifiers when minting. This will only be incremented.
     tokens_minted: u64 = 0,
@@ -67,7 +67,6 @@ impl NFT for Contract {
 
     #[storage(read, write)]
     fn approve(approved: Identity, token_id: u64) {
-        let approved = Option::Some(approved);
         let token_owner = storage.owners.get(token_id);
         require(token_owner.is_some(), InputError::TokenDoesNotExist);
 
@@ -91,7 +90,7 @@ impl NFT for Contract {
     }
 
     #[storage(read)]
-    fn balance_of(owner: Identity) -> u64 {
+    fn balance_of(owner: Identity) -> Option<u64> {
         storage.balances.get(owner)
     }
 
@@ -105,8 +104,8 @@ impl NFT for Contract {
         let sender = msg_sender().unwrap();
         require(token_owner.unwrap() == sender, AccessError::SenderNotOwner);
 
-        storage.owners.insert(token_id, Option::None::<Identity>());
-        storage.balances.insert(sender, storage.balances.get(sender) - 1);
+        storage.owners.remove(token_id);
+        storage.balances.insert(sender, storage.balances.get(sender).unwrap() - 1);
         storage.total_supply -= 1;
 
         log(BurnEvent {
@@ -136,7 +135,7 @@ impl NFT for Contract {
     }
 
     #[storage(read)]
-    fn is_approved_for_all(operator: Identity, owner: Identity) -> bool {
+    fn is_approved_for_all(operator: Identity, owner: Identity) -> Option<bool> {
         storage.operator_approval.get((owner, operator))
     }
 
@@ -157,10 +156,10 @@ impl NFT for Contract {
         require((admin.is_some() && msg_sender().unwrap() == admin.unwrap()), AccessError::SenderNotAdmin);
         // Mint as many tokens as the sender has asked for
         // Create the TokenMetaData for this new token
-        storage.meta_data.insert(index, Option::Some(meta_data));
-        storage.owners.insert(index, Option::Some(to));
+        storage.meta_data.insert(index, meta_data);
+        storage.owners.insert(index, to);
 
-        storage.balances.insert(to, storage.balances.get(to) + 1);
+        storage.balances.insert(to, storage.balances.get(to).unwrap() + 1);
         storage.tokens_minted += 1;
         storage.total_supply += 1;
 
@@ -172,7 +171,6 @@ impl NFT for Contract {
 
     #[storage(read)]
     fn token_metadata(token_id: u64) -> Option<TokenMetaData> {
-        // require(token_id < storage.tokens_minted, InputError::TokenDoesNotExist);
         storage.meta_data.get(token_id)
     }
 
@@ -226,22 +224,22 @@ impl NFT for Contract {
         // 3. Has operator approval for the `from` identity and this token belongs to the `from` identity
         let sender = msg_sender().unwrap();
         let approved = storage.approved.get(token_id);
-        require(sender == token_owner || (approved.is_some() && sender == approved.unwrap()) || (from == token_owner && storage.operator_approval.get((from, sender))), AccessError::SenderNotOwnerOrApproved);
+        require(sender == token_owner || (approved.is_some() && sender == approved.unwrap()) || (from == token_owner && storage.operator_approval.get((from, sender)).unwrap()), AccessError::SenderNotOwnerOrApproved);
 
         // Set the new owner of the token and reset the approved Identity
-        storage.owners.insert(token_id, Option::Some(to));
+        storage.owners.insert(token_id, to);
         if approved.is_some() {
-            storage.approved.insert(token_id, Option::None::<Identity>());
+            storage.approved.remove(token_id);
         }
 
         // Set the new owner of the token and reset the approved Identity
         let shared_owner = storage.shared_owners.get(token_id);
         if shared_owner.is_some() {
-            storage.shared_owners.insert(token_id, Option::None::<Identity>());
+            storage.shared_owners.remove(token_id);
         }
 
-        storage.balances.insert(from, storage.balances.get(from) - 1);
-        storage.balances.insert(to, storage.balances.get(to) + 1);
+        storage.balances.insert(from, storage.balances.get(from).unwrap() - 1);
+        storage.balances.insert(to, storage.balances.get(to).unwrap() + 1);
 
         log(TransferEvent {
             from,
@@ -264,15 +262,14 @@ impl NFT for Contract {
         // 3. Has operator approval for the `from` identity and this token belongs to the `from` identity
         let sender = msg_sender().unwrap();
         let approved = storage.approved.get(token_id);
-        require(sender == token_owner || (approved.is_some() && sender == approved.unwrap()) || (from == token_owner && storage.operator_approval.get((from, sender))), AccessError::SenderNotOwnerOrApproved);
+        require(sender == token_owner || (approved.is_some() && sender == approved.unwrap()) || (from == token_owner && storage.operator_approval.get((from, sender)).unwrap()), AccessError::SenderNotOwnerOrApproved);
 
-        let mut shared_owner = storage.shared_owners.get(token_id);
+        let shared_owner = storage.shared_owners.get(token_id);
         if shared_owner.is_some() {
-            shared_owner = Option::None::<Identity>();
+            storage.shared_owners.remove(token_id);
         } else {
-            shared_owner = Option::Some(to);
+            storage.shared_owners.insert(token_id, to);
         }
-        storage.shared_owners.insert(token_id, shared_owner);
 
         log(TransferEvent {
             from,
@@ -281,4 +278,6 @@ impl NFT for Contract {
             token_id,
         });
     }
+
+
 }
