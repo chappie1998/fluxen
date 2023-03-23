@@ -6,7 +6,6 @@ import SideBar from "../components/layouts/home-8/SideBar";
 const Home08 = () => {
   return (
     <div className="home-8">
-      <Header />
       <section className="tf-item tf-section">
         <div className="themesflat-container">
           <div className="row">

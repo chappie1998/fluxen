@@ -36,7 +36,39 @@ const CreateCollection = () => {
     const factory = new ContractFactory(buff, abi, wallet);
     const contract = await factory.deployContract();
     console.log("contract successful deployed", contract.id.toB256());
-    navigate("/update-property/" + contract.id.toB256());
+    // navigate("/update-property/" + contract.id.toB256());
+    return contract.id.toB256();
+  };
+
+  const create_collection = async () => {
+    const contract_id = await deployContract();
+    const publicKey = await getPublicKey();
+    let body = {
+      contract_id: contract_id,
+      owner: publicKey,
+      mainImage:
+        "https://a0.muscache.com/im/pictures/e89458f1-5c5e-4aa1-bbb3-bee452765064.jpg?im_w=720",
+    };
+    try {
+      const response = await fetch(
+        `${process.env.REACT_APP_API_URL}/collection`,
+        {
+          method: "POST",
+          headers: {
+            "Content-type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(body),
+        }
+      );
+      if (response.ok) {
+        navigate("/update-property/" + contract_id);
+      } else if (!response.ok) {
+        console.log("Unauthorized or token expired");
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
@@ -84,10 +116,10 @@ const CreateCollection = () => {
                   </p>
                 </div>
                 <button
-                  onClick={deployContract}
+                  onClick={create_collection}
                   className="sc-button loadmore style bag fl-button pri-3"
                 >
-                  <span>List Property</span>
+                  <span>Create Property</span>
                 </button>
               </div>
             </div>

@@ -12,7 +12,7 @@ import img5 from "../assets/images/avatar/avt-7.jpg";
 import img6 from "../assets/images/avatar/avt-8.jpg";
 import img7 from "../assets/images/avatar/avt-2.jpg";
 import imgdetail1 from "../assets/images/box-item/images-item-details2.jpg";
-import { getWallet, getPublicKey } from "../utils/GetContract";
+import { getPublicKey } from "../utils/GetContract";
 import { token } from "../utils/auth";
 
 const UpdateCollection = () => {

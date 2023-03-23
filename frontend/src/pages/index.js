@@ -3,6 +3,7 @@ import Home08 from "./Home08";
 import ItemDetails02 from "./ItemDetails02";
 import CreateCollection from "./CreateCollection";
 import UpdateCollection from "./UpdateCollection";
+import MyCollections from "./MyCollections";
 
 import Authors01 from "./Authors01";
 import Authors02 from "./Authors02";
@@ -28,7 +29,8 @@ const routes = [
   { path: "/faq", component: <FAQ /> },
   { path: "/sell/:contract_id/:token", component: <Sell /> },
   { path: "property/:contract_id", component: <ItemDetails02 /> },
-  { path: "list-property", component: <CreateCollection /> },
+  { path: "my-properties", component: <MyCollections /> },
+  { path: "create-property", component: <CreateCollection /> },
   { path: "update-property/:contract_id", component: <UpdateCollection /> },
 ];
 

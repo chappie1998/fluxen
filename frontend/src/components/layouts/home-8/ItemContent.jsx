@@ -32,18 +32,18 @@ const ItemContent = () => {
       id: 1,
       title: "Availabile",
     },
-    {
-      id: 2,
-      title: "Today's Picks",
-    },
-    {
-      id: 3,
-      title: "Land",
-    },
-    {
-      id: 4,
-      title: "Items",
-    },
+    // {
+    //   id: 2,
+    //   title: "Today's Picks",
+    // },
+    // {
+    //   id: 3,
+    //   title: "Land",
+    // },
+    // {
+    //   id: 4,
+    //   title: "Items",
+    // },
   ]);
   const [dataPanel] = useState([
     {
@@ -51,7 +51,7 @@ const ItemContent = () => {
       dataContent: [
         {
           id: 1,
-          img: img1,
+          img: "https://a0.muscache.com/im/pictures/b1d41ee1-034a-4ba5-900c-c5261995dc24.jpg?im_w=1200",
           title: "Flame Dress' by Balmain... ",
           tags: "bsc",
           imgAuthor: imga1,
@@ -63,7 +63,7 @@ const ItemContent = () => {
         },
         {
           id: 2,
-          img: img2,
+          img: "https://a0.muscache.com/im/pictures/01e13f3f-b1ae-4d74-a6a2-92330210e535.jpg?im_w=1200",
           title: "Hamlet Comtemplates... ",
           tags: "bsc",
           imgAuthor: imga2,
@@ -75,7 +75,7 @@ const ItemContent = () => {
         },
         {
           id: 3,
-          img: img3,
+          img: "https://a0.muscache.com/im/pictures/a33dc3e5-c2f7-423f-b08f-0db74e04d248.jpg?im_w=1200",
           title: "Loving Vase 01 by Lanza... ",
           tags: "bsc",
           imgAuthor: imga3,
@@ -87,7 +87,7 @@ const ItemContent = () => {
         },
         {
           id: 4,
-          img: img4,
+          img: "https://a0.muscache.com/im/pictures/366862d0-e46a-42cc-9e15-e89f87b11cfe.jpg?im_w=1200",
           title: "Triumphant awakening... ",
           tags: "bsc",
           imgAuthor: imga4,
@@ -739,7 +739,7 @@ const ItemContent = () => {
                       </div>
                       <div className="card-media">
                         <Link to={`/property/${item.contract_id}`}>
-                          <img src={item.img} alt="Fluxen" />
+                          <img src={item.img} alt="Fuelart" />
                         </Link>
                       </div>
                       <div className="card-title">
@@ -779,7 +779,7 @@ const ItemContent = () => {
                       <div className="wrap-media">
                         <div className="card-media">
                           <Link to="/item-details-01">
-                            <img src={item.img} alt="Fluxen" />
+                            <img src={item.img} alt="Fuelart" />
                           </Link>
                         </div>
                       </div>
@@ -793,7 +793,7 @@ const ItemContent = () => {
                         <p>Creator</p>
                         <div className="author">
                           <div className="avatar">
-                            <img src={item.imgAuthor} alt="Fluxen" />
+                            <img src={item.imgAuthor} alt="Fuelart" />
                           </div>
                           <div className="info">
                             <h4>
