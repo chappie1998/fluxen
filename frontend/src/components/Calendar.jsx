@@ -4,7 +4,6 @@ import "react-date-range/dist/styles.css"; // main css file
 import "react-date-range/dist/theme/default.css"; // theme css file
 import { DateRangePicker } from "react-date-range";
 import enIN from "date-fns/locale/en-IN";
-import { addDays } from "date-fns";
 
 export const Calendar = ({ onChange }) => {
   const [state, setState] = useState([

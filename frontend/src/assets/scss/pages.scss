@@ -136,6 +136,20 @@
       }
     }
   }
+
+  .rooms {
+    table {
+      thead {
+        text-transform: capitalize;
+      }
+      tbody tr {
+        cursor: pointer;
+        &.selected {
+          background-color: var(--primary-color);
+        }
+      }
+    }
+  }
 }
 
 // ---------------------collection--------------------

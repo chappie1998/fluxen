@@ -5,10 +5,22 @@ import imgdetail1 from "../assets/images/box-item/images-item-details2.jpg";
 import { getManagerContract, getPublicKey } from "../utils/GetContract";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
-import { Calendar } from "../components/Calender";
+import { Calendar } from "../components/Calendar";
+import { useState } from "react";
+import { format } from "date-fns";
+
+const data = [
+  { image: "image", name: "name", price: 13 },
+  { image: "image", name: "name", price: 13 },
+  { image: "image", name: "name", price: 13 },
+  { image: "image", name: "name", price: 13 },
+];
 
 const ItemDetails02 = () => {
   const contract_id = useParams();
+
+  const [dateRange, setDateRange] = useState();
+  const [showCalendar, setShowCalendar] = useState(false);
 
   const borrow_nft = async (token, amount, start_time, end_time) => {
     const contract = await getManagerContract();
@@ -30,7 +42,22 @@ const ItemDetails02 = () => {
   };
 
   const onChange = (ranges) => {
-    console.log(ranges);
+    setDateRange(
+      `${format(ranges.startDate, "dd-MM-yyyy")} - ${format(
+        ranges.endDate,
+        "dd-MM-yyyy"
+      )}`
+    );
+  };
+
+  const handleCalendar = () => {
+    setShowCalendar((prev) => !prev);
+  };
+
+  const handleRoomClick = (e, item) => {
+    console.log("rt", e.target.closest("tr").classList);
+    e.target.closest("tr").classList.toggle("selected");
+    console.log("item", item);
   };
 
   return (
@@ -76,14 +103,54 @@ const ItemDetails02 = () => {
                     Facilisi lobortisal morbi fringilla urna amet sed ipsum
                   </p>
                 </div>
+                <div className="my-3">
+                  <div className="rooms">
+                    <h5 className="mb-4">Select your room</h5>
+                    <table>
+                      <thead>
+                        <tr className="fs-16">
+                          {Object.keys(data[0]).map((key, index) => (
+                            <th key={index}>{key}</th>
+                          ))}
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {data.map((item, index) => (
+                          <tr
+                            key={index}
+                            onClick={(e) => handleRoomClick(e, item)}
+                          >
+                            <td>{item.image}</td>
+                            <td>{item.name}</td>
+                            <td>{item.price}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                  <label className="fs-16 mb-4" htmlFor="date-range">
+                    Select your date:
+                  </label>
+                  <input
+                    readOnly
+                    type="text"
+                    name="date-range"
+                    id="date-rage"
+                    placeholder="Check in - Check out"
+                    defaultValue={dateRange}
+                    onClick={handleCalendar}
+                  />
+                  {showCalendar ? (
+                    <div className="calender">
+                      <Calendar onChange={onChange} />
+                    </div>
+                  ) : (
+                    <></>
+                  )}
+                </div>
                 <button className="sc-button loadmore style bag fl-button pri-3">
                   <span>Reserve</span>
                 </button>
-              </div>
-            </div>
-            <div className="col-xl-6 col-md-12">
-              <div className="calender">
-                <Calendar onChange={onChange} />
               </div>
             </div>
           </div>
