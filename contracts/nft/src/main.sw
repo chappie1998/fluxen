@@ -104,7 +104,7 @@ impl NFT for Contract {
         let sender = msg_sender().unwrap();
         require(token_owner.unwrap() == sender, AccessError::SenderNotOwner);
 
-        storage.owners.remove(token_id);
+        let _ = storage.owners.remove(token_id);
         storage.balances.insert(sender, storage.balances.get(sender).unwrap() - 1);
         storage.total_supply -= 1;
 
@@ -128,8 +128,8 @@ impl NFT for Contract {
         let admin = Option::Some(admin);
         require(storage.max_supply == 0, InitError::CannotReinitialize);
         require(max_supply != 0, InputError::TokenSupplyCannotBeZero);
-        // require(admin.is_none(), InitError::AdminIsNone);
 
+        // require(admin.is_none(), InitError::AdminIsNone);
         storage.admin = admin;
         storage.max_supply = max_supply;
     }
@@ -159,7 +159,12 @@ impl NFT for Contract {
         storage.meta_data.insert(index, meta_data);
         storage.owners.insert(index, to);
 
-        storage.balances.insert(to, storage.balances.get(to).unwrap() + 1);
+        let balance = storage.balances.get(to);
+        if balance.is_some() {
+            storage.balances.insert(to, balance.unwrap() + 1);
+        } else {
+            storage.balances.insert(to, 1);
+        }
         storage.tokens_minted += 1;
         storage.total_supply += 1;
 
@@ -224,22 +229,27 @@ impl NFT for Contract {
         // 3. Has operator approval for the `from` identity and this token belongs to the `from` identity
         let sender = msg_sender().unwrap();
         let approved = storage.approved.get(token_id);
-        require(sender == token_owner || (approved.is_some() && sender == approved.unwrap()) || (from == token_owner && storage.operator_approval.get((from, sender)).unwrap()), AccessError::SenderNotOwnerOrApproved);
+        require(sender == token_owner || (approved.is_some() && sender == approved.unwrap()) || (from == token_owner && storage.operator_approval.get((from, sender)).is_some()), AccessError::SenderNotOwnerOrApproved);
 
         // Set the new owner of the token and reset the approved Identity
         storage.owners.insert(token_id, to);
         if approved.is_some() {
-            storage.approved.remove(token_id);
+            let _ = storage.approved.remove(token_id);
         }
 
         // Set the new owner of the token and reset the approved Identity
         let shared_owner = storage.shared_owners.get(token_id);
         if shared_owner.is_some() {
-            storage.shared_owners.remove(token_id);
+            let _ = storage.shared_owners.remove(token_id);
         }
 
         storage.balances.insert(from, storage.balances.get(from).unwrap() - 1);
-        storage.balances.insert(to, storage.balances.get(to).unwrap() + 1);
+        let bal = storage.balances.get(to);
+        if bal.is_some() {
+            storage.balances.insert(to, bal.unwrap() + 1);
+        } else {
+            storage.balances.insert(to, 1);
+        }
 
         log(TransferEvent {
             from,
@@ -266,7 +276,7 @@ impl NFT for Contract {
 
         let shared_owner = storage.shared_owners.get(token_id);
         if shared_owner.is_some() {
-            storage.shared_owners.remove(token_id);
+            let _ = storage.shared_owners.remove(token_id);
         } else {
             storage.shared_owners.insert(token_id, to);
         }
@@ -278,6 +288,4 @@ impl NFT for Contract {
             token_id,
         });
     }
-
-
 }

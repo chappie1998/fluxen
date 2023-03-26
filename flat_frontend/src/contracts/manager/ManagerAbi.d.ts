@@ -22,13 +22,13 @@ import type {
 
 import type { Option, Enum } from "./common";
 
-export type AccessErrorInput = Enum<{ NFTAlreadyListed: [], NFTNotListed: [], SenderCannotSetAccessControl: [], SenderNotAdmin: [], SenderNotOwner: [], MaximumTimeNftLanded: [], CantLandNft: [], ContractIsNotWhitelisted: [], ContractIsAlreadyWhitelisted: [] }>;
+export type AccessErrorInput = Enum<{ NFTAlreadyListed: [], NFTNotListed: [], SenderCannotSetAccessControl: [], SenderNotAdmin: [], SenderNotOwner: [], MaximumblockNftLanded: [], CantLandNft: [], ContractIsNotWhitelisted: [], ContractIsAlreadyWhitelisted: [] }>;
 export type AccessErrorOutput = AccessErrorInput;
 export type IdentityInput = Enum<{ Address: AddressInput, ContractId: ContractIdInput }>;
 export type IdentityOutput = Enum<{ Address: AddressOutput, ContractId: ContractIdOutput }>;
 export type InitErrorInput = Enum<{ AdminIsNone: [] }>;
 export type InitErrorOutput = InitErrorInput;
-export type InputErrorInput = Enum<{ PriceCantBeZero: [], IncorrectAmountProvided: [], EndtimeIsLessThanStarttime: [], WrongStarttimeProvided: [] }>;
+export type InputErrorInput = Enum<{ PriceCantBeZero: [], IncorrectAmountProvided: [], EndblockIsLessThanStartblock: [], WrongStartblockProvided: [] }>;
 export type InputErrorOutput = InputErrorInput;
 
 export type AddressInput = { value: string };
@@ -51,12 +51,12 @@ export type UnwhiteListContractInput = { contract_id: ContractIdInput };
 export type UnwhiteListContractOutput = { contract_id: ContractIdOutput };
 export type WhiteListContractInput = { contract_id: ContractIdInput };
 export type WhiteListContractOutput = { contract_id: ContractIdOutput };
-export type WithdrawLanedNftEventInput = { contract_id: ContractIdInput, token_id: BigNumberish, buyer: IdentityInput, start_time: BigNumberish, end_time: BigNumberish };
-export type WithdrawLanedNftEventOutput = { contract_id: ContractIdOutput, token_id: BN, buyer: IdentityOutput, start_time: BN, end_time: BN };
-export type borrowNftInput = { start_time: BigNumberish, end_time: BigNumberish, price: BigNumberish, buyer: IdentityInput };
-export type borrowNftOutput = { start_time: BN, end_time: BN, price: BN, buyer: IdentityOutput };
-export type borrowNftEventInput = { contract_id: ContractIdInput, token_id: BigNumberish, buyer: IdentityInput, start_time: BigNumberish, end_time: BigNumberish, price: BigNumberish };
-export type borrowNftEventOutput = { contract_id: ContractIdOutput, token_id: BN, buyer: IdentityOutput, start_time: BN, end_time: BN, price: BN };
+export type WithdrawLanedNftEventInput = { contract_id: ContractIdInput, token_id: BigNumberish, buyer: IdentityInput, start_block: BigNumberish, end_block: BigNumberish };
+export type WithdrawLanedNftEventOutput = { contract_id: ContractIdOutput, token_id: BN, buyer: IdentityOutput, start_block: BN, end_block: BN };
+export type borrowNftInput = { start_block: BigNumberish, end_block: BigNumberish, price: BigNumberish, buyer: IdentityInput };
+export type borrowNftOutput = { start_block: BN, end_block: BN, price: BN, buyer: IdentityOutput };
+export type borrowNftEventInput = { contract_id: ContractIdInput, token_id: BigNumberish, buyer: IdentityInput, start_block: BigNumberish, end_block: BigNumberish, price: BigNumberish };
+export type borrowNftEventOutput = { contract_id: ContractIdOutput, token_id: BN, buyer: IdentityOutput, start_block: BN, end_block: BN, price: BN };
 
 interface ManagerAbiInterface extends Interface {
   functions: {
@@ -126,8 +126,8 @@ export class ManagerAbi extends Contract {
   interface: ManagerAbiInterface;
   functions: {
     admin: InvokeFunction<[], Option<IdentityOutput>>;
-    borrow_nft: InvokeFunction<[id: ContractIdInput, token_id: BigNumberish, buyer: IdentityInput, start_time: BigNumberish, end_time: BigNumberish, price: BigNumberish], void>;
-    borrowed_nft_info: InvokeFunction<[id: ContractIdInput, token_id: BigNumberish], [Option<borrowNftOutput>, Option<borrowNftOutput>, Option<borrowNftOutput>, Option<borrowNftOutput>, Option<borrowNftOutput>]>;
+    borrow_nft: InvokeFunction<[id: ContractIdInput, token_id: BigNumberish, buyer: IdentityInput, start_block: BigNumberish, end_block: BigNumberish, price: BigNumberish], void>;
+    borrowed_nft_info: InvokeFunction<[id: ContractIdInput, token_id: BigNumberish], Option<[Option<borrowNftOutput>, Option<borrowNftOutput>, Option<borrowNftOutput>, Option<borrowNftOutput>, Option<borrowNftOutput>]>>;
     borrowed_nft_return: InvokeFunction<[id: ContractIdInput, token_id: BigNumberish], void>;
     change_nft_price: InvokeFunction<[id: ContractIdInput, token_id: BigNumberish, price: BigNumberish], void>;
     constructor: InvokeFunction<[admin: IdentityInput], void>;

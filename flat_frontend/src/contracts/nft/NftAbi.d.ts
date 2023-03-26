@@ -50,7 +50,7 @@ export type TokenMetaDataOutput = TokenMetaDataInput;
 export type TransferEventInput = { from: IdentityInput, sender: IdentityInput, to: IdentityInput, token_id: BigNumberish };
 export type TransferEventOutput = { from: IdentityOutput, sender: IdentityOutput, to: IdentityOutput, token_id: BN };
 
-interface PropertyAbiInterface extends Interface {
+interface NftAbiInterface extends Interface {
   functions: {
     admin: FunctionFragment;
     approve: FunctionFragment;
@@ -108,8 +108,8 @@ interface PropertyAbiInterface extends Interface {
   decodeFunctionData(functionFragment: 'transfer_from', data: BytesLike): DecodedValue;
 }
 
-export class PropertyAbi extends Contract {
-  interface: PropertyAbiInterface;
+export class NftAbi extends Contract {
+  interface: NftAbiInterface;
   functions: {
     admin: InvokeFunction<[], Option<IdentityOutput>>;
     approve: InvokeFunction<[approved: IdentityInput, token_id: BigNumberish], void>;

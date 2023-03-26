@@ -3,8 +3,8 @@ library errors;
 pub enum InputError {
     PriceCantBeZero: (),
     IncorrectAmountProvided: (),
-    EndtimeIsLessThanStarttime: (),
-    WrongStarttimeProvided: (),
+    EndblockIsLessThanStartblock: (),
+    WrongStartblockProvided: (),
 }
 
 pub enum InitError {
@@ -17,7 +17,7 @@ pub enum AccessError {
     SenderCannotSetAccessControl: (),
     SenderNotAdmin: (),
     SenderNotOwner: (),
-    MaximumTimeNftLanded: (),
+    MaximumblockNftLanded: (),
     CantLandNft: (),
     ContractIsNotWhitelisted: (),
     ContractIsAlreadyWhitelisted: (),

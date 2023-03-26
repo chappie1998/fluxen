@@ -24,7 +24,7 @@ use external_interface::externalAbi;
 
 use std::{
     auth::msg_sender,
-    block::{height, timestamp},
+    block::height,
     call_frames::contract_id,
     constants::{
         BASE_ASSET_ID,
@@ -70,7 +70,7 @@ impl NftMarketplace for Contract {
     fn admin() -> Option<Identity> {
         storage.admin
     }
-    
+
     #[storage(read, write)]
     fn constructor(admin: Identity) {
         // This function can only be called once so if the token supply is already set it has
@@ -113,9 +113,9 @@ impl NftMarketplace for Contract {
 
     #[storage(read, write)]
     fn list_nft(id: ContractId, token_id: u64, price: u64) {
-        require(storage.whiltest_contract.get(id).unwrap(), AccessError::ContractIsNotWhitelisted);
+        // require(storage.whiltest_contract.get(id).unwrap(), AccessError::ContractIsNotWhitelisted);
         require(price != 0, InputError::PriceCantBeZero);
-        require(!storage.list_nft.get((id, token_id)).is_some(), AccessError::NFTAlreadyListed);
+        require(storage.list_nft.get((id, token_id)).is_none(), AccessError::NFTAlreadyListed);
 
         let sender = msg_sender().unwrap();
         let nft = ListNft {
@@ -126,7 +126,6 @@ impl NftMarketplace for Contract {
 
         let x = abi(externalAbi, id.value);
         x.transfer_from(sender, Identity::ContractId(contract_id()), token_id);
-
         log(NFTListedEvent {
             owner: sender,
             nft_contract: id,
@@ -143,7 +142,7 @@ impl NftMarketplace for Contract {
         let nft = nft_data.unwrap();
         require(nft.owner == sender, AccessError::SenderNotOwner);
 
-        storage.list_nft.remove((id, token_id));
+        let _ = storage.list_nft.remove((id, token_id));
 
         let x = abi(externalAbi, id.value);
         x.transfer_from(Identity::ContractId(contract_id()), sender, token_id);
@@ -241,36 +240,40 @@ impl NftMarketplace for Contract {
         id: ContractId,
         token_id: u64,
         buyer: Identity,
-        start_time: u64,
-        end_time: u64,
+        start_block: u64,
+        end_block: u64,
         price: u64,
     ) {
-        require(end_time > start_time, InputError::EndtimeIsLessThanStarttime);
+        require(end_block > start_block, InputError::EndblockIsLessThanStartblock);
         let nft_data = storage.list_nft.get((id, token_id));
         require(nft_data.is_some(), AccessError::NFTNotListed);
         require(price == msg_amount(), InputError::IncorrectAmountProvided);
         require(price == nft_data.unwrap().price, InputError::IncorrectAmountProvided);
-        require(start_time > timestamp(), InputError::WrongStarttimeProvided);
 
-        let borrowed_nfts = storage.borrow_nft.get((id, token_id)).unwrap();
-        require(borrowed_nfts[4].is_none(), AccessError::MaximumTimeNftLanded);
+        let borrowed_nfts = storage.borrow_nft.get((id, token_id));
+        let blank = Option::None;
+        let mut data = [blank, blank, blank, blank, blank];
+        if borrowed_nfts.is_some() {
+            data = borrowed_nfts.unwrap();
+            require(data[4].is_none(), AccessError::MaximumblockNftLanded);
+        }
 
-        let result = get_borrowed_nfts(id, token_id, buyer, start_time, end_time, price, borrowed_nfts);
+        let result = get_borrowed_nfts(id, token_id, buyer, start_block, end_block, price, data);
         storage.borrow_nft.insert((id, token_id), result);
 
         log(borrowNftEvent {
             contract_id: id,
             token_id,
             buyer,
-            start_time,
-            end_time,
+            start_block,
+            end_block,
             price,
         });
     }
 
     #[storage(read)]
-    fn borrowed_nft_info(id: ContractId, token_id: u64) -> [Option<borrowNft>; 5] {
-        storage.borrow_nft.get((id, token_id)).unwrap()
+    fn borrowed_nft_info(id: ContractId, token_id: u64) -> Option<[Option<borrowNft>; 5]> {
+        storage.borrow_nft.get((id, token_id))
     }
 
     #[storage(read, write)]
@@ -299,26 +302,26 @@ fn get_borrowed_nfts(
     if nfts[0].is_none() {
         result = [borrowing_nft, blank, blank, blank, blank];
     } else if nfts[1].is_none() {
-        let s1 = nfts[0].unwrap().start_time;
-        let e1 = nfts[0].unwrap().end_time;
+        let s1 = nfts[0].unwrap().start_block;
+        let e1 = nfts[0].unwrap().end_block;
         if eb < s1 || sb > e1 {
             result = [nfts[0], borrowing_nft, blank, blank, blank];
         }
     } else if nfts[2].is_none() {
-        let s1 = nfts[0].unwrap().start_time;
-        let e1 = nfts[0].unwrap().end_time;
-        let s2 = nfts[1].unwrap().start_time;
-        let e2 = nfts[1].unwrap().end_time;
+        let s1 = nfts[0].unwrap().start_block;
+        let e1 = nfts[0].unwrap().end_block;
+        let s2 = nfts[1].unwrap().start_block;
+        let e2 = nfts[1].unwrap().end_block;
         if (eb < s1 || sb > e1) && (eb < s2 || sb > e2) {
             result = [nfts[0], nfts[1], borrowing_nft, blank, blank];
         }
     } else if nfts[3].is_none() {
-        let s1 = nfts[0].unwrap().start_time;
-        let e1 = nfts[0].unwrap().end_time;
-        let s2 = nfts[1].unwrap().start_time;
-        let e2 = nfts[1].unwrap().end_time;
-        let s3 = nfts[2].unwrap().start_time;
-        let e3 = nfts[2].unwrap().end_time;
+        let s1 = nfts[0].unwrap().start_block;
+        let e1 = nfts[0].unwrap().end_block;
+        let s2 = nfts[1].unwrap().start_block;
+        let e2 = nfts[1].unwrap().end_block;
+        let s3 = nfts[2].unwrap().start_block;
+        let e3 = nfts[2].unwrap().end_block;
         if (eb < s1
             || sb > e1)
             && (eb < s2
@@ -329,14 +332,14 @@ fn get_borrowed_nfts(
             result = [nfts[0], nfts[1], nfts[2], borrowing_nft, blank];
         }
     } else if nfts[4].is_none() {
-        let s1 = nfts[0].unwrap().start_time;
-        let e1 = nfts[0].unwrap().end_time;
-        let s2 = nfts[1].unwrap().start_time;
-        let e2 = nfts[1].unwrap().end_time;
-        let s3 = nfts[2].unwrap().start_time;
-        let e3 = nfts[2].unwrap().end_time;
-        let s4 = nfts[3].unwrap().start_time;
-        let e4 = nfts[3].unwrap().end_time;
+        let s1 = nfts[0].unwrap().start_block;
+        let e1 = nfts[0].unwrap().end_block;
+        let s2 = nfts[1].unwrap().start_block;
+        let e2 = nfts[1].unwrap().end_block;
+        let s3 = nfts[2].unwrap().start_block;
+        let e3 = nfts[2].unwrap().end_block;
+        let s4 = nfts[3].unwrap().start_block;
+        let e4 = nfts[3].unwrap().end_block;
         if (eb < s1
             || sb > e1)
             && (eb < s2
@@ -364,71 +367,71 @@ fn withdraw_borrowed_nft(
     let this_contract = Identity::ContractId(contract_id());
     if nfts[4].is_some() {
         let nft = nfts[4].unwrap();
-        if timestamp() >= nft.end_time {
+        if height() >= nft.end_block {
             result = [nfts[0], nfts[1], nfts[2], nfts[3], blank];
             x.share_owner(nft.buyer, this_contract, token_id);
             log(WithdrawLanedNftEvent {
                 contract_id: id,
                 token_id: token_id,
                 buyer: nft.buyer,
-                start_time: nft.start_time,
-                end_time: nft.end_time,
+                start_block: nft.start_block,
+                end_block: nft.end_block,
             });
         }
     }
     if result[3].is_some() {
         let nft = nfts[3].unwrap();
-        if timestamp() >= nft.end_time {
+        if height() >= nft.end_block {
             result = [nfts[0], nfts[1], nfts[2], nfts[4], blank];
             x.share_owner(nft.buyer, this_contract, token_id);
             log(WithdrawLanedNftEvent {
                 contract_id: id,
                 token_id: token_id,
                 buyer: nft.buyer,
-                start_time: nft.start_time,
-                end_time: nft.end_time,
+                start_block: nft.start_block,
+                end_block: nft.end_block,
             });
         }
     }
     if result[2].is_some() {
         let nft = nfts[2].unwrap();
-        if timestamp() >= nft.end_time {
+        if height() >= nft.end_block {
             result = [nfts[0], nfts[1], nfts[3], nfts[4], blank];
             x.share_owner(nft.buyer, this_contract, token_id);
             log(WithdrawLanedNftEvent {
                 contract_id: id,
                 token_id: token_id,
                 buyer: nft.buyer,
-                start_time: nft.start_time,
-                end_time: nft.end_time,
+                start_block: nft.start_block,
+                end_block: nft.end_block,
             });
         }
     }
     if result[1].is_some() {
         let nft = nfts[1].unwrap();
-        if timestamp() >= nft.end_time {
+        if height() >= nft.end_block {
             result = [nfts[0], nfts[2], nfts[3], nfts[4], blank];
             x.share_owner(nft.buyer, this_contract, token_id);
             log(WithdrawLanedNftEvent {
                 contract_id: id,
                 token_id: token_id,
                 buyer: nft.buyer,
-                start_time: nft.start_time,
-                end_time: nft.end_time,
+                start_block: nft.start_block,
+                end_block: nft.end_block,
             });
         }
     }
     if nfts[0].is_some() {
         let nft = nfts[0].unwrap();
-        if timestamp() >= nft.end_time {
+        if height() >= nft.end_block {
             result = [nfts[1], nfts[2], nfts[3], nfts[4], blank];
             x.share_owner(nft.buyer, this_contract, token_id);
             log(WithdrawLanedNftEvent {
                 contract_id: id,
                 token_id: token_id,
                 buyer: nft.buyer,
-                start_time: nft.start_time,
-                end_time: nft.end_time,
+                start_block: nft.start_block,
+                end_block: nft.end_block,
             });
         }
     }

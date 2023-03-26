@@ -1,7 +1,6 @@
 import { Address, Contract, WalletUnlocked } from "fuels";
-// import { NFTAbi__factory } from "../contracts/nft";
 import { ManagerAbi__factory } from "../contracts/manager";
-import { NFTAbi__factory } from "../contracts/nft/factories/NFTAbi__factory";
+import { NftAbi__factory } from "../contracts/nft";
 
 // let pk = "0xde97d8624a438121b86a1956544bd72ed68cd69f2c99555b08b1e8c51ffd511c";
 
@@ -11,7 +10,7 @@ const node = process.env.REACT_APP_FUEL_NETWORK;
 
 export const NFTContract = async (NFTContractId: any) => {
   const wallet = await getWallet();
-  return NFTAbi__factory.connect(NFTContractId, wallet);
+  return NftAbi__factory.connect(NFTContractId, wallet);
 };
 export const getWallet = async () => {
   if (w.fuel) {
@@ -32,7 +31,7 @@ export const getPublicKey = async () => {
 
 export const getNftContract = async (contractId: any) => {
   const wallet = await getWallet();
-  return NFTAbi__factory.connect(contractId, wallet);
+  return NftAbi__factory.connect(contractId, wallet);
 };
 
 export const getManagerContract = async () => {

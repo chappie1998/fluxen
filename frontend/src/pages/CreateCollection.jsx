@@ -22,13 +22,13 @@ const CreateCollection = () => {
   const navigate = useNavigate();
   const deployContract = async () => {
     // load the byteCode of the contract, generated from Sway source
-    const data = await fetch("../deploy_contract/property.bin");
+    const data = await fetch("../deploy_contract/nft.bin");
 
     var byteCode = new Uint8Array(await data.arrayBuffer());
     const buff = buffer.Buffer.from(byteCode);
 
     // load the JSON abi of the contract, generated from Sway source
-    const abi = require("../deploy_contract/property-abi.json");
+    const abi = require("../deploy_contract/nft-abi.json");
     // console.log(abi.toString());
 
     const wallet = await getWallet();

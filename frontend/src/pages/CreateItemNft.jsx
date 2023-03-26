@@ -1,6 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
-import Footer from "../components/footer/Footer";
-import Countdown from "react-countdown";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import "react-tabs/style/react-tabs.css";
 import img1 from "../assets/images/box-item/image-box-6.jpg";
@@ -9,18 +7,18 @@ import avt from "../assets/images/avatar/avt-9.jpg";
 import { Fragment, useState } from "react";
 import { Web3Storage } from "web3.storage";
 
-import { getPublicKey, getWallet } from "./../utils/GetContract";
+import { getNftContract, getPublicKey } from "./../utils/GetContract";
 import { token } from "../utils/auth";
-import { ContractFactory } from "fuels";
 
-const buffer = require("buffer");
-
-const CreateItem = () => {
+const CreateItemNft = () => {
   const [spinner, setSpinner] = useState(false);
   const [imageURL, setImageURL] = useState(img1);
   const [image, setImage] = useState();
   const [name, setName] = useState("Name");
   const [description, setDescription] = useState("Description");
+  const [uploadedImage, setUploadedImage] = useState("Name");
+
+  const { contract_id } = useParams();
 
   const navigate = useNavigate();
 
@@ -42,51 +40,33 @@ const CreateItem = () => {
     return cid;
   };
 
-  const upload = async () => {
-    // console.log(image);
-    const cid = await storeFiles(image);
-    const img = "https://" + cid + ".ipfs.w3s.link";
-    // const nftMetaData = {
-    //   name: name,
-    //   image: "https://" + cid + ".ipfs.w3s.link",
-    //   description: description,
-    //   attributes: [],
-    // };
-    // const cid2 = await storeFiles(makeFileObjects(nftMetaData));
-    // const md1 = {
-    //   name: name,
-    //   token_uri: "https://" + cid2 + ".ipfs.w3s.link",
-    // };
-    return img;
-  };
-
-  const deployContract = async () => {
-    // load the byteCode of the contract, generated from Sway source
-    const data = await fetch("../deploy_contract/nft.bin");
-
-    var byteCode = new Uint8Array(await data.arrayBuffer());
-    const buff = buffer.Buffer.from(byteCode);
-
-    // load the JSON abi of the contract, generated from Sway source
-    const abi = require("../deploy_contract/nft-abi.json");
-    // console.log(abi.toString());
-
-    const wallet = await getWallet();
-
-    // send byteCode and ABI to ContractFactory to load
-    const factory = new ContractFactory(buff, abi, wallet);
-    const contract = await factory.deployContract({
-      gasPrice: 100,
-      gasLimit: 1_000_000,
-      storageSlots: [],
+  function makeFileObjects(meta_data) {
+    const blob = new Blob([JSON.stringify(meta_data)], {
+      type: "application/json",
     });
-    console.log("contract successful deployed", contract.id.toB256());
-    // navigate("/update-property/" + contract.id.toB256());
-    return contract.id.toB256();
-  };
 
-  // const wallet = getWallet();
-  // console.log(getWallet());
+    if (image) {
+      const files = [new File([blob], image[0].name.split(".")[0] + ".json")];
+      return files;
+    }
+  }
+
+  const upload = async () => {
+    const cid = await storeFiles(image);
+    setUploadedImage("https://" + cid + ".ipfs.w3s.link");
+    const nftMetaData = {
+      name: name,
+      image: "https://" + cid + ".ipfs.w3s.link",
+      description: description,
+      attributes: [],
+    };
+    const cid2 = await storeFiles(makeFileObjects(nftMetaData));
+    const md1 = {
+      name: name,
+      token_uri: "https://" + cid2 + ".ipfs.w3s.link",
+    };
+    return md1;
+  };
 
   const mint = async () => {
     if (!image || name == "Name" || description == "Description") {
@@ -95,28 +75,41 @@ const CreateItem = () => {
     }
 
     setSpinner(true);
-    const img = await upload();
-    const contract_id = await deployContract();
-    const publicKey = await getPublicKey();
-    let body = {
-      name: name,
-      description: description,
-      contract_id: contract_id,
-      owner: publicKey,
-      mainImage: img,
-    };
+
     try {
-      const response = await fetch(
-        `${process.env.REACT_APP_API_URL}/collection`,
-        {
-          method: "POST",
-          headers: {
-            "Content-type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(body),
-        }
-      );
+      // const mintData = await upload();
+      const publicKey = await getPublicKey();
+      const nft_contract = await getNftContract(contract_id);
+      const mintData = {
+        token_uri:
+          "https://bafkreidhmmldn6o5nxyfqf65x5jz7f66qcj4xy2axv2onefkzdbv4i7yta.ipfs.w3s.link",
+        name: "nftName 0" + (token + 1),
+      };
+      const mintedNFT = await nft_contract.functions
+        .mint({ Address: { value: publicKey } }, mintData)
+        .txParams({ gasPrice: 1 })
+        .call();
+      console.log("mint", mintedNFT);
+      const token_id = mintedNFT.logs[0].token_id.toNumber();
+      console.log("token_id", token_id);
+
+      let body = {
+        contract_id: contract_id,
+        token_id: 2,
+        image: uploadedImage,
+        name: name,
+        description: description,
+        owner: publicKey,
+      };
+      console.log(body);
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/asset`, {
+        method: "POST",
+        headers: {
+          "Content-type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(body),
+      });
       if (response.ok) {
         navigate("/update-property/" + contract_id);
       } else if (!response.ok) {
@@ -225,4 +218,4 @@ const CreateItem = () => {
   );
 };
 
-export default CreateItem;
+export default CreateItemNft;

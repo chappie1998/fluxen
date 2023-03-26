@@ -14,6 +14,7 @@ import NoResult from "./NoResult";
 import FAQ from "./FAQ";
 
 import { Sell } from "./Sell";
+import CreateItemNft from "./CreateItemNft";
 
 const routes = [
   // { path: "/", component: <Home /> },
@@ -28,10 +29,11 @@ const routes = [
   { path: "/no-result", component: <NoResult /> },
   { path: "/faq", component: <FAQ /> },
   { path: "/sell/:contract_id/:token", component: <Sell /> },
-  { path: "property/:contract_id", component: <ItemDetails02 /> },
-  { path: "my-properties", component: <MyCollections /> },
-  { path: "create-property", component: <CreateItem /> },
-  { path: "update-property/:contract_id", component: <UpdateCollection /> },
+  { path: "/property/:contract_id", component: <ItemDetails02 /> },
+  { path: "/my-properties", component: <MyCollections /> },
+  { path: "/create-property", component: <CreateItem /> },
+  { path: "/add-room/:contract_id", component: <CreateItemNft /> },
+  { path: "/update-property/:contract_id", component: <UpdateCollection /> },
 ];
 
 export default routes;

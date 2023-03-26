@@ -11,7 +11,7 @@
 
 import { Interface, Contract } from "fuels";
 import type { Provider, Account, AbstractAddress } from "fuels";
-import type { PropertyAbi, PropertyAbiInterface } from "../PropertyAbi";
+import type { NftAbi, NftAbiInterface } from "../NftAbi";
 
 const _abi = {
   "types": [
@@ -985,15 +985,15 @@ const _abi = {
   "configurables": []
 }
 
-export class PropertyAbi__factory {
+export class NftAbi__factory {
   static readonly abi = _abi
-  static createInterface(): PropertyAbiInterface {
-    return new Interface(_abi) as unknown as PropertyAbiInterface
+  static createInterface(): NftAbiInterface {
+    return new Interface(_abi) as unknown as NftAbiInterface
   }
   static connect(
     id: string | AbstractAddress,
     accountOrProvider: Account | Provider
-  ): PropertyAbi {
-    return new Contract(id, _abi, accountOrProvider) as unknown as PropertyAbi
+  ): NftAbi {
+    return new Contract(id, _abi, accountOrProvider) as unknown as NftAbi
   }
 }

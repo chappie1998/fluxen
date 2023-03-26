@@ -26,7 +26,7 @@ abi NftMarketplace {
     ///
     /// `ContractId` - contractID of the nft.
     /// `token_id` - token_id of the nft.
-    /// `duration` - The length of time the auction should be open.
+    /// `duration` - The length of block the auction should be open.
     /// `initial_price` - The starting price at which the auction should start.
     /// `reserve_price` - The price at which a buyer may purchase the `sell_asset` outright.
     /// `seller` - The seller for this auction.
@@ -43,10 +43,10 @@ abi NftMarketplace {
     /// * When the `initial_price` for NFTs is not one.
     /// * When transfering of the NFT asset to the contract failed.
     #[payable, storage(read, write)]
-    fn borrow_nft(id: ContractId, token_id: u64, seller: Identity, start_time: u64, end_time: u64, initial_price: u64);
+    fn borrow_nft(id: ContractId, token_id: u64, seller: Identity, start_block: u64, end_block: u64, initial_price: u64);
 
     #[storage(read)]
-    fn borrowed_nft_info(id: ContractId, token_id: u64) -> [Option<borrowNft>; 5];
+    fn borrowed_nft_info(id: ContractId, token_id: u64) -> Option<[Option<borrowNft>; 5]>;
 
     #[storage(read, write)]
     fn borrowed_nft_return(id: ContractId, token_id: u64);

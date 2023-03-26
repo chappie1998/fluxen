@@ -81,7 +81,7 @@ const _abi = {
           "typeArguments": null
         },
         {
-          "name": "MaximumTimeNftLanded",
+          "name": "MaximumblockNftLanded",
           "type": 0,
           "typeArguments": null
         },
@@ -147,12 +147,12 @@ const _abi = {
           "typeArguments": null
         },
         {
-          "name": "EndtimeIsLessThanStarttime",
+          "name": "EndblockIsLessThanStartblock",
           "type": 0,
           "typeArguments": null
         },
         {
-          "name": "WrongStarttimeProvided",
+          "name": "WrongStartblockProvided",
           "type": 0,
           "typeArguments": null
         }
@@ -374,12 +374,12 @@ const _abi = {
           "typeArguments": null
         },
         {
-          "name": "start_time",
+          "name": "start_block",
           "type": 23,
           "typeArguments": null
         },
         {
-          "name": "end_time",
+          "name": "end_block",
           "type": 23,
           "typeArguments": null
         }
@@ -391,12 +391,12 @@ const _abi = {
       "type": "struct borrowNft",
       "components": [
         {
-          "name": "start_time",
+          "name": "start_block",
           "type": 23,
           "typeArguments": null
         },
         {
-          "name": "end_time",
+          "name": "end_block",
           "type": 23,
           "typeArguments": null
         },
@@ -433,12 +433,12 @@ const _abi = {
           "typeArguments": null
         },
         {
-          "name": "start_time",
+          "name": "start_block",
           "type": 23,
           "typeArguments": null
         },
         {
-          "name": "end_time",
+          "name": "end_block",
           "type": 23,
           "typeArguments": null
         },
@@ -499,12 +499,12 @@ const _abi = {
           "typeArguments": null
         },
         {
-          "name": "start_time",
+          "name": "start_block",
           "type": 23,
           "typeArguments": null
         },
         {
-          "name": "end_time",
+          "name": "end_block",
           "type": 23,
           "typeArguments": null
         },
@@ -550,8 +550,14 @@ const _abi = {
       "name": "borrowed_nft_info",
       "output": {
         "name": "",
-        "type": 1,
-        "typeArguments": null
+        "type": 8,
+        "typeArguments": [
+          {
+            "name": "",
+            "type": 1,
+            "typeArguments": null
+          }
+        ]
       },
       "attributes": [
         {
@@ -1005,7 +1011,7 @@ const _abi = {
       "logId": 4,
       "loggedType": {
         "name": "",
-        "type": 7,
+        "type": 4,
         "typeArguments": []
       }
     },
@@ -1021,7 +1027,7 @@ const _abi = {
       "logId": 6,
       "loggedType": {
         "name": "",
-        "type": 4,
+        "type": 22,
         "typeArguments": []
       }
     },
@@ -1029,7 +1035,7 @@ const _abi = {
       "logId": 7,
       "loggedType": {
         "name": "",
-        "type": 22,
+        "type": 4,
         "typeArguments": []
       }
     },
@@ -1037,7 +1043,7 @@ const _abi = {
       "logId": 8,
       "loggedType": {
         "name": "",
-        "type": 4,
+        "type": 20,
         "typeArguments": []
       }
     },
@@ -1077,7 +1083,7 @@ const _abi = {
       "logId": 13,
       "loggedType": {
         "name": "",
-        "type": 20,
+        "type": 4,
         "typeArguments": []
       }
     },
@@ -1093,7 +1099,7 @@ const _abi = {
       "logId": 15,
       "loggedType": {
         "name": "",
-        "type": 4,
+        "type": 17,
         "typeArguments": []
       }
     },
@@ -1101,7 +1107,7 @@ const _abi = {
       "logId": 16,
       "loggedType": {
         "name": "",
-        "type": 17,
+        "type": 6,
         "typeArguments": []
       }
     },
@@ -1109,7 +1115,7 @@ const _abi = {
       "logId": 17,
       "loggedType": {
         "name": "",
-        "type": 6,
+        "type": 4,
         "typeArguments": []
       }
     },
@@ -1125,7 +1131,7 @@ const _abi = {
       "logId": 19,
       "loggedType": {
         "name": "",
-        "type": 4,
+        "type": 15,
         "typeArguments": []
       }
     },
@@ -1133,7 +1139,7 @@ const _abi = {
       "logId": 20,
       "loggedType": {
         "name": "",
-        "type": 15,
+        "type": 7,
         "typeArguments": []
       }
     },
@@ -1149,7 +1155,7 @@ const _abi = {
       "logId": 22,
       "loggedType": {
         "name": "",
-        "type": 7,
+        "type": 16,
         "typeArguments": []
       }
     },
@@ -1165,7 +1171,7 @@ const _abi = {
       "logId": 24,
       "loggedType": {
         "name": "",
-        "type": 16,
+        "type": 11,
         "typeArguments": []
       }
     },
@@ -1181,7 +1187,7 @@ const _abi = {
       "logId": 26,
       "loggedType": {
         "name": "",
-        "type": 11,
+        "type": 14,
         "typeArguments": []
       }
     },
@@ -1197,7 +1203,7 @@ const _abi = {
       "logId": 28,
       "loggedType": {
         "name": "",
-        "type": 14,
+        "type": 4,
         "typeArguments": []
       }
     },
@@ -1213,7 +1219,7 @@ const _abi = {
       "logId": 30,
       "loggedType": {
         "name": "",
-        "type": 4,
+        "type": 18,
         "typeArguments": []
       }
     },
@@ -1229,7 +1235,7 @@ const _abi = {
       "logId": 32,
       "loggedType": {
         "name": "",
-        "type": 18,
+        "type": 4,
         "typeArguments": []
       }
     },
@@ -1237,7 +1243,7 @@ const _abi = {
       "logId": 33,
       "loggedType": {
         "name": "",
-        "type": 4,
+        "type": 19,
         "typeArguments": []
       }
     },
@@ -1245,28 +1251,12 @@ const _abi = {
       "logId": 34,
       "loggedType": {
         "name": "",
-        "type": 4,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 35,
-      "loggedType": {
-        "name": "",
-        "type": 19,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 36,
-      "loggedType": {
-        "name": "",
         "type": 7,
         "typeArguments": []
       }
     },
     {
-      "logId": 37,
+      "logId": 35,
       "loggedType": {
         "name": "",
         "type": 4,

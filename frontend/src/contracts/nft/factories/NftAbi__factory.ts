@@ -11,7 +11,7 @@
 
 import { Interface, Contract } from "fuels";
 import type { Provider, Account, AbstractAddress } from "fuels";
-import type { ManagerAbi, ManagerAbiInterface } from "../ManagerAbi";
+import type { NftAbi, NftAbiInterface } from "../NftAbi";
 
 const _abi = {
   "types": [
@@ -23,48 +23,20 @@ const _abi = {
     },
     {
       "typeId": 1,
-      "type": "[_; 5]",
-      "components": [
-        {
-          "name": "__array_element",
-          "type": 8,
-          "typeArguments": [
-            {
-              "name": "",
-              "type": 21,
-              "typeArguments": null
-            }
-          ]
-        }
-      ],
-      "typeParameters": null
-    },
-    {
-      "typeId": 2,
       "type": "b256",
       "components": null,
       "typeParameters": null
     },
     {
-      "typeId": 3,
+      "typeId": 2,
       "type": "bool",
       "components": null,
       "typeParameters": null
     },
     {
-      "typeId": 4,
+      "typeId": 3,
       "type": "enum AccessError",
       "components": [
-        {
-          "name": "NFTAlreadyListed",
-          "type": 0,
-          "typeArguments": null
-        },
-        {
-          "name": "NFTNotListed",
-          "type": 0,
-          "typeArguments": null
-        },
         {
           "name": "SenderCannotSetAccessControl",
           "type": 0,
@@ -81,23 +53,25 @@ const _abi = {
           "typeArguments": null
         },
         {
-          "name": "MaximumblockNftLanded",
+          "name": "SenderNotOwnerOrApproved",
           "type": 0,
+          "typeArguments": null
+        }
+      ],
+      "typeParameters": null
+    },
+    {
+      "typeId": 4,
+      "type": "enum Identity",
+      "components": [
+        {
+          "name": "Address",
+          "type": 11,
           "typeArguments": null
         },
         {
-          "name": "CantLandNft",
-          "type": 0,
-          "typeArguments": null
-        },
-        {
-          "name": "ContractIsNotWhitelisted",
-          "type": 0,
-          "typeArguments": null
-        },
-        {
-          "name": "ContractIsAlreadyWhitelisted",
-          "type": 0,
+          "name": "ContractId",
+          "type": 15,
           "typeArguments": null
         }
       ],
@@ -105,16 +79,16 @@ const _abi = {
     },
     {
       "typeId": 5,
-      "type": "enum Identity",
+      "type": "enum InitError",
       "components": [
         {
-          "name": "Address",
-          "type": 10,
+          "name": "AdminIsNone",
+          "type": 0,
           "typeArguments": null
         },
         {
-          "name": "ContractId",
-          "type": 12,
+          "name": "CannotReinitialize",
+          "type": 0,
           "typeArguments": null
         }
       ],
@@ -122,10 +96,35 @@ const _abi = {
     },
     {
       "typeId": 6,
-      "type": "enum InitError",
+      "type": "enum InputError",
       "components": [
         {
-          "name": "AdminIsNone",
+          "name": "AdminDoesNotExist",
+          "type": 0,
+          "typeArguments": null
+        },
+        {
+          "name": "ApprovedDoesNotExist",
+          "type": 0,
+          "typeArguments": null
+        },
+        {
+          "name": "NotEnoughTokensToMint",
+          "type": 0,
+          "typeArguments": null
+        },
+        {
+          "name": "OwnerDoesNotExist",
+          "type": 0,
+          "typeArguments": null
+        },
+        {
+          "name": "TokenDoesNotExist",
+          "type": 0,
+          "typeArguments": null
+        },
+        {
+          "name": "TokenSupplyCannotBeZero",
           "type": 0,
           "typeArguments": null
         }
@@ -134,33 +133,6 @@ const _abi = {
     },
     {
       "typeId": 7,
-      "type": "enum InputError",
-      "components": [
-        {
-          "name": "PriceCantBeZero",
-          "type": 0,
-          "typeArguments": null
-        },
-        {
-          "name": "IncorrectAmountProvided",
-          "type": 0,
-          "typeArguments": null
-        },
-        {
-          "name": "EndblockIsLessThanStartblock",
-          "type": 0,
-          "typeArguments": null
-        },
-        {
-          "name": "WrongStartblockProvided",
-          "type": 0,
-          "typeArguments": null
-        }
-      ],
-      "typeParameters": null
-    },
-    {
-      "typeId": 8,
       "type": "enum Option",
       "components": [
         {
@@ -170,39 +142,39 @@ const _abi = {
         },
         {
           "name": "Some",
-          "type": 9,
+          "type": 8,
           "typeArguments": null
         }
       ],
       "typeParameters": [
-        9
+        8
       ]
     },
     {
-      "typeId": 9,
+      "typeId": 8,
       "type": "generic T",
       "components": null,
       "typeParameters": null
     },
     {
+      "typeId": 9,
+      "type": "str[10]",
+      "components": null,
+      "typeParameters": null
+    },
+    {
       "typeId": 10,
-      "type": "struct Address",
-      "components": [
-        {
-          "name": "value",
-          "type": 2,
-          "typeArguments": null
-        }
-      ],
+      "type": "str[81]",
+      "components": null,
       "typeParameters": null
     },
     {
       "typeId": 11,
-      "type": "struct AdminChangedEvent",
+      "type": "struct Address",
       "components": [
         {
-          "name": "mew_admin",
-          "type": 5,
+          "name": "value",
+          "type": 1,
           "typeArguments": null
         }
       ],
@@ -210,28 +182,39 @@ const _abi = {
     },
     {
       "typeId": 12,
-      "type": "struct ContractId",
+      "type": "struct AdminEvent",
       "components": [
         {
-          "name": "value",
-          "type": 2,
-          "typeArguments": null
+          "name": "admin",
+          "type": 7,
+          "typeArguments": [
+            {
+              "name": "",
+              "type": 4,
+              "typeArguments": null
+            }
+          ]
         }
       ],
       "typeParameters": null
     },
     {
       "typeId": 13,
-      "type": "struct ListNft",
+      "type": "struct ApprovalEvent",
       "components": [
         {
-          "name": "owner",
-          "type": 5,
+          "name": "approved",
+          "type": 4,
           "typeArguments": null
         },
         {
-          "name": "price",
-          "type": 23,
+          "name": "owner",
+          "type": 4,
+          "typeArguments": null
+        },
+        {
+          "name": "token_id",
+          "type": 20,
           "typeArguments": null
         }
       ],
@@ -239,11 +222,16 @@ const _abi = {
     },
     {
       "typeId": 14,
-      "type": "struct ManagerChangeEvent",
+      "type": "struct BurnEvent",
       "components": [
         {
-          "name": "mew_manager",
-          "type": 5,
+          "name": "owner",
+          "type": 4,
+          "typeArguments": null
+        },
+        {
+          "name": "token_id",
+          "type": 20,
           "typeArguments": null
         }
       ],
@@ -251,21 +239,11 @@ const _abi = {
     },
     {
       "typeId": 15,
-      "type": "struct NFTDeListedEvent",
+      "type": "struct ContractId",
       "components": [
         {
-          "name": "owner",
-          "type": 5,
-          "typeArguments": null
-        },
-        {
-          "name": "nft_contract",
-          "type": 12,
-          "typeArguments": null
-        },
-        {
-          "name": "token_id",
-          "type": 23,
+          "name": "value",
+          "type": 1,
           "typeArguments": null
         }
       ],
@@ -273,26 +251,16 @@ const _abi = {
     },
     {
       "typeId": 16,
-      "type": "struct NFTListedEvent",
+      "type": "struct MintEvent",
       "components": [
         {
           "name": "owner",
-          "type": 5,
-          "typeArguments": null
-        },
-        {
-          "name": "nft_contract",
-          "type": 12,
+          "type": 4,
           "typeArguments": null
         },
         {
           "name": "token_id",
-          "type": 23,
-          "typeArguments": null
-        },
-        {
-          "name": "price",
-          "type": 23,
+          "type": 20,
           "typeArguments": null
         }
       ],
@@ -300,31 +268,21 @@ const _abi = {
     },
     {
       "typeId": 17,
-      "type": "struct NFTPriceChangeEvent",
+      "type": "struct OperatorEvent",
       "components": [
         {
+          "name": "approve",
+          "type": 2,
+          "typeArguments": null
+        },
+        {
+          "name": "operator",
+          "type": 4,
+          "typeArguments": null
+        },
+        {
           "name": "owner",
-          "type": 5,
-          "typeArguments": null
-        },
-        {
-          "name": "nft_contract",
-          "type": 12,
-          "typeArguments": null
-        },
-        {
-          "name": "token_id",
-          "type": 23,
-          "typeArguments": null
-        },
-        {
-          "name": "old_price",
-          "type": 23,
-          "typeArguments": null
-        },
-        {
-          "name": "new_price",
-          "type": 23,
+          "type": 4,
           "typeArguments": null
         }
       ],
@@ -332,11 +290,16 @@ const _abi = {
     },
     {
       "typeId": 18,
-      "type": "struct UnwhiteListContract",
+      "type": "struct TokenMetaData",
       "components": [
         {
-          "name": "contract_id",
-          "type": 12,
+          "name": "token_uri",
+          "type": 10,
+          "typeArguments": null
+        },
+        {
+          "name": "name",
+          "type": 9,
           "typeArguments": null
         }
       ],
@@ -344,11 +307,26 @@ const _abi = {
     },
     {
       "typeId": 19,
-      "type": "struct WhiteListContract",
+      "type": "struct TransferEvent",
       "components": [
         {
-          "name": "contract_id",
-          "type": 12,
+          "name": "from",
+          "type": 4,
+          "typeArguments": null
+        },
+        {
+          "name": "sender",
+          "type": 4,
+          "typeArguments": null
+        },
+        {
+          "name": "to",
+          "type": 4,
+          "typeArguments": null
+        },
+        {
+          "name": "token_id",
+          "type": 20,
           "typeArguments": null
         }
       ],
@@ -356,102 +334,6 @@ const _abi = {
     },
     {
       "typeId": 20,
-      "type": "struct WithdrawLanedNftEvent",
-      "components": [
-        {
-          "name": "contract_id",
-          "type": 12,
-          "typeArguments": null
-        },
-        {
-          "name": "token_id",
-          "type": 23,
-          "typeArguments": null
-        },
-        {
-          "name": "buyer",
-          "type": 5,
-          "typeArguments": null
-        },
-        {
-          "name": "start_block",
-          "type": 23,
-          "typeArguments": null
-        },
-        {
-          "name": "end_block",
-          "type": 23,
-          "typeArguments": null
-        }
-      ],
-      "typeParameters": null
-    },
-    {
-      "typeId": 21,
-      "type": "struct borrowNft",
-      "components": [
-        {
-          "name": "start_block",
-          "type": 23,
-          "typeArguments": null
-        },
-        {
-          "name": "end_block",
-          "type": 23,
-          "typeArguments": null
-        },
-        {
-          "name": "price",
-          "type": 23,
-          "typeArguments": null
-        },
-        {
-          "name": "buyer",
-          "type": 5,
-          "typeArguments": null
-        }
-      ],
-      "typeParameters": null
-    },
-    {
-      "typeId": 22,
-      "type": "struct borrowNftEvent",
-      "components": [
-        {
-          "name": "contract_id",
-          "type": 12,
-          "typeArguments": null
-        },
-        {
-          "name": "token_id",
-          "type": 23,
-          "typeArguments": null
-        },
-        {
-          "name": "buyer",
-          "type": 5,
-          "typeArguments": null
-        },
-        {
-          "name": "start_block",
-          "type": 23,
-          "typeArguments": null
-        },
-        {
-          "name": "end_block",
-          "type": 23,
-          "typeArguments": null
-        },
-        {
-          "name": "price",
-          "type": 23,
-          "typeArguments": null
-        }
-      ],
-      "typeParameters": null
-    },
-    {
-      "typeId": 23,
       "type": "u64",
       "components": null,
       "typeParameters": null
@@ -463,11 +345,11 @@ const _abi = {
       "name": "admin",
       "output": {
         "name": "",
-        "type": 8,
+        "type": 7,
         "typeArguments": [
           {
             "name": "",
-            "type": 5,
+            "type": 4,
             "typeArguments": null
           }
         ]
@@ -484,104 +366,17 @@ const _abi = {
     {
       "inputs": [
         {
-          "name": "id",
-          "type": 12,
+          "name": "approved",
+          "type": 4,
           "typeArguments": null
         },
         {
           "name": "token_id",
-          "type": 23,
-          "typeArguments": null
-        },
-        {
-          "name": "buyer",
-          "type": 5,
-          "typeArguments": null
-        },
-        {
-          "name": "start_block",
-          "type": 23,
-          "typeArguments": null
-        },
-        {
-          "name": "end_block",
-          "type": 23,
-          "typeArguments": null
-        },
-        {
-          "name": "price",
-          "type": 23,
+          "type": 20,
           "typeArguments": null
         }
       ],
-      "name": "borrow_nft",
-      "output": {
-        "name": "",
-        "type": 0,
-        "typeArguments": null
-      },
-      "attributes": [
-        {
-          "name": "storage",
-          "arguments": [
-            "read",
-            "write"
-          ]
-        },
-        {
-          "name": "payable",
-          "arguments": []
-        }
-      ]
-    },
-    {
-      "inputs": [
-        {
-          "name": "id",
-          "type": 12,
-          "typeArguments": null
-        },
-        {
-          "name": "token_id",
-          "type": 23,
-          "typeArguments": null
-        }
-      ],
-      "name": "borrowed_nft_info",
-      "output": {
-        "name": "",
-        "type": 8,
-        "typeArguments": [
-          {
-            "name": "",
-            "type": 1,
-            "typeArguments": null
-          }
-        ]
-      },
-      "attributes": [
-        {
-          "name": "storage",
-          "arguments": [
-            "read"
-          ]
-        }
-      ]
-    },
-    {
-      "inputs": [
-        {
-          "name": "id",
-          "type": 12,
-          "typeArguments": null
-        },
-        {
-          "name": "token_id",
-          "type": 23,
-          "typeArguments": null
-        }
-      ],
-      "name": "borrowed_nft_return",
+      "name": "approve",
       "output": {
         "name": "",
         "type": 0,
@@ -600,22 +395,94 @@ const _abi = {
     {
       "inputs": [
         {
-          "name": "id",
-          "type": 12,
-          "typeArguments": null
-        },
-        {
           "name": "token_id",
-          "type": 23,
-          "typeArguments": null
-        },
-        {
-          "name": "price",
-          "type": 23,
+          "type": 20,
           "typeArguments": null
         }
       ],
-      "name": "change_nft_price",
+      "name": "approved",
+      "output": {
+        "name": "",
+        "type": 7,
+        "typeArguments": [
+          {
+            "name": "",
+            "type": 4,
+            "typeArguments": null
+          }
+        ]
+      },
+      "attributes": [
+        {
+          "name": "storage",
+          "arguments": [
+            "read"
+          ]
+        }
+      ]
+    },
+    {
+      "inputs": [
+        {
+          "name": "owner",
+          "type": 4,
+          "typeArguments": null
+        }
+      ],
+      "name": "balance_of",
+      "output": {
+        "name": "",
+        "type": 7,
+        "typeArguments": [
+          {
+            "name": "",
+            "type": 20,
+            "typeArguments": null
+          }
+        ]
+      },
+      "attributes": [
+        {
+          "name": "storage",
+          "arguments": [
+            "read"
+          ]
+        }
+      ]
+    },
+    {
+      "inputs": [
+        {
+          "name": "token_id",
+          "type": 20,
+          "typeArguments": null
+        }
+      ],
+      "name": "burn",
+      "output": {
+        "name": "",
+        "type": 0,
+        "typeArguments": null
+      },
+      "attributes": [
+        {
+          "name": "storage",
+          "arguments": [
+            "read",
+            "write"
+          ]
+        }
+      ]
+    },
+    {
+      "inputs": [
+        {
+          "name": "max_supply",
+          "type": 20,
+          "typeArguments": null
+        }
+      ],
+      "name": "change_max_supply",
       "output": {
         "name": "",
         "type": 0,
@@ -635,7 +502,12 @@ const _abi = {
       "inputs": [
         {
           "name": "admin",
-          "type": 5,
+          "type": 4,
+          "typeArguments": null
+        },
+        {
+          "name": "max_supply",
+          "type": 20,
           "typeArguments": null
         }
       ],
@@ -658,17 +530,68 @@ const _abi = {
     {
       "inputs": [
         {
-          "name": "id",
-          "type": 12,
+          "name": "operator",
+          "type": 4,
           "typeArguments": null
         },
         {
-          "name": "token_id",
-          "type": 23,
+          "name": "owner",
+          "type": 4,
           "typeArguments": null
         }
       ],
-      "name": "delist_nft",
+      "name": "is_approved_for_all",
+      "output": {
+        "name": "",
+        "type": 7,
+        "typeArguments": [
+          {
+            "name": "",
+            "type": 2,
+            "typeArguments": null
+          }
+        ]
+      },
+      "attributes": [
+        {
+          "name": "storage",
+          "arguments": [
+            "read"
+          ]
+        }
+      ]
+    },
+    {
+      "inputs": [],
+      "name": "max_supply",
+      "output": {
+        "name": "",
+        "type": 20,
+        "typeArguments": null
+      },
+      "attributes": [
+        {
+          "name": "storage",
+          "arguments": [
+            "read"
+          ]
+        }
+      ]
+    },
+    {
+      "inputs": [
+        {
+          "name": "to",
+          "type": 4,
+          "typeArguments": null
+        },
+        {
+          "name": "meta_data",
+          "type": 18,
+          "typeArguments": null
+        }
+      ],
+      "name": "mint",
       "output": {
         "name": "",
         "type": 0,
@@ -685,53 +608,21 @@ const _abi = {
       ]
     },
     {
-      "inputs": [],
-      "name": "get_balance",
-      "output": {
-        "name": "",
-        "type": 23,
-        "typeArguments": null
-      },
-      "attributes": null
-    },
-    {
-      "inputs": [],
-      "name": "get_default_protocol_feee",
-      "output": {
-        "name": "",
-        "type": 23,
-        "typeArguments": null
-      },
-      "attributes": [
-        {
-          "name": "storage",
-          "arguments": [
-            "read"
-          ]
-        }
-      ]
-    },
-    {
       "inputs": [
         {
-          "name": "id",
-          "type": 12,
-          "typeArguments": null
-        },
-        {
           "name": "token_id",
-          "type": 23,
+          "type": 20,
           "typeArguments": null
         }
       ],
-      "name": "get_nft_data",
+      "name": "owner_of",
       "output": {
         "name": "",
-        "type": 8,
+        "type": 7,
         "typeArguments": [
           {
             "name": "",
-            "type": 13,
+            "type": 4,
             "typeArguments": null
           }
         ]
@@ -748,88 +639,8 @@ const _abi = {
     {
       "inputs": [
         {
-          "name": "id",
-          "type": 12,
-          "typeArguments": null
-        }
-      ],
-      "name": "get_protocol_fee",
-      "output": {
-        "name": "",
-        "type": 23,
-        "typeArguments": null
-      },
-      "attributes": [
-        {
-          "name": "storage",
-          "arguments": [
-            "read"
-          ]
-        }
-      ]
-    },
-    {
-      "inputs": [
-        {
-          "name": "id",
-          "type": 12,
-          "typeArguments": null
-        }
-      ],
-      "name": "get_whiltested_contract",
-      "output": {
-        "name": "",
-        "type": 3,
-        "typeArguments": null
-      },
-      "attributes": [
-        {
-          "name": "storage",
-          "arguments": [
-            "read"
-          ]
-        }
-      ]
-    },
-    {
-      "inputs": [
-        {
-          "name": "id",
-          "type": 12,
-          "typeArguments": null
-        },
-        {
-          "name": "token_id",
-          "type": 23,
-          "typeArguments": null
-        },
-        {
-          "name": "price",
-          "type": 23,
-          "typeArguments": null
-        }
-      ],
-      "name": "list_nft",
-      "output": {
-        "name": "",
-        "type": 0,
-        "typeArguments": null
-      },
-      "attributes": [
-        {
-          "name": "storage",
-          "arguments": [
-            "read",
-            "write"
-          ]
-        }
-      ]
-    },
-    {
-      "inputs": [
-        {
           "name": "admin",
-          "type": 5,
+          "type": 4,
           "typeArguments": null
         }
       ],
@@ -852,41 +663,50 @@ const _abi = {
     {
       "inputs": [
         {
-          "name": "manager",
-          "type": 5,
-          "typeArguments": null
-        }
-      ],
-      "name": "set_manager",
-      "output": {
-        "name": "",
-        "type": 0,
-        "typeArguments": null
-      },
-      "attributes": [
-        {
-          "name": "storage",
-          "arguments": [
-            "read",
-            "write"
-          ]
-        }
-      ]
-    },
-    {
-      "inputs": [
-        {
-          "name": "id",
-          "type": 12,
+          "name": "approve",
+          "type": 2,
           "typeArguments": null
         },
         {
-          "name": "amount",
-          "type": 23,
+          "name": "operator",
+          "type": 4,
           "typeArguments": null
         }
       ],
-      "name": "set_protocol_fee",
+      "name": "set_approval_for_all",
+      "output": {
+        "name": "",
+        "type": 0,
+        "typeArguments": null
+      },
+      "attributes": [
+        {
+          "name": "storage",
+          "arguments": [
+            "write"
+          ]
+        }
+      ]
+    },
+    {
+      "inputs": [
+        {
+          "name": "from",
+          "type": 4,
+          "typeArguments": null
+        },
+        {
+          "name": "to",
+          "type": 4,
+          "typeArguments": null
+        },
+        {
+          "name": "token_id",
+          "type": 20,
+          "typeArguments": null
+        }
+      ],
+      "name": "share_owner",
       "output": {
         "name": "",
         "type": 0,
@@ -905,63 +725,38 @@ const _abi = {
     {
       "inputs": [
         {
-          "name": "id",
-          "type": 12,
+          "name": "token_id",
+          "type": 20,
           "typeArguments": null
         }
       ],
-      "name": "unwhiltest_contract",
+      "name": "token_metadata",
       "output": {
         "name": "",
-        "type": 0,
-        "typeArguments": null
+        "type": 7,
+        "typeArguments": [
+          {
+            "name": "",
+            "type": 18,
+            "typeArguments": null
+          }
+        ]
       },
       "attributes": [
         {
           "name": "storage",
           "arguments": [
-            "read",
-            "write"
+            "read"
           ]
         }
       ]
     },
     {
-      "inputs": [
-        {
-          "name": "id",
-          "type": 12,
-          "typeArguments": null
-        }
-      ],
-      "name": "whiltest_contract",
+      "inputs": [],
+      "name": "total_supply",
       "output": {
         "name": "",
-        "type": 0,
-        "typeArguments": null
-      },
-      "attributes": [
-        {
-          "name": "storage",
-          "arguments": [
-            "read",
-            "write"
-          ]
-        }
-      ]
-    },
-    {
-      "inputs": [
-        {
-          "name": "amount",
-          "type": 23,
-          "typeArguments": null
-        }
-      ],
-      "name": "withdraw_balance",
-      "output": {
-        "name": "",
-        "type": 0,
+        "type": 20,
         "typeArguments": null
       },
       "attributes": [
@@ -972,6 +767,40 @@ const _abi = {
           ]
         }
       ]
+    },
+    {
+      "inputs": [
+        {
+          "name": "from",
+          "type": 4,
+          "typeArguments": null
+        },
+        {
+          "name": "to",
+          "type": 4,
+          "typeArguments": null
+        },
+        {
+          "name": "token_id",
+          "type": 20,
+          "typeArguments": null
+        }
+      ],
+      "name": "transfer_from",
+      "output": {
+        "name": "",
+        "type": 0,
+        "typeArguments": null
+      },
+      "attributes": [
+        {
+          "name": "storage",
+          "arguments": [
+            "read",
+            "write"
+          ]
+        }
+      ]
     }
   ],
   "loggedTypes": [
@@ -979,7 +808,7 @@ const _abi = {
       "logId": 0,
       "loggedType": {
         "name": "",
-        "type": 7,
+        "type": 6,
         "typeArguments": []
       }
     },
@@ -987,7 +816,7 @@ const _abi = {
       "logId": 1,
       "loggedType": {
         "name": "",
-        "type": 4,
+        "type": 3,
         "typeArguments": []
       }
     },
@@ -995,7 +824,7 @@ const _abi = {
       "logId": 2,
       "loggedType": {
         "name": "",
-        "type": 7,
+        "type": 13,
         "typeArguments": []
       }
     },
@@ -1003,7 +832,7 @@ const _abi = {
       "logId": 3,
       "loggedType": {
         "name": "",
-        "type": 7,
+        "type": 6,
         "typeArguments": []
       }
     },
@@ -1011,7 +840,7 @@ const _abi = {
       "logId": 4,
       "loggedType": {
         "name": "",
-        "type": 4,
+        "type": 3,
         "typeArguments": []
       }
     },
@@ -1019,7 +848,7 @@ const _abi = {
       "logId": 5,
       "loggedType": {
         "name": "",
-        "type": 4,
+        "type": 14,
         "typeArguments": []
       }
     },
@@ -1027,7 +856,7 @@ const _abi = {
       "logId": 6,
       "loggedType": {
         "name": "",
-        "type": 22,
+        "type": 6,
         "typeArguments": []
       }
     },
@@ -1035,7 +864,7 @@ const _abi = {
       "logId": 7,
       "loggedType": {
         "name": "",
-        "type": 4,
+        "type": 3,
         "typeArguments": []
       }
     },
@@ -1043,7 +872,7 @@ const _abi = {
       "logId": 8,
       "loggedType": {
         "name": "",
-        "type": 20,
+        "type": 5,
         "typeArguments": []
       }
     },
@@ -1051,7 +880,7 @@ const _abi = {
       "logId": 9,
       "loggedType": {
         "name": "",
-        "type": 20,
+        "type": 6,
         "typeArguments": []
       }
     },
@@ -1059,7 +888,7 @@ const _abi = {
       "logId": 10,
       "loggedType": {
         "name": "",
-        "type": 20,
+        "type": 6,
         "typeArguments": []
       }
     },
@@ -1067,7 +896,7 @@ const _abi = {
       "logId": 11,
       "loggedType": {
         "name": "",
-        "type": 20,
+        "type": 3,
         "typeArguments": []
       }
     },
@@ -1075,7 +904,7 @@ const _abi = {
       "logId": 12,
       "loggedType": {
         "name": "",
-        "type": 20,
+        "type": 16,
         "typeArguments": []
       }
     },
@@ -1083,7 +912,7 @@ const _abi = {
       "logId": 13,
       "loggedType": {
         "name": "",
-        "type": 4,
+        "type": 3,
         "typeArguments": []
       }
     },
@@ -1091,7 +920,7 @@ const _abi = {
       "logId": 14,
       "loggedType": {
         "name": "",
-        "type": 4,
+        "type": 12,
         "typeArguments": []
       }
     },
@@ -1115,7 +944,7 @@ const _abi = {
       "logId": 17,
       "loggedType": {
         "name": "",
-        "type": 4,
+        "type": 3,
         "typeArguments": []
       }
     },
@@ -1123,7 +952,7 @@ const _abi = {
       "logId": 18,
       "loggedType": {
         "name": "",
-        "type": 4,
+        "type": 19,
         "typeArguments": []
       }
     },
@@ -1131,7 +960,7 @@ const _abi = {
       "logId": 19,
       "loggedType": {
         "name": "",
-        "type": 15,
+        "type": 6,
         "typeArguments": []
       }
     },
@@ -1139,7 +968,7 @@ const _abi = {
       "logId": 20,
       "loggedType": {
         "name": "",
-        "type": 7,
+        "type": 3,
         "typeArguments": []
       }
     },
@@ -1147,119 +976,7 @@ const _abi = {
       "logId": 21,
       "loggedType": {
         "name": "",
-        "type": 4,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 22,
-      "loggedType": {
-        "name": "",
-        "type": 16,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 23,
-      "loggedType": {
-        "name": "",
-        "type": 4,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 24,
-      "loggedType": {
-        "name": "",
-        "type": 11,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 25,
-      "loggedType": {
-        "name": "",
-        "type": 4,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 26,
-      "loggedType": {
-        "name": "",
-        "type": 14,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 27,
-      "loggedType": {
-        "name": "",
-        "type": 4,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 28,
-      "loggedType": {
-        "name": "",
-        "type": 4,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 29,
-      "loggedType": {
-        "name": "",
-        "type": 4,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 30,
-      "loggedType": {
-        "name": "",
-        "type": 18,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 31,
-      "loggedType": {
-        "name": "",
-        "type": 4,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 32,
-      "loggedType": {
-        "name": "",
-        "type": 4,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 33,
-      "loggedType": {
-        "name": "",
         "type": 19,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 34,
-      "loggedType": {
-        "name": "",
-        "type": 7,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 35,
-      "loggedType": {
-        "name": "",
-        "type": 4,
         "typeArguments": []
       }
     }
@@ -1268,15 +985,15 @@ const _abi = {
   "configurables": []
 }
 
-export class ManagerAbi__factory {
+export class NftAbi__factory {
   static readonly abi = _abi
-  static createInterface(): ManagerAbiInterface {
-    return new Interface(_abi) as unknown as ManagerAbiInterface
+  static createInterface(): NftAbiInterface {
+    return new Interface(_abi) as unknown as NftAbiInterface
   }
   static connect(
     id: string | AbstractAddress,
     accountOrProvider: Account | Provider
-  ): ManagerAbi {
-    return new Contract(id, _abi, accountOrProvider) as unknown as ManagerAbi
+  ): NftAbi {
+    return new Contract(id, _abi, accountOrProvider) as unknown as NftAbi
   }
 }

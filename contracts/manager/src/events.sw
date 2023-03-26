@@ -16,8 +16,8 @@ pub struct WithdrawLanedNftEvent {
     contract_id: ContractId,
     token_id: u64,
     buyer: Identity,
-    start_time: u64,
-    end_time: u64,
+    start_block: u64,
+    end_block: u64,
 }
 
 pub struct BidEvent {
@@ -31,8 +31,8 @@ pub struct borrowNftEvent {
     contract_id: ContractId,
     token_id: u64,
     buyer: Identity,
-    start_time: u64,
-    end_time: u64,
+    start_block: u64,
+    end_block: u64,
     price: u64,
 }
 

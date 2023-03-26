@@ -13,11 +13,11 @@ const main = async () => {
 
   const deployNFTContract = async () => {
     const bytecode = readFileSync(
-      "/home/chappie/fluxen/contracts/nft/out/debug/property.bin"
+      "/home/ankit/fluxen/contracts/nft/out/debug/nft.bin"
     ); // Read the binary file
     const abiJSON = JSON.parse(
       readFileSync(
-        "/home/chappie/fluxen/contracts/nft/out/debug/property-abi.json"
+        "/home/ankit/fluxen/contracts/nft/out/debug/nft-abi.json"
       ).toString()
     ) as JsonAbi;
     const factory = new ContractFactory(bytecode, abiJSON, wallet);
@@ -50,7 +50,7 @@ const main = async () => {
   };
 
   await deployManagerContract();
-  // await deployNFTContract();
+  await deployNFTContract();
 };
 
 main()

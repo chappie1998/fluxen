@@ -1,7 +1,6 @@
 import { useState } from "react";
 import logo from "./logo.svg";
 import "./App.css";
-import { PropertyAbi__factory } from "./contracts/nft";
 import { ManagerAbi__factory } from "./contracts/manager";
 import { Contract, ContractFactory, Wallet } from "fuels";
 import { _abi } from "./contracts/nft/factories/PropertyAbi__factory";
@@ -25,12 +24,18 @@ function App() {
     "https://beta-3.fuel.network/graphql"
   );
 
+  // const admin =
+  //   "0x6b63804cfbf9856e68e5b6e7aef238dc8311ec55bec04df774003a2c96e0418e";
+  // const wallet = Wallet.fromPrivateKey(
+  //   "0xde97d8624a438121b86a1956544bd72ed68cd69f2c99555b08b1e8c51ffd511c"
+  // );
+
   const contractId =
-    "0x515c77d2a4a7221d749d93140f9a6470724c5c54e306945ed3868c84c362a9e9";
+    "0x5d62351788f11e2834a139278e44ab9b2c2545bae0a6ac7b97ed4ef4705138b5";
   const managerContract = ManagerAbi__factory.connect(contractId, wallet);
 
   const NFTContractId =
-    "0x311706d205dd505a5a3e65673edd8166ca1ec219b6e905672ecbe5bc053e3a84";
+    "0x1576d319c866a78838fbcf67b4abac80a5450f135302f167656eac903137ccf6";
   // const NFTContract = PropertyAbi__factory.connect(NFTContractId, wallet);
   // console.log(PropertyAbi__factory.createInterface);
 
@@ -46,7 +51,7 @@ function App() {
   };
 
   const constructorManager = async () => {
-    console.log("some1 start");
+    console.log("start manager");
     const consttructor = await managerContract.functions
       .constructor({ Address: { value: admin } })
       .txParams({ gasPrice: 1 })
@@ -55,7 +60,7 @@ function App() {
   };
 
   const getadmin = async () => {
-    const admin = await managerContract.functions.admin().get();
+    const admin = await NFTContract.functions.admin().get();
     console.log("admin", admin);
   };
 
@@ -64,7 +69,7 @@ function App() {
     // console.log("NFTAdmin", NFTAdmin);
     const mintData: TokenMetaData = {
       token_uri:
-        "https://bafkreidhmmldn6o5nxyfqf65x5jz7f66qcj4xy2axv2onefkzdbv4i7yta.ipfs.w3s.link/",
+        "https://bafkreidhmmldn6o5nxyfqf65x5jz7f66qcj4xy2axv2onefkzdbv4i7yta.ipfs.w3s.link",
       name: "nftName 0" + (token + 1),
     };
     console.log(mintData);
@@ -105,6 +110,13 @@ function App() {
 
   const token_metadata = async () => {
     const token_metadata = await NFTContract.functions.token_metadata(0).get();
+    console.log("token_metadata", token_metadata);
+  };
+
+  const get_nft_data = async () => {
+    const token_metadata = await managerContract.functions
+      .get_nft_data({ value: NFTContractId }, 0)
+      .get();
     console.log("token_metadata", token_metadata);
   };
 
@@ -183,13 +195,18 @@ function App() {
   };
 
   const borrow_nft = async () => {
-    const lend_nft = await managerContract.functions
+    let p = wallet.provider;
+    let t1 = (await p.getBlockNumber()).toNumber();
+    let t2 = t1 + (24 * 60 * 60) / 30;
+    console.log(t1, t2, 2, 0.01 * 1e9);
+
+    const borrow_nft = await managerContract.functions
       .borrow_nft(
         { value: NFTContractId },
         0,
         { Address: { value: admin } },
-        8315,
-        8316,
+        t1,
+        t2,
         0.01 * 1e9
       )
       .txParams({ gasPrice: 1 })
@@ -204,9 +221,9 @@ function App() {
     const lended_nft_info = await managerContract.functions
       .borrowed_nft_info({ value: NFTContractId }, 0)
       .get();
-    console.log("borrowed_nft_info", borrowed_nft_info);
+    console.log("borrowed_nft_info", lended_nft_info);
     console.log(
-      "start_block",
+      "start_block"
       // borrowed_nft_info.value[0]?.start_block.toNumber()
     );
   };
@@ -287,6 +304,7 @@ function App() {
 
       <div>
         <button onClick={mintAndList}>mintAndList</button>
+        <button onClick={get_nft_data}>get_nft_data</button>
       </div>
       <div>
         <button onClick={token_metadata}>token_metadata</button>
