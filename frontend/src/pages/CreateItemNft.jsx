@@ -53,13 +53,13 @@ const CreateItemNft = () => {
 
   const upload = async () => {
     const cid = await storeFiles(image);
-    setUploadedImage("https://" + cid + ".ipfs.w3s.link");
     const nftMetaData = {
       name: name,
       image: "https://" + cid + ".ipfs.w3s.link",
       description: description,
       attributes: [],
     };
+    setUploadedImage(nftMetaData.image);
     const cid2 = await storeFiles(makeFileObjects(nftMetaData));
     const md1 = {
       name: name,
@@ -77,17 +77,17 @@ const CreateItemNft = () => {
     setSpinner(true);
 
     try {
-      // const mintData = await upload();
+      const mintData = await upload();
       const publicKey = await getPublicKey();
       const nft_contract = await getNftContract(contract_id);
-      const mintData = {
-        token_uri:
-          "https://bafkreidhmmldn6o5nxyfqf65x5jz7f66qcj4xy2axv2onefkzdbv4i7yta.ipfs.w3s.link",
-        name: "nftName 0" + (token + 1),
-      };
+      // const mintData = {
+      //   token_uri:
+      //     "https://bafkreidhmmldn6o5nxyfqf65x5jz7f66qcj4xy2axv2onefkzdbv4i7yta.ipfs.w3s.link",
+      //   name: "nftName 0" + (token + 1),
+      // };
       const mintedNFT = await nft_contract.functions
         .mint({ Address: { value: publicKey } }, mintData)
-        .txParams({ gasPrice: 1 })
+        .txParams({ gasPrice: 10000 })
         .call();
       console.log("mint", mintedNFT);
       const token_id = mintedNFT.logs[0].token_id.toNumber();
@@ -95,7 +95,7 @@ const CreateItemNft = () => {
 
       let body = {
         contract_id: contract_id,
-        token_id: 2,
+        token_id: token_id,
         image: uploadedImage,
         name: name,
         description: description,

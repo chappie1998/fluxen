@@ -9,9 +9,9 @@ const UpdateCollection = () => {
       <section className="tf-item tf-section">
         <div className="themesflat-container">
           <div className="row">
-            <div className="col-box-17">
+            {/* <div className="col-box-17">
               <SideBar />
-            </div>
+            </div> */}
 
             <div className="col-box-83">
               <ItemContent />

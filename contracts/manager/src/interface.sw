@@ -94,13 +94,4 @@ abi NftMarketplace {
 
     #[storage(read)]
     fn withdraw_balance(amount: u64);
-
-    #[storage(read, write)]
-    fn whiltest_contract(id: ContractId);
-
-    #[storage(read, write)]
-    fn unwhiltest_contract(id: ContractId);
-
-    #[storage(read)]
-    fn get_whiltested_contract(id: ContractId) -> bool;
 }

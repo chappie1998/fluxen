@@ -56,8 +56,6 @@ storage {
     /// 10000 == 100%
     protocol_fee: StorageMap<ContractId, u64> = StorageMap {},
     /// Info of the royalty
-    /// StorageVec is not allowed to inside storageMap so need to use this method
-    whiltest_contract: StorageMap<ContractId, bool> = StorageMap {},
     /// List NFT info
     list_nft: StorageMap<(ContractId, u64), ListNft> = StorageMap {},
     /// Info of the royalty
@@ -113,7 +111,6 @@ impl NftMarketplace for Contract {
 
     #[storage(read, write)]
     fn list_nft(id: ContractId, token_id: u64, price: u64) {
-        // require(storage.whiltest_contract.get(id).unwrap(), AccessError::ContractIsNotWhitelisted);
         require(price != 0, InputError::PriceCantBeZero);
         require(storage.list_nft.get((id, token_id)).is_none(), AccessError::NFTAlreadyListed);
 
@@ -204,35 +201,6 @@ impl NftMarketplace for Contract {
         require(amount < balance_of(BASE_ASSET_ID, contract_id()), InputError::IncorrectAmountProvided);
         require(current_admin.is_some() && msg_sender().unwrap() == current_admin.unwrap(), AccessError::SenderCannotSetAccessControl);
         transfer(amount, BASE_ASSET_ID, current_admin.unwrap());
-    }
-
-    #[storage(read, write)]
-    fn whiltest_contract(id: ContractId) {
-        require(!storage.whiltest_contract.get(id).unwrap(), AccessError::ContractIsAlreadyWhitelisted);
-        let current_admin = storage.admin;
-        let current_manager = storage.manager;
-        require((current_admin.is_some() && msg_sender().unwrap() == current_admin.unwrap()) || (current_manager.is_some() && msg_sender().unwrap() == current_manager.unwrap()), AccessError::SenderCannotSetAccessControl);
-        storage.whiltest_contract.insert(id, true);
-        log(WhiteListContract {
-            contract_id: id,
-        });
-    }
-
-    #[storage(read, write)]
-    fn unwhiltest_contract(id: ContractId) {
-        require(storage.whiltest_contract.get(id).unwrap(), AccessError::ContractIsNotWhitelisted);
-        let current_admin = storage.admin;
-        let current_manager = storage.manager;
-        require((current_admin.is_some() && msg_sender().unwrap() == current_admin.unwrap()) || (current_manager.is_some() && msg_sender().unwrap() == current_manager.unwrap()), AccessError::SenderCannotSetAccessControl);
-        storage.whiltest_contract.insert(id, false);
-        log(UnwhiteListContract {
-            contract_id: id,
-        });
-    }
-
-    #[storage(read)]
-    fn get_whiltested_contract(id: ContractId) -> bool {
-        storage.whiltest_contract.get(id).unwrap()
     }
 
     #[payable, storage(read, write)]

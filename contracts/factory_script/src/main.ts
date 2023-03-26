@@ -49,7 +49,7 @@ const main = async () => {
     console.log("manager contract", contract.id.toB256());
   };
 
-  await deployManagerContract();
+  // await deployManagerContract();
   await deployNFTContract();
 };
 

@@ -70,6 +70,7 @@ const ItemContent = () => {
     }
     setContractCall(true);
     try {
+      console.log(tokenId);
       // await approveNFT(token);
       // await listNFT(token);
       const nft_contract = await getNftContract(contract_id);
@@ -374,7 +375,7 @@ const ItemContent = () => {
                     <div className="sc-card-product menu_card style-h7">
                       <div className="wrap-media">
                         <div className="card-media">
-                          <Link to="/item-details-01">
+                          <Link>
                             <img src={item.image} alt="Fuelart" />
                           </Link>
                         </div>
@@ -382,7 +383,7 @@ const ItemContent = () => {
                       <div className="card-title">
                         <p>Item Name</p>
                         <h4>
-                          <Link to="/item-details-01">{item.name}</Link>
+                          <Link>{item.name}</Link>
                         </h4>
                       </div>
                       {/* <div className="meta-info style">

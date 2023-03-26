@@ -17,8 +17,10 @@ function App() {
     // symbol: string;
     token_uri: string;
   };
+  // const admin =
+  // "0x776ca7cd27f4b12bd51f97952f31ebac15e2e65e013fd4b8efab81ddec643558";
   const admin =
-    "0xfec21894a55b54b3dd89ab836856403d20f20d2af3694e13e64a32b3e1d41f0a";
+    "0x776ca7cd27f4b12bd51f97952f31ebac15e2e65e013fd4b8efab81ddec643558";
   const wallet = Wallet.fromPrivateKey(
     "0xc852a8675f20538e3c578f56d59ea928035fda840b428e873e8abc04bb2a57ab",
     "https://beta-3.fuel.network/graphql"
@@ -31,11 +33,11 @@ function App() {
   // );
 
   const contractId =
-    "0x5d62351788f11e2834a139278e44ab9b2c2545bae0a6ac7b97ed4ef4705138b5";
+    "0x55154d75ab66e76c675787091ffa900369595c778e1233145dbd460107f7e585";
   const managerContract = ManagerAbi__factory.connect(contractId, wallet);
 
   const NFTContractId =
-    "0x1576d319c866a78838fbcf67b4abac80a5450f135302f167656eac903137ccf6";
+    "0xd19e33aed0eae50929b4cbb4847a071773fd3df8ef0aeb72c049203f288a5d10";
   // const NFTContract = PropertyAbi__factory.connect(NFTContractId, wallet);
   // console.log(PropertyAbi__factory.createInterface);
 
@@ -45,7 +47,7 @@ function App() {
     console.log("some1 start");
     const consttructor = await NFTContract.functions
       .constructor({ Address: { value: admin } }, 100)
-      .txParams({ gasPrice: 1 })
+      .txParams({ gasPrice: 10000 })
       .call();
     console.log("some1", consttructor);
   };
