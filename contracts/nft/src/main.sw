@@ -159,12 +159,7 @@ impl NFT for Contract {
         storage.meta_data.insert(index, meta_data);
         storage.owners.insert(index, to);
 
-        let balance = storage.balances.get(to);
-        if balance.is_some() {
-            storage.balances.insert(to, balance.unwrap() + 1);
-        } else {
-            storage.balances.insert(to, 1);
-        }
+        storage.balances.insert(to, storage.balances.get(to).unwrap_or(0) + 1);
         storage.tokens_minted += 1;
         storage.total_supply += 1;
 
@@ -229,7 +224,7 @@ impl NFT for Contract {
         // 3. Has operator approval for the `from` identity and this token belongs to the `from` identity
         let sender = msg_sender().unwrap();
         let approved = storage.approved.get(token_id);
-        require(sender == token_owner || (approved.is_some() && sender == approved.unwrap()) || (from == token_owner && storage.operator_approval.get((from, sender)).is_some()), AccessError::SenderNotOwnerOrApproved);
+        require(sender == token_owner || (approved.is_some() && sender == approved.unwrap()) || (from == token_owner && storage.operator_approval.get((from, sender)).unwrap_or(false)), AccessError::SenderNotOwnerOrApproved);
 
         // Set the new owner of the token and reset the approved Identity
         storage.owners.insert(token_id, to);
@@ -244,12 +239,7 @@ impl NFT for Contract {
         }
 
         storage.balances.insert(from, storage.balances.get(from).unwrap() - 1);
-        let bal = storage.balances.get(to);
-        if bal.is_some() {
-            storage.balances.insert(to, bal.unwrap() + 1);
-        } else {
-            storage.balances.insert(to, 1);
-        }
+        storage.balances.insert(to, storage.balances.get(to).unwrap_or(0) + 1);
 
         log(TransferEvent {
             from,
@@ -272,7 +262,7 @@ impl NFT for Contract {
         // 3. Has operator approval for the `from` identity and this token belongs to the `from` identity
         let sender = msg_sender().unwrap();
         let approved = storage.approved.get(token_id);
-        require(sender == token_owner || (approved.is_some() && sender == approved.unwrap()) || (from == token_owner && storage.operator_approval.get((from, sender)).is_some()), AccessError::SenderNotOwnerOrApproved);
+        require(sender == token_owner || (approved.is_some() && sender == approved.unwrap()) || (from == token_owner && storage.operator_approval.get((from, sender)).unwrap_or(false)), AccessError::SenderNotOwnerOrApproved);
 
         let shared_owner = storage.shared_owners.get(token_id);
         if shared_owner.is_some() {
